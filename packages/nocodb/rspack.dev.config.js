@@ -4,12 +4,6 @@ const nodeExternals = require('webpack-node-externals');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 const { TsCheckerRspackPlugin } = require('ts-checker-rspack-plugin');
 
-const tsCheckerEnabled = process.env.NC_DISABLE_TYPECHECK !== 'true';
-const tsCheckerMemoryLimitRaw = Number(process.env.NC_TS_CHECKER_MEMORY_LIMIT);
-const tsCheckerMemoryLimit = Number.isFinite(tsCheckerMemoryLimitRaw)
-  ? tsCheckerMemoryLimitRaw
-  : 8192;
-
 const baseDevConfig = {
   mode: 'development',
   target: 'node',
@@ -95,16 +89,11 @@ const baseDevConfig = {
     new rspack.CopyRspackPlugin({
       patterns: [{ from: 'src/public', to: 'public' }],
     }),
-    ...(tsCheckerEnabled
-      ? [
-          new TsCheckerRspackPlugin({
-            typescript: {
-              configFile: resolve('tsconfig.json'),
-              memoryLimit: tsCheckerMemoryLimit,
-            },
-          }),
-        ]
-      : []),
+    new TsCheckerRspackPlugin({
+      typescript: {
+        configFile: resolve('tsconfig.json'),
+      },
+    }),
   ],
   output: {
     devtoolModuleFilenameTemplate: (info) => {

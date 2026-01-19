@@ -4,40 +4,15 @@ import type { Ref } from 'vue'
 import type { CreateApiOptions, UseApiProps, UseApiReturn } from './types'
 import { addAxiosInterceptors } from './interceptors'
 
-function addUnprefixedAliases(module: Record<string, any>, prefix: string) {
-  for (const [key, value] of Object.entries(module)) {
-    if (typeof value !== 'function') continue
-    if (!key.startsWith(prefix)) continue
-    const nextChar = key[prefix.length]
-    if (!nextChar || nextChar !== nextChar.toUpperCase()) continue
-    const alias = nextChar.toLowerCase() + key.slice(prefix.length + 1)
-    if (!module[alias]) module[alias] = value
-  }
-}
-
-function normalizeSdkApi(api: any) {
-  if (!api) return api
-
-  for (const moduleName of Object.keys(api)) {
-    const module = api[moduleName]
-    if (!module || typeof module !== 'object') continue
-    if (Array.isArray(module)) continue
-    addUnprefixedAliases(module, moduleName)
-  }
-  return api
-}
-
 export function createApiInstance<SecurityDataType = any>({
   baseURL: _baseUrl = BASE_FALLBACK_URL,
 }: CreateApiOptions = {}): Api<SecurityDataType> {
   const config = useRuntimeConfig()
   const baseURL = config.public.ncBackendUrl || _baseUrl
   return addAxiosInterceptors(
-    normalizeSdkApi(
-      new Api<SecurityDataType>({
-        baseURL,
-      }),
-    ),
+    new Api<SecurityDataType>({
+      baseURL,
+    }),
   )
 }
 

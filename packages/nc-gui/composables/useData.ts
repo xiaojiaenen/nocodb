@@ -903,23 +903,19 @@ export function useData(args: {
     rows: Record<string, string>[],
     { metaValue = meta.value, viewMetaValue = viewMeta.value }: { metaValue?: TableType; viewMetaValue?: ViewType } = {},
   ) {
-    try {
-      const bulkDeletedRowsData = await $api.internal.postOperation(
-        (metaValue as any).fk_workspace_id!,
-        metaValue!.base_id!,
-        {
-          operation: 'dataDelete',
-          tableId: metaValue?.id as string,
-          viewId: viewMetaValue?.id as string,
-        },
-        rows.length === 1 ? rows[0] : rows,
-      )
-      await reloadAggregate?.trigger()
+    const bulkDeletedRowsData = await $api.internal.postOperation(
+      (metaValue as any).fk_workspace_id!,
+      metaValue!.base_id!,
+      {
+        operation: 'dataDelete',
+        tableId: metaValue?.id as string,
+        viewId: viewMetaValue?.id as string,
+      },
+      rows.length === 1 ? rows[0] : rows,
+    )
+    await reloadAggregate?.trigger()
 
-      return rows.length === 1 && bulkDeletedRowsData ? [bulkDeletedRowsData] : bulkDeletedRowsData
-    } catch (error: any) {
-      message.error(await extractSdkResponseErrorMsg(error))
-    }
+    return rows.length === 1 && bulkDeletedRowsData ? [bulkDeletedRowsData] : bulkDeletedRowsData
   }
 
   const removeRowIfNew = (row: Row) => {

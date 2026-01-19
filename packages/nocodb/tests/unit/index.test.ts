@@ -23,7 +23,9 @@ dotenv.config({
 });
 
 (async function () {
+  console.log('Initializing Test DB...');
   await TestDbMngr.init();
+  console.log('Test DB Initialized. Registering tests...');
 
   helperTests();
   modelTests();
@@ -36,5 +38,6 @@ dotenv.config({
   processorTests();
   await dataApiV3Test();
 
+  console.log('Tests registered. Running mocha...');
   run();
 })();

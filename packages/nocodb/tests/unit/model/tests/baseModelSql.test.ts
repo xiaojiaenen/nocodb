@@ -13,6 +13,14 @@ import type LinkToAnotherRecordColumn from '~/models/LinkToAnotherRecordColumn';
 import { BaseModelSqlv2 } from '~/db/BaseModelSqlv2';
 import Filter from '~/models/Filter';
 import Audit from '~/models/Audit';
+import * as sinon from 'sinon';
+import {
+  Permission,
+  PermissionEntity,
+  PermissionKey,
+  PermissionGrantedType,
+  PermissionRole,
+} from '~/models/Permission';
 import Source from '~/models/Source';
 import NcConnectionMgrv2 from '~/utils/common/NcConnectionMgrv2';
 
@@ -274,6 +282,56 @@ function baseModelSqlTests() {
     });*/
   });
 
+  it('Bulk update all record respects permissions', async () => {
+    const columns = await table.getColumns(ctx);
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: 'usr_editor', roles: { editor: true } },
+    };
+
+    const idColumn = columns.find((column) => column.title === 'Id')!;
+
+    // Stub permission to return creator-only for edit
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_bulk_edit_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_RECORD_UPDATE,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.bulkUpdateAll(
+        {
+          filterArr: [
+            new Filter({
+              logical_op: 'and',
+              fk_column_id: idColumn.id,
+              comparison_op: 'lt',
+              value: 5,
+            }),
+          ],
+        },
+        { Title: 'Unauthorized Update' },
+        { cookie: request },
+      );
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('Permission denied');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
   it('Delete record', async () => {
     const request = {
       clientIp: '::ffff:192.0.0.1',
@@ -400,6 +458,127 @@ function baseModelSqlTests() {
       description: '4 records have been bulk deleted in Table1_Title',
       details: null,
     });*/
+  });
+
+  it('Bulk delete records respects permissions', async () => {
+    const columns = await table.getColumns(ctx);
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: 'usr_1', roles: { editor: true } },
+    };
+    const bulkData = Array(5)
+      .fill(0)
+      .map((_, index) => generateDefaultRowAttributes({ columns, index }));
+    await baseModelSql.bulkInsert(bulkData, { cookie: request });
+
+    const insertedRows: any[] = await baseModelSql.list();
+
+    // Stub permission to return creator-only for delete
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_RECORD_DELETE,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      // Should fail because user is not the creator
+      await baseModelSql.bulkDelete(
+        insertedRows.map((row) => ({ id: row['Id'] })),
+        { cookie: request },
+      );
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('Permission denied');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('Insert respects table add permission', async () => {
+    const columns = await table.getColumns(ctx);
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: 'usr_editor', roles: { editor: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_add_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_RECORD_ADD,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.insert(
+        generateDefaultRowAttributes({ columns }),
+        request as any,
+      );
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('Permission denied');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('Update respects record edit permission', async () => {
+    const columns = await table.getColumns(ctx);
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: 'usr_editor', roles: { editor: true } },
+    };
+
+    const row = await baseModelSql.insert(
+      generateDefaultRowAttributes({ columns }),
+      { user: context.user } as any,
+    );
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_edit_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.RECORD_FIELD_EDIT,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.updateByPk(row['Id'], { Title: 'Updated' }, request);
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('Permission denied');
+    } finally {
+      permissionListStub.restore();
+    }
   });
 
   it('Nested insert', async () => {

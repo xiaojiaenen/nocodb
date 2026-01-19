@@ -162,6 +162,7 @@ export default class TestDbMngr {
   }
 
   static async switchToSqlite() {
+    console.log('Switching to Sqlite...');
     // process.env[`DATABASE_URL`] = `sqlite3:///?database=${__dirname}/${TestDbMngr.dbName}.sqlite`;
     TestDbMngr.dbConfig = {
       client: 'sqlite3',
@@ -188,8 +189,11 @@ export default class TestDbMngr {
     process.env[
       `NC_DB`
     ] = `sqlite3:///?database=${__dirname}/${TestDbMngr.dbName}.db`;
+    console.log('Setting up Meta DB...');
     await TestDbMngr.setupMeta();
+    console.log('Setting up Sakila DB...');
     await TestDbMngr.setupSakila();
+    console.log('Sqlite setup complete.');
   }
 
   private static async resetDatabase(knexClient, dbName) {
@@ -252,16 +256,20 @@ export default class TestDbMngr {
   }
 
   static async seedSakila() {
-    const testsDir = __dirname.replace('tests/unit', 'tests');
+    console.log('Seeding Sakila DB...');
+    const testsDir = __dirname.replace(/[\\\/]unit$/, '');
+    console.log('testsDir:', testsDir);
 
     if (TestDbMngr.isSqlite()) {
-      if (fs.existsSync(`${__dirname}/test_sakila.db`)) {
-        fs.unlinkSync(`${__dirname}/test_sakila.db`);
+      const targetPath = `${__dirname}/test_sakila.db`;
+      const sourcePath = `${testsDir}/sqlite-sakila-db/sakila.db`;
+      console.log(`Copying Sakila from ${sourcePath} to ${targetPath}`);
+      if (fs.existsSync(targetPath)) {
+        console.log('Removing existing test_sakila.db');
+        fs.unlinkSync(targetPath);
       }
-      fs.copyFileSync(
-        `${testsDir}/sqlite-sakila-db/sakila.db`,
-        `${__dirname}/test_sakila.db`,
-      );
+      fs.copyFileSync(sourcePath, targetPath);
+      console.log('Sakila DB copied successfully.');
     } else if (TestDbMngr.isPg()) {
       const schemaFile = fs
         .readFileSync(`${testsDir}/pg-sakila-db/01-postgres-sakila-schema.sql`)

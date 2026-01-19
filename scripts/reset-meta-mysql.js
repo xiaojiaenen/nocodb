@@ -1,13 +1,9 @@
 const path = require('path')
-const fs = require('fs')
 
 delete process.env.NC_DB
 
 const dotenv = require('dotenv')
-const envDir = path.join(__dirname, '..', 'packages', 'nocodb')
-const envCandidates = ['.env', '.env.local', '.env.example'].map((f) => path.join(envDir, f))
-const envPath = envCandidates.find((p) => fs.existsSync(p))
-if (envPath) dotenv.config({ path: envPath })
+dotenv.config({ path: path.join(__dirname, '..', 'packages', 'nocodb', '.env') })
 
 const ncDb = process.env.NC_DB
 if (!ncDb) {
