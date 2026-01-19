@@ -8,7 +8,7 @@ const tsCheckerEnabled = process.env.NC_DISABLE_TYPECHECK !== 'true';
 const tsCheckerMemoryLimitRaw = Number(process.env.NC_TS_CHECKER_MEMORY_LIMIT);
 const tsCheckerMemoryLimit = Number.isFinite(tsCheckerMemoryLimitRaw)
   ? tsCheckerMemoryLimitRaw
-  : 4096;
+  : 8192;
 
 const baseDevConfig = {
   mode: 'development',
