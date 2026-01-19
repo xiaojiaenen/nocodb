@@ -35,6 +35,7 @@ export interface IBaseModelSqlV2 {
       extractOnlyPrimaries?: boolean;
       apiVersion?: NcApiVersion;
       extractOrderColumn?: boolean;
+      cookie?: NcRequest;
     },
   ): Promise<any>;
   execAndParse(
@@ -105,6 +106,96 @@ export interface IBaseModelSqlV2 {
       apiVersion?: NcApiVersion;
       extractOrderColumn?: boolean;
     },
+  ): Promise<any>;
+
+  count(
+    args?: {
+      where?: string;
+      limit?;
+      filterArr?: Filter[];
+      customConditions?: Filter[];
+      cookie?: NcRequest;
+    },
+    ignoreViewFilterAndSort?: boolean,
+    throwErrorIfInvalidParams?: boolean,
+  ): Promise<any>;
+
+  groupByAndAggregate(
+    aggregateColumnName: string,
+    aggregateFn: string,
+    args: {
+      where?: string;
+      limit?;
+      offset?;
+      sortBy?: {
+        column_name: string;
+        direction: 'asc' | 'desc';
+      };
+      groupByColumnName?: string;
+      cookie?: NcRequest;
+    },
+  ): Promise<any>;
+
+  bulkGroupByCount(
+    args: {
+      filterArr?: Filter[];
+      cookie?: NcRequest;
+    },
+    bulkFilterList: {
+      alias: string;
+      where?: string;
+      sort: string;
+      column_name: string;
+      filterArr?: Filter[];
+    }[],
+    _view: View,
+  ): Promise<any>;
+
+  bulkGroupBy(
+    args: {
+      filterArr?: Filter[];
+      cookie?: NcRequest;
+    },
+    bulkFilterList: {
+      alias: string;
+      where?: string;
+      column_name: string;
+      limit?;
+      offset?;
+      sort?: string;
+      filterArr?: Filter[];
+      sortArr?: Sort[];
+    }[],
+    _view: View,
+  ): Promise<any>;
+
+  bulkAggregate(
+    args: {
+      filterArr?: Filter[];
+      cookie?: NcRequest;
+    },
+    bulkFilterList: Array<{
+      alias: string;
+      where?: string;
+      filterArrJson?: string | Filter[];
+    }>,
+    view?: View,
+  ): Promise<any>;
+
+  ooRead(
+    {
+      colId,
+      id,
+    }: { colId: string; id: any; apiVersion?: NcApiVersion; cookie?: NcRequest },
+    _args?: { limit?: any; offset?: any; fieldSet?: Set<string> },
+  ): Promise<any>;
+
+  btRead(
+    {
+      colId,
+      id,
+    }: { colId: string; id: any; apiVersion?: NcApiVersion; cookie?: NcRequest },
+    args?: { limit?: any; offset?: any; fieldSet?: Set<string> },
   ): Promise<any>;
 
   getViewId(): string;

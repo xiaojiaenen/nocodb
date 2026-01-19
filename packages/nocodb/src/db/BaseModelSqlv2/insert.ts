@@ -3,6 +3,8 @@ import {
   isAttachment,
   isLinksOrLTAR,
   NcApiVersion,
+  PermissionEntity,
+  PermissionKey,
   type NcRequest,
 } from 'nocodb-sdk';
 import { AttachmentUrlUploadPreparator } from './attachment-url-upload-preparator';
@@ -33,6 +35,14 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
       }
 
       await populatePk(baseModel.context, baseModel.model, data);
+
+      await baseModel.checkPermission({
+        entity: PermissionEntity.TABLE,
+        entityId: baseModel.model.id,
+        permission: PermissionKey.TABLE_RECORD_ADD,
+        user: request?.user,
+        req: request,
+      });
 
       // todo: filter based on view
       insertObj = await baseModel.model.mapAliasToColumn(
@@ -194,6 +204,15 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
     } = {},
   ) => {
     let trx;
+
+    await baseModel.checkPermission({
+      entity: PermissionEntity.TABLE,
+      entityId: baseModel.model.id,
+      permission: PermissionKey.TABLE_RECORD_ADD,
+      user: cookie?.user,
+      req: cookie,
+    });
+
     try {
       const insertDatas = raw ? datas : [];
       const postInsertOpsMap: Record<

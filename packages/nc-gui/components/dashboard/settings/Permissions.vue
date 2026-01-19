@@ -302,6 +302,18 @@ async function save() {
     }
   })
 
+  for (const item of items) {
+    if (
+      item.value === PermissionOptionValue.SPECIFIC_USERS &&
+      (!item.userIds || item.userIds.length === 0)
+    ) {
+      const table = tables.value.find((t) => t.id === item.entityId)
+      const tableName = table ? table.title || (table as any).table_name : item.entityId
+      message.error(`${tableName}: ${t('error.someOfTheRequiredFieldsAreEmpty')}`)
+      return
+    }
+  }
+
   if (!items.length) {
     message.info(t('msg.info.noChanges'))
     return

@@ -15,12 +15,12 @@ import Filter from '~/models/Filter';
 import Audit from '~/models/Audit';
 import * as sinon from 'sinon';
 import {
-  Permission,
   PermissionEntity,
   PermissionKey,
   PermissionGrantedType,
   PermissionRole,
-} from '~/models/Permission';
+} from 'nocodb-sdk';
+import Permission from '~/models/Permission';
 import Source from '~/models/Source';
 import NcConnectionMgrv2 from '~/utils/common/NcConnectionMgrv2';
 
@@ -286,7 +286,7 @@ function baseModelSqlTests() {
     const columns = await table.getColumns(ctx);
     const request = {
       clientIp: '::ffff:192.0.0.1',
-      user: { id: 'usr_editor', roles: { editor: true } },
+      user: { id: context.user.id, roles: { editor: true } },
     };
 
     const idColumn = columns.find((column) => column.title === 'Id')!;
@@ -299,7 +299,7 @@ function baseModelSqlTests() {
         base_id: base.id,
         entity: PermissionEntity.TABLE,
         entity_id: table.id,
-        permission: PermissionKey.TABLE_RECORD_UPDATE,
+        permission: PermissionKey.RECORD_FIELD_EDIT,
         created_by: 'another_user',
         enforce_for_form: true,
         enforce_for_automation: true,
@@ -326,8 +326,85 @@ function baseModelSqlTests() {
       );
       expect.fail('Expected forbidden error');
     } catch (e: any) {
-      expect(e.message).to.include('Permission denied');
+      expect(e.message).to.include('You do not have permission');
     } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('bulkAggregate respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.bulkAggregate(
+        {
+          cookie: request,
+        },
+        [
+          {
+            alias: 'count',
+          },
+        ],
+      );
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('count respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.count({
+        cookie: request,
+      });
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
+  } finally {
       permissionListStub.restore();
     }
   });
@@ -464,7 +541,7 @@ function baseModelSqlTests() {
     const columns = await table.getColumns(ctx);
     const request = {
       clientIp: '::ffff:192.0.0.1',
-      user: { id: 'usr_1', roles: { editor: true } },
+      user: { id: context.user.id, roles: { editor: true } },
     };
     const bulkData = Array(5)
       .fill(0)
@@ -499,7 +576,7 @@ function baseModelSqlTests() {
       );
       expect.fail('Expected forbidden error');
     } catch (e: any) {
-      expect(e.message).to.include('Permission denied');
+      expect(e.message).to.include('You do not have permission');
     } finally {
       permissionListStub.restore();
     }
@@ -509,7 +586,7 @@ function baseModelSqlTests() {
     const columns = await table.getColumns(ctx);
     const request = {
       clientIp: '::ffff:192.0.0.1',
-      user: { id: 'usr_editor', roles: { editor: true } },
+      user: { id: context.user.id, roles: { editor: true } },
     };
 
     const permissionListStub = sinon.stub(Permission, 'list').resolves([
@@ -536,7 +613,7 @@ function baseModelSqlTests() {
       );
       expect.fail('Expected forbidden error');
     } catch (e: any) {
-      expect(e.message).to.include('Permission denied');
+      expect(e.message).to.include('You do not have permission');
     } finally {
       permissionListStub.restore();
     }
@@ -546,7 +623,7 @@ function baseModelSqlTests() {
     const columns = await table.getColumns(ctx);
     const request = {
       clientIp: '::ffff:192.0.0.1',
-      user: { id: 'usr_editor', roles: { editor: true } },
+      user: { id: context.user.id, roles: { editor: true } },
     };
 
     const row = await baseModelSql.insert(
@@ -572,10 +649,152 @@ function baseModelSqlTests() {
     ]);
 
     try {
-      await baseModelSql.updateByPk(row['Id'], { Title: 'Updated' }, request);
+      await baseModelSql.updateByPk(row['Id'], { Title: 'Updated' }, undefined, request);
       expect.fail('Expected forbidden error');
     } catch (e: any) {
-      expect(e.message).to.include('Permission denied');
+      expect(e.message).to.include('You do not have permission');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('Count respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.count({ cookie: request });
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('GroupBy respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.groupByAndAggregate('Title', 'count', {
+        cookie: request,
+      });
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('ooRead respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.ooRead({
+        colId: 'some-col-id',
+        id: 'some-id',
+        cookie: request,
+      });
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
+    } finally {
+      permissionListStub.restore();
+    }
+  });
+
+  it('btRead respects table visibility permission', async () => {
+    const request = {
+      clientIp: '::ffff:192.0.0.1',
+      user: { id: context.user.id, roles: { viewer: true } },
+    };
+
+    const permissionListStub = sinon.stub(Permission, 'list').resolves([
+      new Permission({
+        id: 'perm_view_1',
+        fk_workspace_id: base.fk_workspace_id,
+        base_id: base.id,
+        entity: PermissionEntity.TABLE,
+        entity_id: table.id,
+        permission: PermissionKey.TABLE_VISIBILITY,
+        created_by: 'another_user',
+        enforce_for_form: true,
+        enforce_for_automation: true,
+        granted_type: PermissionGrantedType.ROLE,
+        granted_role: PermissionRole.CREATOR,
+        subjects: [],
+      } as any),
+    ]);
+
+    try {
+      await baseModelSql.btRead({
+        colId: 'some-col-id',
+        id: 'some-id',
+        cookie: request,
+      });
+      expect.fail('Expected forbidden error');
+    } catch (e: any) {
+      expect(e.message).to.include('You do not have permission');
     } finally {
       permissionListStub.restore();
     }
