@@ -101,16 +101,6 @@ export default {
             <DashboardMiniSidebarTheme placement="bottom" render-as-btn />
 
             <LazySmartsheetToolbarExportWithProvider v-if="allowCSVDownload" />
-
-            <a
-              v-if="!appInfo.isOnPrem"
-              href="https://app.nocodb.com/#/signin"
-              target="_blank"
-              class="!no-underline xs:hidden"
-              rel="noopener"
-            >
-              <NcButton size="xs"> {{ $t('labels.signUpForFree') }} </NcButton>
-            </a>
           </div>
         </a-layout-header>
         <NcFullScreen v-model="isFullScreen" class="h-full" :page-only="true">

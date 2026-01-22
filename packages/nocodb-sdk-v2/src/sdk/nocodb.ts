@@ -3,17 +3,21 @@ import type { InternalAPI, NocoDBOptions } from './types';
 import { Workspace } from './workspace';
 
 class NocoDB {
-  private static _endPointURL = 'https://app.nocodb.com';
+  private static _endPointURL = '';
   private static _apiKey: string;
   private readonly internalAPI: InternalAPI;
 
   constructor(
-    options: NocoDBOptions = {
-      endPointURL: 'https://app.nocodb.com',
-    },
+    options: NocoDBOptions = {},
   ) {
     const endPointURL = options.endPointURL || NocoDB._endPointURL;
     const apiKey = options.apiKey || NocoDB._apiKey;
+
+    if (!endPointURL) {
+      throw new Error(
+        'endPointURL is required. Provide it in the constructor options or use NocoDB.configure().',
+      );
+    }
 
     if (!apiKey) {
       throw new Error(
