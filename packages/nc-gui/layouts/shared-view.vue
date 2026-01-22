@@ -45,7 +45,7 @@ onMounted(() => {
   if (sharedView.value?.title) {
     document.title = `${sharedView.value.title}`
   } else {
-    document.title = 'NocoDB'
+    document.title = '星澜 (XingLan)'
   }
 })
 </script>
@@ -66,15 +66,9 @@ export default {
           class="nc-table-topbar flex items-center justify-between !bg-transparent !px-3 !py-2 border-b-1 border-nc-border-gray-medium !h-[46px]"
         >
           <div class="flex items-center gap-6 h-7 max-w-[calc(100%_-_280px)] xs:max-w-[calc(100%_-_90px)]">
-            <a
-              class="transition-all duration-200 cursor-pointer transform hover:scale-105"
-              href="https://github.com/nocodb/nocodb"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img v-if="isDark" width="96" alt="NocoDB" src="~/assets/img/brand/text.png" class="flex-none min-w-[96px]" />
-              <img v-else width="96" alt="NocoDB" src="~/assets/img/brand/nocodb.png" class="flex-none min-w-[96px]" />
-            </a>
+            <nuxt-link class="transition-all duration-200 cursor-pointer transform hover:scale-105" to="/">
+              <img width="140" alt="星澜 (XingLan)" src="~/assets/img/brand/full-logo.svg" class="flex-none min-w-[140px]" />
+            </nuxt-link>
 
             <div class="flex items-center gap-2 text-nc-content-gray-emphasis text-sm truncate">
               <template v-if="isLoading">

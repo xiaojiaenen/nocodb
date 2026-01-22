@@ -13,13 +13,15 @@ const { locale } = useI18n()
 
 const languages = computed(
   () =>
-    Object.entries(Language)
-      .sort()
-      .map(([key, value]) => ({
-        label: value,
-        value: key,
-      })) as { label: string; value: string }[],
+    [
+      {
+        label: Language['zh-Hans'],
+        value: 'zh-Hans',
+      },
+    ] as { label: string; value: string }[],
 )
+
+const showLanguageSwitcher = computed(() => languages.value.length > 1)
 
 async function changeLanguage(lang: { label: string; value: string }) {
   const nextLang = lang.value as keyof typeof Language
@@ -35,6 +37,7 @@ const isDropdownOpen = ref(false)
 
 <template>
   <NcDropdown
+    v-if="showLanguageSwitcher"
     v-model:visible="isDropdownOpen"
     class="select-none color-transition cursor-pointer"
     :trigger="['click']"

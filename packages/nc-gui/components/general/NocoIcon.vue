@@ -11,8 +11,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { size, animate } = toRefs(props)
 
-const { isDark } = useTheme()
-
 const ping = autoResetRef(false, 1000)
 
 const onClick = useThrottleFn(() => {
@@ -28,14 +26,11 @@ const onClick = useThrottleFn(() => {
   >
     <div class="relative">
       <img
-        v-if="isDark"
-        class="hidden dark:block"
         :width="size"
         :height="size"
-        alt="NocoDB"
-        src="~/assets/img/icons/256x256-trans.png"
+        alt="星澜 (XingLan)"
+        src="~/assets/img/brand/logo.svg"
       />
-      <img v-else :width="size" :height="size" alt="NocoDB" src="~/assets/img/icons/256x256.png" />
 
       <TransitionGroup name="layout" :duration="500">
         <template v-if="animate || ping">

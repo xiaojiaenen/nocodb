@@ -7,7 +7,9 @@ const { lang: currentLang } = useGlobal()
 
 const { locale } = useI18n()
 
-const languages = computed(() => Object.entries(Language).sort() as [keyof typeof Language, Language][])
+const languages = computed(() => ['zh-Hans'] as const)
+
+const showLanguageSwitcher = computed(() => languages.value.length > 1)
 
 async function changeLanguage(lang: string) {
   const nextLang = lang as keyof typeof Language
@@ -20,29 +22,20 @@ async function changeLanguage(lang: string) {
 </script>
 
 <template>
-  <a-menu-item class="group rounded-md !my-0.5">
-    <a
-      href="https://nocodb.com/docs/product-docs/engineering/translation#how-to-contribute--for-community-members"
-      target="_blank"
-      class="caption nc-base-menu-item rounded-md underline hover:!text-primary"
-      rel="noopener"
+  <template v-if="showLanguageSwitcher">
+    <a-menu-item
+      v-for="key of languages"
+      :key="key"
+      class="group rounded-md !my-0.5"
+      :value="key"
+      @click="changeLanguage(key)"
     >
-      {{ $t('activity.translate') }}
-    </a>
-  </a-menu-item>
-
-  <a-menu-item
-    v-for="[key, lang] of languages"
-    :key="key"
-    class="group rounded-md !my-0.5"
-    :value="key"
-    @click="changeLanguage(key)"
-  >
-    <div class="flex items-center gap-2 justify-between">
-      <div class="nc-base-menu-item w-fit capitalize">
-        {{ Language[key] || lang }}
+      <div class="flex items-center gap-2 justify-between">
+        <div class="nc-base-menu-item w-fit capitalize">
+          {{ Language[key] }}
+        </div>
+        <component :is="iconMap.check" v-if="key === locale" class="text-nc-content-brand w-4 h-4" />
       </div>
-      <component :is="iconMap.check" v-if="key === locale" class="text-nc-content-brand w-4 h-4" />
-    </div>
-  </a-menu-item>
+    </a-menu-item>
+  </template>
 </template>

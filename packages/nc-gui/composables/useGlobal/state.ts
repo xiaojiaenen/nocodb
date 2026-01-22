@@ -4,8 +4,6 @@ import type { AppInfo, State, StoredState } from './types'
 import { INITIAL_LEFT_SIDEBAR_WIDTH } from '~/lib/constants'
 
 export function useGlobalState(storageKey = 'nocodb-gui-v2'): State {
-  /** get the preferred languages of a user, according to browser settings */
-  const preferredLanguages = usePreferredLanguages()
   /** todo: reimplement; get the preferred dark mode setting, according to browser settings */
   //   const prefersDarkMode = $(usePreferredDark())
   const prefersDarkMode = false
@@ -13,39 +11,11 @@ export function useGlobalState(storageKey = 'nocodb-gui-v2'): State {
   /** reactive timestamp to check token expiry against */
   const timestamp = useTimestamp({ immediate: true, interval: 100 })
 
-  const {
-    vueApp: { i18n },
-  } = useNuxtApp()
-
   const router = useRouter()
 
   const isSharedBaseOrErdOrView = computed(() => isSharedBaseOrErdOrViewRoute(router.currentRoute.value))
 
-  /**
-   * Set initial language based on browser settings.
-   * If the user has not set a preferred language, we fall back to 'en'.
-   * If the user has set a preferred language, we try to find a matching locale in the available locales.
-   */
-  const preferredLanguage = preferredLanguages.value.reduce<keyof typeof Language>((locale, language) => {
-    /** split language to language and code, e.g. en-GB -> [en, GB] */
-    const [lang, code] = language.split(/[_-]/)
-
-    /** find all locales that match the language */
-    let availableLocales = i18n.global.availableLocales.filter((locale) => locale.startsWith(lang))
-
-    /** If we can match more than one locale, we check if the code of the language matches as well */
-    if (availableLocales.length > 1) {
-      availableLocales = availableLocales.filter((locale) => locale.endsWith(code))
-    }
-
-    /** if there are still multiple locales, pick the first one */
-    const availableLocale = availableLocales[0]
-
-    /** if we found a matching locale, return it */
-    if (availableLocale) locale = availableLocale as keyof typeof Language
-
-    return locale
-  }, 'en' /** fallback locale */)
+  const preferredLanguage = 'zh-Hans' as const
 
   const { width } = useWindowSize()
   const isViewPortMobile = () => {

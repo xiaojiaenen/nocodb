@@ -44,15 +44,10 @@ hooks.hook('page:finish', () => {
           class="transition-all duration-200 p-2 cursor-pointer transform hover:scale-105 nc-noco-brand-icon"
           @click="navigateTo('/')"
         >
-          <a-tooltip placement="bottom">
-            <template #title>
-              {{ currentVersion }}
-            </template>
-            <div class="flex items-center gap-2">
-              <img v-if="!isDashboard" width="120" alt="NocoDB" src="~/assets/img/brand/nocodb-full.png" />
-              <img v-else width="25" alt="NocoDB" src="~/assets/img/icons/256x256.png" />
-            </div>
-          </a-tooltip>
+          <div class="flex items-center gap-2">
+            <img v-if="!isDashboard" width="140" alt="星澜 (XingLan)" src="~/assets/img/brand/full-logo.svg" />
+            <img v-else width="26" alt="星澜 (XingLan)" src="~/assets/img/brand/logo.svg" />
+          </div>
         </div>
 
         <div class="!text-nc-content-inverted-primary flex justify-center">

@@ -19,11 +19,11 @@ const statePlugin = async (_nuxtApp) => {
 
   let currentLang = state.lang.value
 
-  /** fall back to EN language if the current language cannot be found in Language or LanguagesAlias */
-  if (![...Object.keys(Language), ...Object.keys(LanguageAlias)].includes(currentLang)) state.lang.value = currentLang = 'en'
+  /** force simplified Chinese only */
+  state.lang.value = currentLang = 'zh-Hans'
 
   /** force load initial locale messages */
-  await Promise.all([loadLocaleMessages(currentLang), loadLocaleMessages('en')])
+  await loadLocaleMessages(currentLang)
 
   /** set i18n locale to stored language */
   await setI18nLanguage(currentLang)
