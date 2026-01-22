@@ -1,12 +1,7 @@
 import process from 'process';
 import { Injectable, Logger } from '@nestjs/common';
-import axios from 'axios';
-import { compareVersions, validate } from 'compare-versions';
 import { ViewTypes } from 'nocodb-sdk';
 import { ConfigService } from '@nestjs/config';
-import { useAgent } from 'request-filtering-agent';
-import dayjs from 'dayjs';
-import type { ErrorReportReqType } from 'nocodb-sdk';
 import type { AppConfig, NcRequest } from '~/interface/config';
 import {
   NC_ATTACHMENT_FIELD_SIZE,
@@ -16,10 +11,10 @@ import SqlMgrv2 from '~/db/sql-mgr/v2/SqlMgrv2';
 import { NcError } from '~/helpers/catchError';
 import { Base, User } from '~/models';
 import Noco from '~/Noco';
-import { isCloud, isEE, isOnPrem, T } from '~/utils';
+import { isCloud, isEE, isOnPrem } from '~/utils';
 import NcConnectionMgrv2 from '~/utils/common/NcConnectionMgrv2';
 import getInstance from '~/utils/getInstance';
-import { CacheScope, MetaTable, RootScopes } from '~/utils/globals';
+import { MetaTable, RootScopes } from '~/utils/globals';
 import { jdbcToXcConfig } from '~/utils/nc-config/helpers';
 import { packageVersion } from '~/utils/packageVersion';
 import {
@@ -31,13 +26,6 @@ import {
   NC_DISABLE_GROUP_BY_AGG,
   NC_DISABLE_SUPPORT_CHAT,
 } from '~/utils/nc-config';
-import NocoCache from '~/cache/NocoCache';
-import { getCircularReplacer } from '~/utils';
-
-const versionCache = {
-  releaseVersion: null,
-  lastFetched: null,
-};
 
 const defaultConnectionConfig: any = {
   // https://github.com/knex/knex/issues/97
@@ -90,36 +78,9 @@ export class UtilsService {
   lastSyncTime = null;
 
   async versionInfo() {
-    if (
-      !versionCache.lastFetched ||
-      (versionCache.lastFetched &&
-        versionCache.lastFetched < Date.now() - 1000 * 60 * 60)
-    ) {
-      const nonBetaTags = await axios
-        .get('https://api.github.com/repos/nocodb/nocodb/tags', {
-          timeout: 5000,
-        })
-        .then((response) => {
-          return response.data
-            .map((x) => x.name)
-            .filter(
-              (v) =>
-                validate(v) &&
-                // also filter only XXX.XXX.XXX version. ex: 0.263.8
-                v.match(/^\d+\.\d+\.\d+$/),
-            )
-            .sort((x, y) => compareVersions(y, x));
-        })
-        .catch(() => null);
-      if (nonBetaTags && nonBetaTags.length > 0) {
-        versionCache.releaseVersion = nonBetaTags[0];
-      }
-      versionCache.lastFetched = Date.now();
-    }
-
     const response = {
       currentVersion: packageVersion,
-      releaseVersion: versionCache.releaseVersion,
+      releaseVersion: null,
     };
 
     return response;
@@ -138,52 +99,7 @@ export class UtilsService {
       apiMeta: any;
     };
   }) {
-    const { apiMeta } = param.body;
-
-    if (apiMeta?.body) {
-      try {
-        apiMeta.body = JSON.parse(apiMeta.body);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    if (apiMeta?.auth) {
-      try {
-        apiMeta.auth = JSON.parse(apiMeta.auth);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    apiMeta.response = {};
-    const _req = {
-      params: apiMeta.parameters
-        ? apiMeta.parameters.reduce((paramsObj, param) => {
-            if (param.name && param.enabled) {
-              paramsObj[param.name] = param.value;
-            }
-            return paramsObj;
-          }, {})
-        : {},
-      url: apiMeta.url,
-      method: apiMeta.method || 'GET',
-      data: apiMeta.body || {},
-      headers: apiMeta.headers
-        ? apiMeta.headers.reduce((headersObj, header) => {
-            if (header.name && header.enabled) {
-              headersObj[header.name] = header.value;
-            }
-            return headersObj;
-          }, {})
-        : {},
-      responseType: apiMeta.responseType || 'json',
-      withCredentials: true,
-      httpAgent: useAgent(apiMeta.url, {}),
-      httpsAgent: useAgent(apiMeta.url, {}),
-    };
-    const data = await axios(_req);
-    return data?.data;
+    return {};
   }
 
   async axiosRequestMake(param: {
@@ -191,25 +107,7 @@ export class UtilsService {
       apiMeta: any;
     };
   }) {
-    const {
-      apiMeta: { url },
-    } = param.body;
-    const isExcelImport = /.*\.(xls|xlsx|xlsm|ods|ots)/;
-    const isCSVImport = /.*\.(csv)/;
-    const ipBlockList =
-      /(10)(\.([2]([0-5][0-5]|[01234][6-9])|[1][0-9][0-9]|[1-9][0-9]|[0-9])){3}|(172)\.(1[6-9]|2[0-9]|3[0-1])(\.(2[0-4][0-9]|25[0-5]|[1][0-9][0-9]|[1-9][0-9]|[0-9])){2}|(192)\.(168)(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){2}|(0.0.0.0)|localhost?/g;
-    if (
-      ipBlockList.test(url) ||
-      (!isCSVImport.test(url) && !isExcelImport.test(url))
-    ) {
-      return {};
-    }
-    if (isCSVImport || isExcelImport) {
-      param.body.apiMeta.responseType = 'arraybuffer';
-    }
-    return await this._axiosRequestMake({
-      body: param.body,
-    });
+    return {};
   }
 
   async urlToDbConfig(param: {
@@ -508,129 +406,14 @@ export class UtilsService {
   }
 
   async reportErrors(param: { body: ErrorReportReqType; req: NcRequest }) {
-    for (const error of param.body?.errors ?? []) {
-      T.emit('evt', {
-        evt_type: 'gui:error',
-        properties: {
-          message: error.message,
-          stack: error.stack?.split('\n').slice(0, 2).join('\n'),
-          ...(param.body.extra || {}),
-        },
-      });
-    }
+    return {};
   }
 
   async feed(req: NcRequest) {
-    const {
-      type = 'all',
-      page = '1',
-      per_page = '10',
-    } = req.query as {
-      type: 'github' | 'youtube' | 'all' | 'twitter' | 'cloud';
-      page: string;
-      per_page: string;
-    };
-
-    const perPage = Math.min(Math.max(parseInt(per_page, 10) || 10, 1), 100);
-    const pageNum = Math.max(parseInt(page, 10) || 1, 1);
-
-    const cacheKey = `${CacheScope.PRODUCT_FEED}:${type}:${pageNum}:${perPage}`;
-
-    const cachedData = await NocoCache.get('root', cacheKey, 'json');
-
-    if (cachedData) {
-      try {
-        return JSON.parse(cachedData);
-      } catch (e) {
-        this.logger.error(e?.message, e);
-        await NocoCache.del('root', cacheKey);
-      }
-    }
-
-    let payload = null;
-    if (
-      !this.lastSyncTime ||
-      dayjs().isAfter(this.lastSyncTime.add(3, 'hours'))
-    ) {
-      payload = await T.payload();
-      this.lastSyncTime = dayjs();
-    }
-
-    let response;
-
-    try {
-      response = await axios.post(
-        'https://product-feed.nocodb.com/api/v1/social/feed',
-        payload,
-        {
-          params: {
-            per_page: perPage,
-            page: pageNum,
-            type,
-          },
-        },
-      );
-    } catch (e) {
-      this.logger.error(e?.message, e);
-      return [];
-    }
-
-    // The feed includes the attachments, which has the presigned URL
-    // So the cache should match the presigned URL cache
-    await NocoCache.setExpiring(
-      'root',
-      cacheKey,
-      JSON.stringify(response.data, getCircularReplacer),
-      Number.isNaN(parseInt(process.env.NC_ATTACHMENT_EXPIRE_SECONDS))
-        ? 2 * 60 * 60
-        : parseInt(process.env.NC_ATTACHMENT_EXPIRE_SECONDS),
-    );
-
-    return response.data;
+    return [];
   }
 
   async cloudFeatures(_req: NcRequest) {
-    const cacheKey = `${CacheScope.CLOUD_FEATURES}`;
-
-    const cachedData = await NocoCache.get('root', cacheKey, 'json');
-
-    if (cachedData) {
-      try {
-        return JSON.parse(cachedData);
-      } catch (e) {
-        this.logger.error(e?.message, e);
-        await NocoCache.del('root', cacheKey);
-      }
-    }
-
-    let payload = null;
-    if (
-      !this.lastSyncTime ||
-      dayjs().isAfter(this.lastSyncTime.add(3, 'hours'))
-    ) {
-      payload = await T.payload();
-      this.lastSyncTime = dayjs();
-    }
-
-    let response;
-
-    try {
-      response = await axios.post(
-        'https://product-feed.nocodb.com/api/v1/cloud/features',
-        payload,
-      );
-    } catch (e) {
-      this.logger.error(e?.message, e);
-      return [];
-    }
-
-    await NocoCache.setExpiring(
-      'root',
-      cacheKey,
-      JSON.stringify(response.data, getCircularReplacer),
-      3 * 60 * 60,
-    );
-
-    return response.data;
+    return [];
   }
 }

@@ -1,7 +1,6 @@
 import os from 'os';
 import Emittery from 'emittery';
 import { machineIdSync } from 'node-machine-id';
-import axios from 'axios';
 import isDocker from 'is-docker';
 import { packageVersion } from '~/utils/packageVersion';
 import TeleBatchProcessor from '~/utils/TeleBatchProcessor';
@@ -17,20 +16,7 @@ const litestream = !!(
   process.env.LITESTREAM_S3_ACCESS_KEY_ID
 );
 
-const sendEvt = () => {
-  try {
-    const upTime = Math.round(process.uptime() / 3600);
-    Tele.emit('evt', {
-      evt_type: 'alive',
-      count: global.NC_COUNT,
-      upTime,
-      cache,
-      litestream,
-      executable,
-    });
-  } catch {}
-};
-setInterval(sendEvt, 8 * 60 * 60 * 1000).unref();
+const sendEvt = () => {};
 
 class Tele {
   static emitter;
@@ -41,7 +27,6 @@ class Tele {
   static emit(event, data) {
     try {
       this._init();
-      Tele.emitter.emit(event, data);
     } catch (e) {}
   }
 
@@ -51,11 +36,9 @@ class Tele {
   }
 
   static page(args: Record<string, any>) {
-    this.emit('page', args);
   }
 
   static event(args: Record<string, any>) {
-    this.emit('ph_event', args);
   }
 
   static _init() {
@@ -81,148 +64,6 @@ class Tele {
           oneClick: !!process.env.NC_ONE_CLICK,
         };
         teleData.machine_id = `${machineIdSync()},,`;
-        Tele.emitter.on('evt_app_started', async (msg) => {
-          try {
-            await waitForMachineId(teleData);
-            if (isDisabled) return;
-
-            if (msg && msg.count !== undefined) {
-              global.NC_COUNT = msg.count;
-            }
-
-            await axios.post('https://telemetry.nocodb.com/api/v1/telemetry', {
-              ...teleData,
-              evt_type: 'started',
-              payload: {
-                count: global.NC_COUNT,
-              },
-            });
-          } catch (e) {
-          } finally {
-            sendEvt();
-          }
-        });
-
-        Tele.emitter.on('evt', async (payload) => {
-          try {
-            const instanceMeta = (await Tele.getInstanceMeta()) || {};
-
-            await waitForMachineId(teleData);
-            if (payload.check) {
-              teleData.machine_id = `${machineIdSync()},,`;
-            }
-            if (
-              isDisabled &&
-              !(
-                payload.evt_type &&
-                payload.evt_type.startsWith('a:sync-request:')
-              )
-            )
-              return;
-
-            if (payload.evt_type === 'project:invite') {
-              global.NC_COUNT = payload.count || global.NC_COUNT;
-            }
-            if (payload.evt_type === 'user:first_signup') {
-              global.NC_COUNT = +global.NC_COUNT || 1;
-            }
-
-            await axios.post('https://telemetry.nocodb.com/api/v1/telemetry', {
-              ...teleData,
-              evt_type: payload.evt_type,
-              payload: { ...instanceMeta, ...(payload || {}) },
-            });
-          } catch {}
-        });
-
-        Tele.emitter.on('evt_api_created', async (data) => {
-          try {
-            await waitForMachineId(teleData);
-            const stats = {
-              ...teleData,
-              table_count: data.tablesCount || 0,
-              relation_count: data.relationsCount || 0,
-              view_count: data.viewsCount || 0,
-              api_count: data.apiCount || 0,
-              function_count: data.functionsCount || 0,
-              procedure_count: data.proceduresCount || 0,
-              mysql: data.dbType === 'mysql2' ? 1 : 0,
-              pg: data.dbType === 'pg' ? 1 : 0,
-              sqlite3: data.dbType === 'sqlite3' ? 1 : 0,
-              oracledb: data.dbType === 'oracledb' ? 1 : 0,
-              rest: data.type === 'rest' ? 1 : 0,
-              graphql: data.type === 'graphql' ? 1 : 0,
-              grpc: data.type === 'grpc' ? 1 : 0,
-              time_taken: data.timeTaken,
-            };
-            if (isDisabled) return;
-            await axios.post(
-              'https://telemetry.nocodb.com/api/v1/telemetry/apis_created',
-              stats,
-            );
-          } catch (e) {}
-        });
-
-        Tele.emitter.on('evt_subscribe', async (email) => {
-          try {
-            if (isDisabled) return;
-            await axios.post(
-              'https://telemetry.nocodb.com/api/v1/newsletter/sdhjh34u3yuy34bj343jhj4iwolaAdsdj3434uiut4nn',
-              {
-                email,
-              },
-            );
-          } catch (e) {}
-        });
-
-        Tele.emitter.on('page', async (args) => {
-          try {
-            if (isDisabled) return;
-            const instanceMeta = await Tele.getInstanceMeta();
-
-            await this.client.capture({
-              distinctId: args.id || `${this.machineId}:public`,
-              event: '$pageview',
-              properties: {
-                ...teleData,
-                ...instanceMeta,
-                $current_url: args.path,
-              },
-            });
-          } catch {}
-        });
-        Tele.emitter.on('ph_event', async (payload: Record<string, any>) => {
-          try {
-            if (
-              isDisabled &&
-              !(
-                payload.evt_type &&
-                payload.evt_type.startsWith('a:sync-request:')
-              )
-            )
-              return;
-            const instanceMeta = await this.getInstanceMeta();
-            let id = payload.id;
-
-            if (!id) {
-              if (payload.event && payload.event.startsWith('a:api:')) {
-                id = this.machineId;
-              } else {
-                id = `${this.machineId}:public`;
-              }
-            }
-            await this.client.capture({
-              // userId: id,
-              distinctId: id,
-              event: payload.event,
-              properties: {
-                ...teleData,
-                ...instanceMeta,
-                ...(payload.data || {}),
-              },
-            });
-          } catch {}
-        });
       }
     } catch (e) {}
 
@@ -292,18 +133,6 @@ async function waitForMachineId(teleData) {
   while (i-- && !teleData.machine_id) {
     await new Promise((resolve) => setTimeout(() => resolve(null), 500));
   }
-}
-
-// this is to keep the server alive
-if (process.env.NC_PUBLIC_URL) {
-  setInterval(() => {
-    axios({
-      method: 'get',
-      url: process.env.NC_PUBLIC_URL,
-    })
-      .then(() => {})
-      .catch(() => {});
-  }, 2 * 60 * 60 * 1000).unref();
 }
 
 if (process.env.NC_ONE_CLICK) {

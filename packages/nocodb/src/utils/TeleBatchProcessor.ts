@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-// This class is used to batch process telemetry data
 class TeleBatchProcessor {
   private batch: any[];
   private flushAt: number;
@@ -42,8 +39,6 @@ class TeleBatchProcessor {
     if (!batch.length) {
       return;
     }
-
-    await axios.post('https://telemetry.nocodb.com/api/v1/telemetry', batch);
   }
 }
 

@@ -17,22 +17,12 @@ export default defineNuxtConfig({
 
   ignore: [...(process.env.NODE_ENV === 'production' ? ['pages/playground/**/*'] : [])],
 
-  modules: ['@vueuse/nuxt', 'nuxt-windicss', '@nuxt/image', '@pinia/nuxt', '@productdevbook/chatwoot'],
+  modules: ['@vueuse/nuxt', 'nuxt-windicss', '@nuxt/image', '@pinia/nuxt'],
   ssr: false,
 
   router: {
     options: {
       hashMode: true,
-    },
-  },
-  chatwoot: {
-    init: {
-      websiteToken: 'ke2YjiPnKw9gnz4PCq4RuQqR',
-      baseUrl: 'https://app.chatwoot.com',
-    },
-    settings: {
-      darkMode: 'light',
-      hideMessageBubble: true,
     },
   },
   spaLoadingTemplate: false,

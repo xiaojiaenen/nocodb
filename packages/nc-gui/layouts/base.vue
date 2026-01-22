@@ -60,8 +60,6 @@ hooks.hook('page:finish', () => {
 
         <div class="flex-1" />
 
-        <GeneralReleaseInfo />
-
         <a-tooltip placement="bottom" :mouse-enter-delay="1" class="mr-4">
           <template #title>{{ $t('labels.community.communityTranslated') }}</template>
 
