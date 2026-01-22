@@ -70,7 +70,7 @@ useEventListener(document, 'keydown', async (e: KeyboardEvent) => {
   }
 })
 
-// TODO: Remove when https://github.com/vuejs/core/issues/5513 fixed
+// TODO: Remove when vuejs/core issue 5513 fixed
 const key = ref(0)
 
 const messages = [
@@ -85,7 +85,7 @@ if (typeof window !== 'undefined') {
     window.addEventListener('error', (event) => {
       if (messages.includes(event.message)) {
         event.preventDefault()
-        console.warn('Re-rendering layout because of https://github.com/vuejs/core/issues/5513')
+        console.warn('Re-rendering layout because of vuejs/core issue 5513')
         key.value++
       }
     })
@@ -101,7 +101,7 @@ function onScope(scope: string) {
   }
 }
 
-// ref: https://github.com/vuejs/vue-cli/issues/7431#issuecomment-1793385162
+// ref: vuejs/vue-cli issue 7431 comment 1793385162
 // Stop error resizeObserver
 const debounce = (callback: (...args: any[]) => void, delay: number) => {
   let tid: any

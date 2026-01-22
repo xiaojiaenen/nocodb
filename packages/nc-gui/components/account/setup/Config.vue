@@ -75,13 +75,7 @@ const isValid = computed(() => {
 })
 
 const docLinks = computed(() => {
-  return [
-    {
-      title: 'Application Setup',
-      url: `https://nocodb.com/docs/product-docs/account-settings/oss-specific-details#configure-${plugin.value?.category?.toLowerCase()}`,
-    },
-    ...(plugin.value?.formDetails?.docs || []),
-  ]
+  return []
 })
 </script>
 
@@ -132,20 +126,21 @@ const docLinks = computed(() => {
       </div>
       <div class="nc-config-right-panel">
         <div class="flex-grow flex flex-col gap-3">
-          <div class="text-nc-content-gray-muted text-capitalize">{{ $t('labels.documentation') }}</div>
-          <a
-            v-for="doc of docLinks"
-            :key="doc.title"
-            :href="doc.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="!no-underline !text-current flex gap-2 items-center"
-          >
-            <GeneralIcon icon="bookOpen" class="text-nc-content-gray-muted" />
-            {{ doc.title }}
-          </a>
-
-          <NcDivider />
+          <div v-if="docLinks.length" class="text-nc-content-gray-muted text-capitalize">{{ $t('labels.documentation') }}</div>
+          <template v-if="docLinks.length">
+            <a
+              v-for="doc of docLinks"
+              :key="doc.title"
+              :href="doc.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="!no-underline !text-current flex gap-2 items-center"
+            >
+              <GeneralIcon icon="bookOpen" class="text-nc-content-gray-muted" />
+              {{ doc.title }}
+            </a>
+            <NcDivider />
+          </template>
 
           <div class="text-nc-content-gray-muted text-capitalize">{{ $t('labels.modifiedOn') }}</div>
           <div class="">

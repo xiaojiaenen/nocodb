@@ -302,8 +302,6 @@ const getHookTypeText = (hook: HookType) => {
               type="link"
               size="xsmall"
               class="!hover:underline !font-bold"
-              target="_blank"
-              href="https://nocodb.com/docs/product-docs/automation/webhook/webhook-v2-vs-v3#upgrade-to-webhook-v3"
             >
               {{ $t('activity.goToDocs') }}
             </NcButton>
@@ -327,9 +325,6 @@ const getHookTypeText = (hook: HookType) => {
               class="px-2"
               type="text"
               size="small"
-              @click="
-                navigateTo('https://nocodb.com/docs/product-docs/automation/webhook', { open: navigateToBlankTargetOpenOption })
-              "
             >
               <div class="flex items-center gap-2">
                 {{ $t('title.docs') }}

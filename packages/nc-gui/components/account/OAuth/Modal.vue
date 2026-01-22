@@ -17,16 +17,7 @@ const { createOAuthClient } = oauthStore
 
 const { getPossibleAttachmentSrc } = useAttachment()
 
-const supportedDocs: SupportedDocsType[] = [
-  {
-    title: 'NocoDB OAuth Client Setup',
-    href: 'https://docs.nocodb.com/nc-gui/oauth-client-setup',
-  },
-  {
-    title: 'NocoDB OAuth Client Setup',
-    href: 'https://docs.nocodb.com/nc-gui/oauth-client-setup',
-  },
-]
+const supportedDocs: SupportedDocsType[] = []
 
 const useForm = Form.useForm
 
@@ -264,7 +255,7 @@ function copyToClipboard(text: string, label: string) {
               </template>
               <a-input
                 v-model:value="clientRef.client_uri"
-                placeholder="https://example.com"
+                placeholder="example.com"
                 class="nc-input-shadow !rounded-lg"
               />
             </a-form-item>
@@ -325,17 +316,13 @@ function copyToClipboard(text: string, label: string) {
               <a-textarea
                 v-model:value="clientRef.redirect_uris"
                 :rows="4"
-                placeholder="https://example.com/auth/callback&#10;http://localhost:3000/callback&#10;http://127.0.0.1:3000/callback"
+                placeholder="example.com/auth/callback&#10;http://localhost:3000/callback&#10;http://127.0.0.1:3000/callback"
                 class="nc-input-shadow !rounded-lg"
               />
             </a-form-item>
           </a-form>
         </div>
       </div>
-
-      <NcModalSupportedDocsSidebar>
-        <NcModalSupportedDocs :docs="supportedDocs"> </NcModalSupportedDocs>
-      </NcModalSupportedDocsSidebar>
     </div>
   </NcModal>
 </template>

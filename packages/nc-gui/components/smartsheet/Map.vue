@@ -131,11 +131,6 @@ onMounted(async () => {
 
   myMapRef.value = myMap
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(myMap)
-
   markersClusterGroupRef.value = L.markerClusterGroup({
     iconCreateFunction(cluster: { getChildCount: () => number }) {
       return L.divIcon({

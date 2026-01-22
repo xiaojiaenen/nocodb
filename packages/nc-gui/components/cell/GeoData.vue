@@ -84,18 +84,6 @@ const onClickSetCurrentLocation = () => {
   navigator.geolocation.getCurrentPosition(onSuccess, onError, options)
 }
 
-const openInGoogleMaps = () => {
-  const [latitude, longitude] = (vModel.value || '').split(';')
-  const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
-  window.open(url, '_blank', 'noopener,noreferrer')
-}
-
-const openInOSM = () => {
-  const [latitude, longitude] = (vModel.value || '').split(';')
-  const url = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=15/${latitude}/${longitude}`
-  window.open(url, '_blank', "'noopener,noreferrer'")
-}
-
 const handleClose = (e: MouseEvent) => {
   if (e.target instanceof HTMLElement && !e.target.closest('.nc-geodata-picker-overlay')) {
     isExpanded.value = false
@@ -282,21 +270,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
                   </NcButton>
                 </div>
                 <div class="flex-1" />
-                <div v-if="vModel" class="flex gap-2">
-                  <NcButton type="secondary" size="small" @click="openInGoogleMaps">
-                    <div class="flex items-center gap-2">
-                      <GeneralIcon icon="ncLogoGoogleMapColored" />
-                      {{ $t('activity.map.googleMaps') }}
-                    </div>
-                  </NcButton>
-
-                  <NcButton type="secondary" size="small" @click="openInOSM">
-                    <div class="flex items-center gap-2">
-                      <GeneralIcon class="w-4 h-4" icon="ncLogoOpenStreetMapColored" />
-                      {{ $t('activity.map.osm') }}
-                    </div>
-                  </NcButton>
-                </div>
               </div>
 
               <div class="flex gap-3 justify-end">

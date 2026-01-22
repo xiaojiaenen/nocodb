@@ -96,7 +96,7 @@ export default defineNuxtConfig({
           content:
             '星澜 (XingLan) provides an intuitive spreadsheet interface for creating online databases, either from scratch or by connecting to any Postgres/MySQL. Access your data through interactive UIs or via API and SQL. Get started for free.',
         },
-        { hid: 'og:url', property: 'og:url', content: 'https://nocodb.com' },
+        { hid: 'og:url', property: 'og:url', content: '' },
         // Twitter
         { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
         { hid: 'twitter:title', name: 'twitter:title', content: '星澜 (XingLan)' },

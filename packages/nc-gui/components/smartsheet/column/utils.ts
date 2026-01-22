@@ -9,7 +9,7 @@ export function getRelationName(type: string) {
 }
 
 // supported mime types
-// retrieved from https://github.com/sindresorhus/file-type/blob/main/supported.js#L146
+// retrieved from sindresorhus/file-type supported.js
 export const fileMimeTypes = [
   {
     title: 'Application',

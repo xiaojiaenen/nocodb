@@ -100,14 +100,6 @@ onBeforeUnmount(() => {
           </div>
         </template>
         <div class="relative">
-          <FeedSocial
-            :class="{
-              'normal-left': ['recents', 'youtube', 'cloud'].includes(tab.key),
-              'changelog-left': tab.key === 'github',
-              'changelog-twitter': tab.key === 'twitter',
-            }"
-            class="absolute social-card"
-          />
           <component :is="tab.container" :type="tab.key" />
         </div>
       </a-tab-pane>
@@ -116,19 +108,4 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="scss">
-.social-card {
-  top: 24px;
-}
-
-.normal-left {
-  @apply xl:left-[calc(50%+350px)] left-[calc(50%+300px)];
-}
-
-.changelog-left {
-  @apply xl:left-[calc(50%+350px)] left-[calc(50%+300px)];
-}
-
-.changelog-twitter {
-  left: calc(50% + 350px);
-}
 </style>

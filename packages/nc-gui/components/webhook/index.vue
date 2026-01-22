@@ -785,24 +785,7 @@ async function testWebhook() {
   }
 }
 
-const supportedDocs: SupportedDocsType[] = [
-  {
-    title: 'Getting started',
-    href: 'https://nocodb.com/docs/product-docs/automation/webhook/create-webhook',
-  },
-  {
-    title: 'Create webhook',
-    href: 'https://nocodb.com/docs/product-docs/automation/webhook',
-  },
-  {
-    title: 'Custom payload',
-    href: 'https://nocodb.com/docs/product-docs/automation/webhook/create-webhook#webhook-with-custom-payload-',
-  },
-  {
-    title: 'Trigger on condition',
-    href: 'https://nocodb.com/docs/product-docs/automation/webhook/create-webhook#webhook-with-conditions',
-  },
-]
+const supportedDocs: SupportedDocsType[] = []
 
 watch(
   () => hookRef?.event,
@@ -1068,13 +1051,7 @@ const webhookV2AndV3Diff = computed(() => {
             <div class="text-base font-bold text-nc-content-gray-emphasis">Change in webhook response</div>
             <div class="text-sm font-normal text-nc-content-gray-subtle2">
               For more information on webhooks v3 visit
-              <a
-                href="https://nocodb.com/docs/product-docs/automation/webhook/webhook-v2-vs-v3#upgrade-to-webhook-v3"
-                class="nc-link"
-                target="_blank"
-              >
-                NocoDB Docs.
-              </a>
+              <span class="nc-link">NocoDB Docs.</span>
             </div>
           </div>
 

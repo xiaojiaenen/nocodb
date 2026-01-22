@@ -1,4 +1,4 @@
-// ref - https://github.com/nuxt/nuxt/issues/26565
+// ref - nuxt/nuxt issue 26565
 export default defineNuxtPlugin((nuxtApp) => {
   const MAX_RETRIES = 2
   const QUERY_PARAM_NAME = 'reload_attempt'

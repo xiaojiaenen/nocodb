@@ -23,24 +23,7 @@ const { openedProject } = storeToRefs(useBases())
 
 const token = useVModel(props, 'token')
 
-const supportedDocs: SupportedDocsType[] = [
-  {
-    title: 'Getting Started with MCP Server',
-    href: 'https://nocodb.com/docs/product-docs/mcp',
-  },
-  {
-    title: 'Claude Setup',
-    href: 'https://nocodb.com/docs/product-docs/mcp#claude',
-  },
-  {
-    title: 'Cursor Setup',
-    href: 'https://nocodb.com/docs/product-docs/mcp#cursor',
-  },
-  {
-    title: 'Windsurf Setup',
-    href: 'https://nocodb.com/docs/product-docs/mcp#windsurf',
-  },
-]
+const supportedDocs: SupportedDocsType[] = []
 
 const { updateMcpToken } = useMcpSettings()
 
@@ -290,9 +273,6 @@ const code = computed(
         </div>
       </div>
 
-      <NcModalSupportedDocsSidebar>
-        <NcModalSupportedDocs :docs="supportedDocs"> </NcModalSupportedDocs>
-      </NcModalSupportedDocsSidebar>
     </div>
   </NcModal>
 </template>

@@ -301,13 +301,7 @@ const customRow = (record: Record<string, any>) => ({
       <div class="text-sm font-normal text-nc-content-gray-subtle2">
         <div>
           {{ $t('msg.manageConnections') }}
-          <a
-            target="_blank"
-            href="https://nocodb.com/docs/product-docs/integrations/actions-on-connection"
-            rel="noopener noreferrer"
-          >
-            {{ $t('msg.learnMore') }}
-          </a>
+          <span>{{ $t('msg.learnMore') }}</span>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -616,13 +610,7 @@ const customRow = (record: Record<string, any>) => ({
             {{ successConfirmModal.description }}
           </div>
 
-          <a
-            target="_blank"
-            href="https://nocodb.com/docs/product-docs/data-sources/connect-to-data-source"
-            rel="noopener noreferrer"
-          >
-            Learn more
-          </a>
+          <span>Learn more</span>
         </div>
       </div>
     </NcModal>

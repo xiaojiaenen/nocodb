@@ -56,7 +56,7 @@ const migrateToV3 = async () => {
 
     <div class="text-nc-content-gray-subtle2 mt-2 leading-5">
       Upgrade this base to v3 to unlock the latest platform capabilities and future-ready APIs.
-      <a href="https://docs.nocodb.com/" target="_blank" rel="noopener noreferrer" class="text-nc-content-brand"> Learn more </a>
+      <span class="text-nc-content-brand"> Learn more </span>
     </div>
 
     <div class="mt-6">

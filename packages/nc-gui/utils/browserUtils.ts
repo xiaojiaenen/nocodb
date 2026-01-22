@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/vue-3'
 import { ncIsArray } from 'nocodb-sdk'
 
-// refer - https://stackoverflow.com/a/11752084
+// refer - stackoverflow a/11752084
 export const isMac = () => /Mac/i.test(navigator.platform)
 export const isDrawerExist = () => document.querySelector('.ant-drawer-open')
 export const isLinkDropdownExist = () => document.querySelector('.nc-links-dropdown.active')
@@ -94,7 +94,7 @@ export function getElementAtMouse<T>(cssSelector: string, { clientX, clientY }: 
 }
 
 export function forcedNextTick(cb: () => void) {
-  // See https://github.com/vuejs/vue/issues/9200
+  // See vuejs/vue issue 9200
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       cb()

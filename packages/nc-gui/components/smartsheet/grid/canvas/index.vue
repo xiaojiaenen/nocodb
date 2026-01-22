@@ -1534,7 +1534,6 @@ async function handleMouseUp(e: MouseEvent, _elementMap: CanvasElement) {
       return
     } else {
       if (upgradeModalInlineState.value.isHoveredLearnMore) {
-        window.open('https://nocodb.com/pricing', '_blank', 'noopener,noreferrer')
         return
       }
 

@@ -266,14 +266,9 @@ onMounted(async () => {
 
         <div class="prose-sm mt-4 text-nc-content-gray-muted">
           {{ $t('msg.bySigningUp') }}
-          <a
-            class="prose-sm !text-nc-content-gray-muted underline"
-            target="_blank"
-            href="https://nocodb.com/policy-nocodb"
-            rel="noopener"
-          >
-            {{ $t('title.termsOfService') }}</a
-          >
+          <span class="prose-sm !text-nc-content-gray-muted underline">
+            {{ $t('title.termsOfService') }}
+          </span>
         </div>
       </div>
     </NuxtLayout>

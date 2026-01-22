@@ -160,24 +160,7 @@ watch(activeLang, (newLang) => {
   selectedClient.value = newLang?.clients?.[0]
 })
 
-const supportedDocs = [
-  {
-    title: 'Data APIs',
-    href: 'https://nocodb.com/apis/v2/data',
-  },
-  {
-    title: 'Meta APIs',
-    href: 'https://nocodb.com/apis/v2/meta',
-  },
-  {
-    title: 'Create API Token',
-    href: 'https://nocodb.com/docs/product-docs/account-settings/api-tokens#create-api-token',
-  },
-  {
-    title: 'Swagger',
-    href: 'https://nocodb.com/docs/product-docs/bases/actions-on-base#rest-apis',
-  },
-] as {
+const supportedDocs = [] as {
   title: string
   href: string
 }[]
@@ -219,7 +202,7 @@ const supportedDocs = [
 
         <NcDivider class="!my-3" />
 
-        <div class="flex flex-col gap-1">
+        <div v-if="supportedDocs.length" class="flex flex-col gap-1">
           <div
             class="p-2 text-xs text-nc-content-gray-muted uppercase font-semibold"
             :style="{

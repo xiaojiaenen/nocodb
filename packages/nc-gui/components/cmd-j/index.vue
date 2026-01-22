@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { Client } from 'typesense'
 import { useVModel } from '@vueuse/core'
-import type { SortedResult } from '#imports'
 
 const props = defineProps<{
   open: boolean
@@ -18,18 +16,11 @@ const modalEl = ref<HTMLElement | null>(null)
 const cmdInputEl = ref<HTMLElement | null>(null)
 const selectedIndex = ref(0)
 
-const typesenseClient = new Client({
-  apiKey: 'lNKDTZdJrE76Sg8WEyeN9mXT29l1xq7Q',
-  nodes: [
-    {
-      host: 'rqf5uvajyeczwt3xp-1.a1.typesense.net',
-      port: 443,
-      protocol: 'https',
-    },
-  ],
-})
-
-const { search, query } = useTypesenseSearch(typesenseClient, 'noco-docs-v2')
+const search = ref('')
+const query = {
+  data: ref<any[] | 'empty'>([]),
+  isLoading: ref(false),
+}
 
 const hide = () => {
   vOpen.value = false
@@ -37,8 +28,7 @@ const hide = () => {
   selectedIndex.value = 0
 }
 
-const navigateToResult = (result: SortedResult) => {
-  window.open(`https://nocodb.com${result.url}`, '_blank')
+const navigateToResult = (_result: any) => {
   hide()
 }
 

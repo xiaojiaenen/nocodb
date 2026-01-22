@@ -222,7 +222,7 @@ onMounted(async () => {
       'wordWrap': 'on',
       'wrappingStrategy': 'advanced',
       // This seems to be a bug in the monoco.
-      // https://github.com/microsoft/monaco-editor/issues/4535#issuecomment-2234042290
+      // microsoft/monaco-editor issue 4535 comment 2234042290
       'bracketPairColorization.enabled': false,
       'padding': {
         top: 8,

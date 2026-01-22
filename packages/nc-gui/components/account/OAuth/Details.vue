@@ -229,7 +229,7 @@ function copyToClipboard(text: string, label: string) {
               </template>
               <a-input
                 v-model:value="clientRef.client_uri"
-                placeholder="https://example.com"
+                placeholder="example.com"
                 class="nc-input-shadow !rounded-lg"
               />
             </a-form-item>
@@ -291,7 +291,7 @@ function copyToClipboard(text: string, label: string) {
               <a-textarea
                 v-model:value="clientRef.redirect_uris"
                 :rows="4"
-                placeholder="https://example.com/auth/callback&#10;http://localhost:3000/callback&#10;http://127.0.0.1:3000/callback"
+                placeholder="example.com/auth/callback&#10;http://localhost:3000/callback&#10;http://127.0.0.1:3000/callback"
                 class="nc-input-shadow !rounded-lg"
               />
             </a-form-item>
@@ -354,27 +354,13 @@ function copyToClipboard(text: string, label: string) {
               <div class="h-7 w-7 flex items-center justify-center">
                 <GeneralIcon icon="bookOpen" class="flex-none w-4 h-4 text-nc-content-gray-muted" />
               </div>
-              <NuxtLink
-                href="https://nocodb.com/docs/product-docs/developer-resources/oauth-clients"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="!text-nc-content-gray-muted text-sm !no-underline !hover:underline"
-              >
-                Create OAuth Clients
-              </NuxtLink>
+              <span class="!text-nc-content-gray-muted text-sm">Create OAuth Clients</span>
             </div>
             <div class="flex items-center gap-1">
               <div class="h-7 w-7 flex items-center justify-center">
                 <GeneralIcon icon="bookOpen" class="flex-none w-4 h-4 text-nc-content-gray-muted" />
               </div>
-              <NuxtLink
-                href="https://nocodb.com/docs/product-docs/developer-resources/oauth-clients/manage"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="!text-nc-content-gray-muted text-sm !no-underline !hover:underline"
-              >
-                Managing OAuth Clients
-              </NuxtLink>
+              <span class="!text-nc-content-gray-muted text-sm">Managing OAuth Clients</span>
             </div>
           </div>
           <NcDivider />
