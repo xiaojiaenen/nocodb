@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { DuplicateProcessor } from '~/modules/jobs/jobs/export-import/duplicate.processor';
-import { AtImportProcessor } from '~/modules/jobs/jobs/at-import/at-import.processor';
 import { MetaSyncProcessor } from '~/modules/jobs/jobs/meta-sync/meta-sync.processor';
 import { SourceCreateProcessor } from '~/modules/jobs/jobs/source-create/source-create.processor';
 import { SourceDeleteProcessor } from '~/modules/jobs/jobs/source-delete/source-delete.processor';
@@ -11,14 +10,12 @@ import { AttachmentCleanUpProcessor } from '~/modules/jobs/jobs/attachment-clean
 import { InitMigrationJobs } from '~/modules/jobs/migration-jobs/init-migration-jobs';
 import { UseWorkerProcessor } from '~/modules/jobs/jobs/use-worker/use-worker.processor';
 import { DataExportCleanUpProcessor } from '~/modules/jobs/jobs/data-export-clean-up/data-export-clean-up.processor';
-import { AttachmentUrlUploadProcessor } from '~/modules/jobs/jobs/attachment-url-upload/attachment-url-upload.processor';
 import { JobTypes } from '~/interface/Jobs';
 
 @Injectable()
 export class JobsMap {
   constructor(
     protected readonly duplicateProcessor: DuplicateProcessor,
-    protected readonly atImportProcessor: AtImportProcessor,
     protected readonly metaSyncProcessor: MetaSyncProcessor,
     protected readonly sourceCreateProcessor: SourceCreateProcessor,
     protected readonly sourceDeleteProcessor: SourceDeleteProcessor,
@@ -29,7 +26,6 @@ export class JobsMap {
     protected readonly initMigrationJobs: InitMigrationJobs,
     protected readonly useWorkerProcessor: UseWorkerProcessor,
     protected readonly dataExportCleanUpProcessor: DataExportCleanUpProcessor,
-    protected readonly attachmentUrlUploadProcessor: AttachmentUrlUploadProcessor,
   ) {}
 
   protected get _jobMap(): {
@@ -50,9 +46,6 @@ export class JobsMap {
       [JobTypes.DuplicateColumn]: {
         this: this.duplicateProcessor,
         fn: 'duplicateColumn',
-      },
-      [JobTypes.AtImport]: {
-        this: this.atImportProcessor,
       },
       [JobTypes.MetaSync]: {
         this: this.metaSyncProcessor,
@@ -87,9 +80,6 @@ export class JobsMap {
       },
       [JobTypes.UseWorker]: {
         this: this.useWorkerProcessor,
-      },
-      [JobTypes.AttachmentUrlUpload]: {
-        this: this.attachmentUrlUploadProcessor,
       },
     };
   }

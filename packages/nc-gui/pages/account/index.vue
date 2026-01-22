@@ -226,8 +226,6 @@ const isPending = computed(() => !emailConfigured.value || !storageConfigured.va
                 <AccountBreadcrumb />
               </div>
 
-              <GeneralReleaseInfo />
-
               <NcTooltip placement="bottom" class="mr-4">
                 <template #title>{{ $t('labels.community.communityTranslated') }}</template>
 

@@ -17,9 +17,7 @@ import { JobStatus } from '~/interface/Jobs';
 const NC_WORKER_CONCURRENCY = process.env.NC_WORKER_CONCURRENCY ?? 10;
 
 const LOCAL_CONCURRENCY_LIMIT = {
-  [JobTypes.AtImport]: 2,
   [JobTypes.ThumbnailGenerator]: 1,
-  [JobTypes.AttachmentUrlUpload]: 1,
 };
 
 const LOCAL_JOB_COUNT_MAP = new Map<string, number>();
@@ -64,7 +62,9 @@ export class JobsProcessor {
 
     const localRunning = LOCAL_JOB_COUNT_MAP.get(jobName)!;
 
-    if (localRunning && localRunning >= LOCAL_CONCURRENCY_LIMIT[jobName]) {
+    const localLimit = LOCAL_CONCURRENCY_LIMIT[jobName] ?? Infinity;
+
+    if (localRunning && localRunning >= localLimit) {
       job.data._jobDelay = 0;
       job.data._jobAttempt = 1;
 

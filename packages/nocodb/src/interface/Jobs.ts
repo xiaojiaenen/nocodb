@@ -1,4 +1,3 @@
-import type { AttachmentUrlUploadParam } from '~/types/data-columns/attachment';
 import type {
   AttachmentResType,
   PublicAttachmentScope,
@@ -27,7 +26,6 @@ export enum JobTypes {
   DuplicateModel = 'duplicate-model',
   DuplicateColumn = 'duplicate-column',
   DuplicateDashboard = 'duplicate-dashboard',
-  AtImport = 'at-import',
   MetaSync = 'meta-sync',
   MetaDiff = 'meta-diff',
   SourceCreate = 'source-create',
@@ -53,7 +51,6 @@ export enum JobTypes {
   SyncModuleSchedule = 'sync-module-schedule',
   UpdateUsageStats = 'update-usage-stats',
   CloudDbMigrate = 'cloud-db-migrate',
-  AttachmentUrlUpload = 'attachment-url-upload',
   ExecuteAction = 'execute-action',
   ReseatSubscription = 'reseat-subscription',
   ExecuteWorkflow = 'execute-workflow',
@@ -131,26 +128,6 @@ export interface JobData {
   // context
   context: NcContext;
   user: Partial<UserType>;
-}
-
-export interface AtImportJobData extends JobData {
-  syncId: string;
-  baseId: string;
-  sourceId: string;
-  baseName: string;
-  authToken: string;
-  baseURL: string;
-  clientIp: string;
-  options?: {
-    syncViews?: boolean;
-    syncAttachment?: boolean;
-    syncLookup?: boolean;
-    syncRollup?: boolean;
-    syncUsers?: boolean;
-    syncData?: boolean;
-    syncFormula?: boolean;
-  };
-  user: any;
 }
 
 export interface DuplicateBaseJobData extends JobData {
@@ -258,8 +235,6 @@ export interface SyncDataSyncModuleJobData extends JobData {
   bulk?: boolean;
   req: NcRequest;
 }
-
-export type AttachmentUrlUploadJobData = AttachmentUrlUploadParam & JobData;
 
 export interface ExecuteActionJobData extends JobData {
   req: NcRequest;

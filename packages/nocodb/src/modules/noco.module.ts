@@ -153,7 +153,6 @@ import { FiltersV3Service } from '~/services/v3/filters-v3.service';
 import { SortsV3Service } from '~/services/v3/sorts-v3.service';
 import { TablesV3Service } from '~/services/v3/tables-v3.service';
 import { ViewRowColorController } from '~/controllers/view-row-color.controller';
-import { AttachmentUrlUploadHandler } from '~/services/emit-handler/attachment-url-upload.handler';
 
 /* ACL */
 import { AclMiddleware } from '~/middlewares/extract-ids/extract-ids.middleware';
@@ -362,9 +361,6 @@ export const nocoModuleMetadata = {
       useClass: FormulaColumnTypeChanger,
     },
 
-    /* emit handlers */
-    AttachmentUrlUploadHandler,
-
     ...InternalApiModules,
     InternalApiModuleProvider,
 
@@ -419,8 +415,6 @@ export const nocoModuleMetadata = {
     DataV3Service,
     DataAttachmentV3Service,
     'IViewsV3Service',
-
-    AttachmentUrlUploadHandler,
 
     ...InternalApiModules,
     MetaDependencyEventHandler,

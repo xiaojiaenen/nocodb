@@ -9,8 +9,6 @@ import { getRedisURL, NC_REDIS_TYPE } from '~/helpers/redisHelpers';
 // Jobs
 import { ExportService } from '~/modules/jobs/jobs/export-import/export.service';
 import { ImportService } from '~/modules/jobs/jobs/export-import/import.service';
-import { AtImportController } from '~/modules/jobs/jobs/at-import/at-import.controller';
-import { AtImportProcessor } from '~/modules/jobs/jobs/at-import/at-import.processor';
 import { DuplicateController } from '~/modules/jobs/jobs/export-import/duplicate.controller';
 import { DuplicateProcessor } from '~/modules/jobs/jobs/export-import/duplicate.processor';
 import { DuplicateService } from '~/modules/jobs/jobs/export-import/duplicate.service';
@@ -28,7 +26,6 @@ import { PublicDataExportController } from '~/modules/jobs/jobs/data-export/publ
 import { ThumbnailGeneratorProcessor } from '~/modules/jobs/jobs/thumbnail-generator/thumbnail-generator.processor';
 import { AttachmentCleanUpProcessor } from '~/modules/jobs/jobs/attachment-clean-up/attachment-clean-up';
 import { UseWorkerProcessor } from '~/modules/jobs/jobs/use-worker/use-worker.processor';
-import { AttachmentUrlUploadProcessor } from '~/modules/jobs/jobs/attachment-url-upload/attachment-url-upload.processor';
 
 // Job Processor
 import { JobsProcessor } from '~/modules/jobs/jobs.processor';
@@ -83,7 +80,6 @@ export const JobsModuleMetadata = {
       ? [
           DuplicateController,
           MigrateController,
-          AtImportController,
           MetaSyncController,
           SourceCreateController,
           SourceDeleteController,
@@ -109,7 +105,6 @@ export const JobsModuleMetadata = {
     DuplicateProcessor,
     DuplicateService,
     MigrateService,
-    AtImportProcessor,
     MetaSyncProcessor,
     SourceCreateProcessor,
     SourceDeleteProcessor,
@@ -119,7 +114,6 @@ export const JobsModuleMetadata = {
     ThumbnailGeneratorProcessor,
     AttachmentCleanUpProcessor,
     UseWorkerProcessor,
-    AttachmentUrlUploadProcessor,
 
     // Migration Jobs
     InitMigrationJobs,
