@@ -3,8 +3,6 @@ import path from 'path';
 import { promisify } from 'util';
 import { Readable } from 'stream';
 import mkdirp from 'mkdirp';
-import axios from 'axios';
-import { useAgent } from 'request-filtering-agent';
 import { globStream } from 'glob';
 import { Logger } from '@nestjs/common';
 import type { IStorageAdapterV2, XcFile } from '~/types/nc-plugin';
@@ -30,46 +28,14 @@ export default class Local implements IStorageAdapterV2 {
 
   async fileCreateByUrl(
     key: string,
-    url: string,
+    _url: string,
     { fetchOptions: { buffer } = { buffer: false } },
   ): Promise<any> {
-    try {
-      const destPath = validateAndNormaliseLocalPath(key);
-      const response = await axios.get(url, {
-        responseType: buffer ? 'arraybuffer' : 'stream',
-        headers: {
-          accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-          'accept-language': 'en-US,en;q=0.9',
-          'cache-control': 'no-cache',
-          pragma: 'no-cache',
-          'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-          origin: 'https://www.airtable.com/',
-        },
-        httpAgent: useAgent(url, {}),
-        httpsAgent: useAgent(url, {}),
-      });
-
-      await mkdirp(path.dirname(destPath));
-      if (buffer) {
-        await fs.promises.writeFile(destPath, Buffer.from(response.data));
-        return {
-          url: null,
-          data: response.data,
-        };
-      } else {
-        await this.fileCreateByStream(key, response.data);
-        return {
-          url: null,
-          data: null,
-        };
-      }
-    } catch (err) {
-      NcError._.storageFileCreateError(
-        `Failed to create file from URL: ${err.message}`,
-      );
+    if (buffer) {
+      NcError._.storageFileCreateError('URL file upload is not supported');
     }
+
+    NcError._.storageFileCreateError('URL file upload is not supported');
   }
 
   public async fileCreateByStream(

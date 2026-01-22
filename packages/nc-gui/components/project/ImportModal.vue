@@ -18,34 +18,6 @@ const { isFeatureEnabled } = useBetaFeatureToggle()
 
 const { showRecordPlanLimitExceededModal } = useEeConfig()
 
-async function openAirtableImportDialog(baseId?: string, sourceId?: string) {
-  if (!baseId || !sourceId) return
-
-  $e('a:actions:import-airtable')
-
-  const isOpen = ref(true)
-
-  await nextTick()
-  visible.value = false
-
-  const { close } = useDialog(resolveComponent('DlgAirtableImport'), {
-    'modelValue': isOpen,
-    'baseId': baseId,
-    'sourceId': sourceId,
-    'onUpdate:modelValue': closeDialog,
-    'showBackBtn': true,
-    'onBack': () => {
-      visible.value = true
-    },
-  })
-
-  function closeDialog() {
-    isOpen.value = false
-
-    close(1000)
-  }
-}
-
 async function openNocoDbImportDialog(baseId?: string) {
   if (!baseId) return
 
@@ -102,12 +74,10 @@ async function openQuickImportDialog(type: 'csv' | 'excel' | 'json') {
   }
 }
 
-const onClick = (type: 'airtable' | 'csv' | 'excel' | 'json' | 'nocodb') => {
+const onClick = (type: 'csv' | 'excel' | 'json' | 'nocodb') => {
   if (showRecordPlanLimitExceededModal()) return
 
-  if (type === 'airtable') {
-    openAirtableImportDialog(source.value.base_id, source.value.id)
-  } else if (type === 'nocodb') {
+  if (type === 'nocodb') {
     openNocoDbImportDialog(source.value.base_id)
   } else {
     openQuickImportDialog(type)
@@ -122,11 +92,6 @@ const onClick = (type: 'airtable' | 'csv' | 'excel' | 'json' | 'nocodb') => {
         <div class="text-base font-weight-700">{{ $t('labels.importDataFrom') }}</div>
       </div>
       <NcMenu class="border-1 divide-y-1 nc-import-items-menu overflow-clip">
-        <NcMenuItem @click="onClick('airtable')">
-          <GeneralIcon icon="importAirtable" class="w-5 h-5" />
-          <span class="ml-1 text-[13px] font-weight-700"> {{ $t('labels.airtable') }} </span>
-          <GeneralIcon icon="chevronRight" class="ml-auto text-lg" />
-        </NcMenuItem>
         <NcMenuItem @click="onClick('csv')">
           <GeneralIcon icon="importCsv" class="w-5 h-5" />
           <span class="ml-1 text-[13px] font-weight-700"> {{ $t('labels.csv') }} </span>

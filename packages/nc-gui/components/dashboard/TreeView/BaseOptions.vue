@@ -33,28 +33,6 @@ const baseRole = computed(() => base.value.project_role || base.value.workspace_
 
 const { $e } = useNuxtApp()
 
-function openAirtableImportDialog(baseId?: string, sourceId?: string) {
-  if (!baseId || !sourceId) return
-
-  $e('a:actions:import-airtable')
-
-  const isOpen = ref(true)
-
-  const { close } = useDialog(resolveComponent('DlgAirtableImport'), {
-    'modelValue': isOpen,
-    'baseId': baseId,
-    'sourceId': sourceId,
-    'showSourceSelector': props.showSourceSelector,
-    'onUpdate:modelValue': closeDialog,
-  })
-
-  function closeDialog() {
-    isOpen.value = false
-
-    close(1000)
-  }
-}
-
 function openQuickImportDialog(type: string) {
   if (!source.value?.id || !source.value.base_id) return
 
@@ -101,16 +79,6 @@ function openQuickImportDialog(type: string) {
     </template>
 
     <slot name="label"> </slot>
-
-    <NcMenuItem
-      v-if="isUIAllowed('airtableImport', { roles: baseRole, source })"
-      key="quick-import-airtable"
-      v-e="['c:import:airtable']"
-      @click="openAirtableImportDialog(source.base_id, source.id)"
-    >
-      <GeneralIcon icon="airtable" class="max-w-3.75" />
-      <div class="ml-0.5">{{ $t('labels.airtableBase') }}</div>
-    </NcMenuItem>
 
     <NcMenuItem
       v-if="isUIAllowed('csvImport', { roles: baseRole, source })"

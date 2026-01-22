@@ -22,7 +22,7 @@ const { isUIAllowed } = useRoles()
 const showBaseOption = (source: SourceType) => {
   return (
     (source.enabled || (base.value.sources || []).length > 1) &&
-    ['airtableImport', 'csvImport', 'jsonImport', 'excelImport'].some((permission) => isUIAllowed(permission, { source }))
+    ['csvImport', 'jsonImport', 'excelImport'].some((permission) => isUIAllowed(permission, { source }))
   )
 }
 </script>
