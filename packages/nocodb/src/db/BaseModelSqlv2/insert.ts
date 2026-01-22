@@ -7,6 +7,7 @@ import {
   PermissionKey,
   type NcRequest,
 } from 'nocodb-sdk';
+import { sanitize } from '~/helpers/sqlSanitize';
 import { AttachmentUrlUploadPreparator } from './attachment-url-upload-preparator';
 import type { Column } from 'src/models';
 import type { IBaseModelSqlV2 } from '../IBaseModelSqlV2';
@@ -36,14 +37,6 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
 
       await populatePk(baseModel.context, baseModel.model, data);
 
-      await baseModel.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: baseModel.model.id,
-        permission: PermissionKey.TABLE_RECORD_ADD,
-        user: request?.user,
-        req: request,
-      });
-
       // todo: filter based on view
       insertObj = await baseModel.model.mapAliasToColumn(
         baseModel.context,
@@ -52,6 +45,24 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
         baseModel.dbDriver,
         columns,
       );
+
+      const colsToCheck = columns
+        .filter((c) => !c.system)
+        .filter((c) => !c.pk)
+        .filter((c) =>
+          Object.prototype.hasOwnProperty.call(insertObj, sanitize(c.column_name)),
+        )
+        .map((c) => c.id);
+
+      if (colsToCheck.length) {
+        await baseModel.checkPermission({
+          entity: PermissionEntity.FIELD,
+          entityId: colsToCheck,
+          permission: PermissionKey.RECORD_FIELD_EDIT,
+          user: (request as any)?.user,
+          req: request,
+        });
+      }
 
       await baseModel.validate(insertObj, columns);
 
@@ -204,15 +215,6 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
     } = {},
   ) => {
     let trx;
-
-    await baseModel.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: baseModel.model.id,
-      permission: PermissionKey.TABLE_RECORD_ADD,
-      user: cookie?.user,
-      req: cookie,
-    });
-
     try {
       const insertDatas = raw ? datas : [];
       const postInsertOpsMap: Record<
@@ -230,6 +232,7 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
         const order = await baseModel.getHighestOrderInTable();
         const nestedCols = columns.filter((c) => isLinksOrLTAR(c));
         const attachmentCols = columns.filter((c) => isAttachment(c));
+        const colsToCheckSet = new Set<string>();
 
         for (const [index, d] of datas.entries()) {
           const insertObj = await baseModel.handleValidateBulkInsert(
@@ -241,6 +244,18 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
               typecast,
             },
           );
+
+          for (const col of columns) {
+            if (col.system || col.pk) continue;
+            if (
+              Object.prototype.hasOwnProperty.call(
+                insertObj,
+                sanitize(col.column_name),
+              )
+            ) {
+              colsToCheckSet.add(col.id);
+            }
+          }
 
           await baseModel.prepareNocoData(insertObj, true, cookie, null, {
             ncOrder: order?.plus(index),
@@ -282,12 +297,43 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
           insertDatas.push(insertObj);
         }
 
+        if (colsToCheckSet.size) {
+          await baseModel.checkPermission({
+            entity: PermissionEntity.FIELD,
+            entityId: [...colsToCheckSet],
+            permission: PermissionKey.RECORD_FIELD_EDIT,
+            user: (cookie as any)?.user,
+            req: cookie,
+          });
+        }
+
         aiPkCol = baseModel.model.primaryKeys.find((pk) => pk.ai);
         agPkCol = baseModel.model.primaryKeys.find((pk) => pk.meta?.ag);
       } else {
         columns = await baseModel.model.getColumns(baseModel.context);
 
         const order = await baseModel.getHighestOrderInTable();
+        const colsToCheckSet = new Set<string>();
+
+        for (const d of insertDatas) {
+          const wrapper = dataWrapper(d);
+          for (const col of columns) {
+            if (col.system || col.pk) continue;
+            if (wrapper.getByColumnNameTitleOrId(col) !== undefined) {
+              colsToCheckSet.add(col.id);
+            }
+          }
+        }
+
+        if (colsToCheckSet.size) {
+          await baseModel.checkPermission({
+            entity: PermissionEntity.FIELD,
+            entityId: [...colsToCheckSet],
+            permission: PermissionKey.RECORD_FIELD_EDIT,
+            user: (cookie as any)?.user,
+            req: cookie,
+          });
+        }
 
         await Promise.all(
           insertDatas.map(

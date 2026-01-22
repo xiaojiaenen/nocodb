@@ -144,9 +144,10 @@ export async function hasTableVisibilityAccess(
 ): Promise<boolean> {
   // Get permissions if not provided
   if (!permissions) {
-    if (!context.permissions)
-      context.permissions = await Permission.list(context, context.base_id);
-    permissions = context.permissions;
+    if (!(context as any).__permissionsLoaded) {
+      await Permission.list(context, context.base_id);
+    }
+    permissions = context.permissions ?? [];
   }
 
   // if user not defined then check if table have default visibility for all users

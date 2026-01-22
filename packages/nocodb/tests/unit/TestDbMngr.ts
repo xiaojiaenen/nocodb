@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import process from 'process';
 import { knex } from 'knex';
 import SqlMgrv2 from '../../src/db/sql-mgr/v2/SqlMgrv2';
@@ -162,7 +163,6 @@ export default class TestDbMngr {
   }
 
   static async switchToSqlite() {
-    console.log('Switching to Sqlite...');
     // process.env[`DATABASE_URL`] = `sqlite3:///?database=${__dirname}/${TestDbMngr.dbName}.sqlite`;
     TestDbMngr.dbConfig = {
       client: 'sqlite3',
@@ -189,11 +189,8 @@ export default class TestDbMngr {
     process.env[
       `NC_DB`
     ] = `sqlite3:///?database=${__dirname}/${TestDbMngr.dbName}.db`;
-    console.log('Setting up Meta DB...');
     await TestDbMngr.setupMeta();
-    console.log('Setting up Sakila DB...');
     await TestDbMngr.setupSakila();
-    console.log('Sqlite setup complete.');
   }
 
   private static async resetDatabase(knexClient, dbName) {
@@ -256,38 +253,24 @@ export default class TestDbMngr {
   }
 
   static async seedSakila() {
-    console.log('Seeding Sakila DB...');
-    const testsDir = __dirname.replace(/[\\\/]unit$/, '');
+    const testsDir = path.resolve(__dirname, '..');
 
     if (TestDbMngr.isSqlite()) {
-      const targetPath = `${__dirname}/test_sakila.db`;
-      const sourcePath = `${testsDir}/sqlite-sakila-db/sakila.db`;
-
+      const hadKnex = !!TestDbMngr.sakilaKnex;
       if (TestDbMngr.sakilaKnex) {
-        console.log('Destroying existing Sakila connection before seeding...');
         await TestDbMngr.sakilaKnex.destroy();
-        TestDbMngr.sakilaKnex = null;
+        TestDbMngr.sakilaKnex = undefined;
       }
-
-      console.log(`Copying Sakila from ${sourcePath} to ${targetPath}`);
-      if (fs.existsSync(targetPath)) {
-        try {
-          console.log('Removing existing test_sakila.db');
-          fs.unlinkSync(targetPath);
-        } catch (e) {
-          console.warn('Could not remove test_sakila.db, it might be in use. Trying to overwrite.', e.message);
-        }
+      if (fs.existsSync(`${__dirname}/test_sakila.db`)) {
+        fs.unlinkSync(`${__dirname}/test_sakila.db`);
       }
-      try {
-        fs.copyFileSync(sourcePath, targetPath);
-        console.log('Sakila DB copied successfully.');
-      } catch (e) {
-        console.error('Failed to copy Sakila DB:', e.message);
+      fs.copyFileSync(
+        `${testsDir}/sqlite-sakila-db/sakila.db`,
+        `${__dirname}/test_sakila.db`,
+      );
+      if (hadKnex) {
+        TestDbMngr.sakilaKnex = knex(TestDbMngr.getSakilaDbConfig());
       }
-
-      // Re-establish connection after copying
-      console.log('Re-establishing Sakila connection...');
-      TestDbMngr.sakilaKnex = knex(TestDbMngr.getSakilaDbConfig());
     } else if (TestDbMngr.isPg()) {
       const schemaFile = fs
         .readFileSync(`${testsDir}/pg-sakila-db/01-postgres-sakila-schema.sql`)

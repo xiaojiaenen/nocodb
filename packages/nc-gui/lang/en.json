@@ -581,6 +581,17 @@
       "extra": "Extra"
     },
     "externalDb": "External Database",
+    "permissions": {
+      "permissionOptions": {
+        "viewers_and_up": "Viewers & up",
+        "commenters_and_up": "Commenters & up",
+        "editors_and_up": "Editors & up",
+        "creators_and_up": "Creators & up",
+        "specific_users": "Specific users",
+        "nobody": "Nobody",
+        "everyone": "Everyone"
+      }
+    },
     "syncData": {
       "appleNumbers": "Apple numbers",
       "asana": "Asana",
@@ -690,6 +701,15 @@
       "colourRecordsByField": "Colour records by field"
     },
     "permissions": {
+      "permissionOptions": {
+        "viewers_and_up": "Viewers & up",
+        "commenters_and_up": "Commenters & up",
+        "editors_and_up": "Editors & up",
+        "creators_and_up": "Creators & up",
+        "specific_users": "Specific users",
+        "nobody": "Nobody",
+        "everyone": "Everyone"
+      },
       "addNewRecordTooltipTitle": "Create record restricted",
       "addNewRecordTooltip": "You do not have permission to create records in this table",
       "deleteRecordTooltipTitle": "Delete record restricted",
@@ -1553,6 +1573,8 @@
     "importAttachmentColumns": "Import attachment columns",
     "importFormulaColumns": "Import formula columns",
     "importUsers": "Import Users (by email)",
+    "batchEdit": "Batch Edit",
+    "batchEditDescription": "Select permissions to modify. Unchecked items will remain unchanged. Changes will be applied to all tables in the current list.",
     "noData": "No Data",
     "goToDashboard": "Go to Dashboard",
     "importing": "Importing",
@@ -2193,6 +2215,11 @@
     "searchColumn": "Search {search} field",
     "searchApps": "Search apps",
     "searchModels": "Search models",
+    "selectUsers": "Select users",
+    "selectUsersToView": "Select users to view",
+    "selectUsersToCreate": "Select users to create",
+    "selectUsersToEdit": "Select users to edit",
+    "selectUsersToDelete": "Select users to delete",
     "noItemsFound": "No items found",
     "defaultValue": "Default value",
     "filterByEmail": "Filter by E-mail",
@@ -2826,6 +2853,7 @@
       "primaryColumnUpdated": "Successfully updated as primary field",
       "tableDataExported": "Successfully exported all table data",
       "updated": "Successfully updated",
+      "batchUpdated": "Batch settings applied, please click save to take effect",
       "sharedViewDeleted": "Deleted shared view successfully",
       "userDeleted": "User deleted successfully",
       "viewRenamed": "View renamed successfully",

@@ -518,6 +518,17 @@
       "extra": "更高"
     },
     "externalDb": "外部数据库",
+    "permissions": {
+      "permissionOptions": {
+        "viewers_and_up": "浏览者及以上",
+        "commenters_and_up": "评论者及以上",
+        "editors_and_up": "编辑者及以上",
+        "creators_and_up": "创建者及以上",
+        "specific_users": "特定用户",
+        "nobody": "无人",
+        "everyone": "所有人"
+      }
+    },
     "syncData": {
       "appleNumbers": "苹果Numbers",
       "asana": "Asana",
@@ -627,6 +638,15 @@
       "colourRecordsByField": "按字段为记录着色"
     },
     "permissions": {
+      "permissionOptions": {
+        "viewers_and_up": "浏览者及以上",
+        "commenters_and_up": "评论者及以上",
+        "editors_and_up": "编辑者及以上",
+        "creators_and_up": "创建者及以上",
+        "specific_users": "特定用户",
+        "nobody": "无人",
+        "everyone": "所有人"
+      },
       "addNewRecordTooltipTitle": "创建记录受限",
       "addNewRecordTooltip": "您没有权限在此表中创建记录",
       "deleteRecordTooltipTitle": "删除记录受限",
@@ -1348,6 +1368,8 @@
     "importAttachmentColumns": "Import attachment fields",
     "importFormulaColumns": "Import formula fields",
     "importUsers": "导入用户 (通过电子邮件)",
+    "batchEdit": "批量设置",
+    "batchEditDescription": "选中要修改的权限项，未选中的项将保持原样。更改将应用到当前列表中的所有表。",
     "noData": "暂无数据",
     "goToDashboard": "转到仪表板",
     "importing": "导入中",
@@ -1922,6 +1944,11 @@
     "searchColumn": "搜索 {search} 列",
     "searchApps": "搜索应用程序",
     "searchModels": "搜索模型",
+    "selectUsers": "选择用户",
+    "selectUsersToView": "选择可见的用户",
+    "selectUsersToCreate": "选择可创建的用户",
+    "selectUsersToEdit": "选择可编辑的用户",
+    "selectUsersToDelete": "选择可删除的用户",
     "noItemsFound": "未找到任何项目",
     "defaultValue": "默认值",
     "filterByEmail": "通过电子邮件过滤",
@@ -2492,6 +2519,7 @@
       "primaryColumnUpdated": "成功更新为主列",
       "tableDataExported": "成功导出所有表内数据",
       "updated": "更新成功",
+      "batchUpdated": "批量设置已应用，请点击保存以生效",
       "sharedViewDeleted": "共享视图删除成功",
       "userDeleted": "删除用户成功",
       "viewRenamed": "视图重命名成功",

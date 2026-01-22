@@ -399,6 +399,7 @@ const saveSubmitted = async () => {
       reloadMetaAndData()
     }, props.columnPosition)
   }
+
   saving.value = false
 
   if (!saved) return

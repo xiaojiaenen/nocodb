@@ -79,16 +79,25 @@ const isOverviewTabVisible = computed(() => isUIAllowed('projectOverviewTab'))
 
 const isAuditsTabVisible = computed(() => isEeUI && !isAdminPanel.value && isWsAuditEnabled.value && isUIAllowed('baseAuditList'))
 
+const isPermissionsTabVisible = computed(() => {
+  if (!base.value?.id || isMobileMode.value || isSharedBase.value) return false
+  return (
+    isUIAllowed('tablePermission', { roles: baseRoles }) ||
+    isUIAllowed('sourceCreate', { roles: baseRoles }) ||
+    !!baseRoles.value?.[ProjectRoles.OWNER]
+  )
+})
+
 const projectPageTab = computed({
   get() {
     return _projectPageTab.value
   },
   set(value) {
-    if (value === 'permissions' && showUpgradeToUseTableAndFieldPermissions()) {
+    if (isEeUI && value === 'permissions' && showUpgradeToUseTableAndFieldPermissions()) {
       return
     }
 
-    if (value === 'syncs' && showUpgradeToUseSync()) {
+    if (isEeUI && value === 'syncs' && showUpgradeToUseSync()) {
       return
     }
 
@@ -128,7 +137,11 @@ watch(
         projectPageTab.value = 'data-source'
       } else if (newVal === 'overview' && isOverviewTabVisible.value) {
         projectPageTab.value = 'overview'
-      } else if (newVal === 'permissions' && !blockTableAndFieldPermissions.value && isEeUI) {
+      } else if (
+        newVal === 'permissions' &&
+        (isEeUI ? !blockTableAndFieldPermissions.value : true) &&
+        isPermissionsTabVisible.value
+      ) {
         projectPageTab.value = 'permissions'
       } else if (newVal === 'base-settings') {
         projectPageTab.value = 'base-settings'
@@ -282,7 +295,7 @@ onMounted(() => {
           </template>
           <ProjectAccessSettings :base-id="currentBase?.id" />
         </a-tab-pane>
-        <a-tab-pane v-if="isEeUI && isUIAllowed('sourceCreate') && base.id && !isMobileMode" key="permissions">
+        <a-tab-pane v-if="isPermissionsTabVisible" key="permissions">
           <template #tab>
             <div class="tab-title" data-testid="proj-view-tab__permissions">
               <GeneralIcon icon="ncLock" />

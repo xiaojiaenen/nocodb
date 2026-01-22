@@ -15,6 +15,7 @@ import {
   enumColors,
   EventType,
   extractFilterFromXwhere,
+  getProjectRole,
   isAIPromptCol,
   isAttachment,
   isCreatedOrLastModifiedByCol,
@@ -33,6 +34,10 @@ import {
   ncIsUndefined,
   PermissionEntity,
   PermissionKey,
+  PermissionMeta,
+  PermissionRoleMap,
+  PermissionRolePower,
+  ProjectRoles,
   RelationTypes,
   UITypes,
 } from 'nocodb-sdk';
@@ -110,7 +115,6 @@ import getAst from '~/helpers/getAst';
 import { sanitize, unsanitize } from '~/helpers/sqlSanitize';
 import {
   Audit,
-  Base,
   BaseUser,
   Column,
   FileReference,
@@ -250,7 +254,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       extractOnlyPrimaries = false,
       apiVersion,
       extractOrderColumn = false,
-      cookie,
     }: {
       ignoreView?: boolean;
       getHiddenColumn?: boolean;
@@ -258,17 +261,8 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       extractOnlyPrimaries?: boolean;
       apiVersion?: NcApiVersion;
       extractOrderColumn?: boolean;
-      cookie?: NcRequest;
     } = {},
   ): Promise<any> {
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
-
     const qb = this.dbDriver(this.tnPath);
     const { ast, dependencyFields, parsedQuery } = await getAst(this.context, {
       query,
@@ -497,14 +491,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       skipSortBasedOnOrderCol = false,
     } = options;
 
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: args['cookie']?.user,
-      req: args['cookie'],
-    });
-
     const columns = await this.model.getColumns(this.context);
 
     const { where, fields, ...rest } = this._getListArgs(args as any);
@@ -685,19 +671,10 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       limit?;
       filterArr?: Filter[];
       customConditions?: Filter[];
-      cookie?: NcRequest;
     } = {},
     ignoreViewFilterAndSort = false,
     throwErrorIfInvalidParams = false,
   ): Promise<any> {
-    const cookie = args.cookie;
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
     const columns = await this.model.getColumns(this.context);
     const { where } = this._getListArgs(args);
 
@@ -800,17 +777,8 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         direction: 'asc' | 'desc';
       };
       groupByColumnName?: string;
-      cookie?: NcRequest;
     },
   ) {
-    const cookie = args.cookie;
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
     const columns = await this.model.getColumns(this.context);
 
     const { where, ...rest } = this._getListArgs(args as any);
@@ -864,7 +832,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   async bulkGroupByCount(
     args: {
       filterArr?: Filter[];
-      cookie?: NcRequest;
     },
     bulkFilterList: {
       alias: string;
@@ -875,14 +842,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     }[],
     _view: View,
   ) {
-    const cookie = args.cookie;
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
     return await baseModelGroupBy(this, logger).bulkCount(
       args,
       bulkFilterList,
@@ -893,7 +852,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   async bulkGroupBy(
     args: {
       filterArr?: Filter[];
-      cookie?: NcRequest;
     },
     bulkFilterList: {
       alias: string;
@@ -907,14 +865,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     }[],
     _view: View,
   ) {
-    const cookie = args.cookie;
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
     return await baseModelGroupBy(this, logger).bulkList(
       args,
       bulkFilterList,
@@ -925,7 +875,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   async bulkAggregate(
     args: {
       filterArr?: Filter[];
-      cookie?: NcRequest;
     },
     bulkFilterList: Array<{
       alias: string;
@@ -934,14 +883,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     }>,
     view?: View,
   ) {
-    const cookie = args.cookie;
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_VISIBILITY,
-      user: cookie?.user,
-      req: cookie,
-    });
     try {
       if (!bulkFilterList?.length) {
         return {};
@@ -2042,13 +1983,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   }
 
   async delByPk(id, _trx?, cookie?) {
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_RECORD_DELETE,
-      user: cookie?.user,
-      req: cookie,
-    });
     let trx: Knex.Transaction = _trx;
     try {
       const source = await this.getSource();
@@ -2250,14 +2184,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     try {
       const columns = await this.model.getColumns(this.context);
 
-      await this.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: this.model.id,
-        permission: PermissionKey.RECORD_FIELD_EDIT,
-        user: cookie?.user,
-        req: cookie,
-      });
-
       const updateObj = await this.model.mapAliasToColumn(
         this.context,
         data,
@@ -2265,6 +2191,24 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         this.dbDriver,
         columns,
       );
+
+      const colsToCheck = columns
+        .filter((c) => !isSystemColumn(c))
+        .filter((c) => !c.pk)
+        .filter((c) =>
+          Object.prototype.hasOwnProperty.call(updateObj, sanitize(c.column_name)),
+        )
+        .map((c) => c.id);
+
+      if (colsToCheck.length) {
+        await this.checkPermission({
+          entity: PermissionEntity.FIELD,
+          entityId: colsToCheck,
+          permission: PermissionKey.RECORD_FIELD_EDIT,
+          user: cookie?.user,
+          req: cookie,
+        });
+      }
 
       await this.validate(data, columns);
 
@@ -3140,14 +3084,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         }
       }
 
-      await this.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: this.model.id,
-        permission: PermissionKey.RECORD_FIELD_EDIT,
-        user: cookie?.user,
-        req: cookie,
-      });
-
       const updateDatas = raw
         ? datas
         : await Promise.all(
@@ -3161,6 +3097,33 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
               ),
             ),
           );
+
+      const colsToCheck = columns
+        .filter((c) => !isSystemColumn(c))
+        .filter((c) => !c.pk)
+        .filter((c) =>
+          raw
+            ? updateDatas.some(
+                (d) => dataWrapper(d).getByColumnNameTitleOrId(c) !== undefined,
+              )
+            : updateDatas.some((d) =>
+                Object.prototype.hasOwnProperty.call(
+                  d,
+                  sanitize(c.column_name),
+                ),
+              ),
+        )
+        .map((c) => c.id);
+
+      if (colsToCheck.length) {
+        await this.checkPermission({
+          entity: PermissionEntity.FIELD,
+          entityId: colsToCheck,
+          permission: PermissionKey.RECORD_FIELD_EDIT,
+          user: cookie?.user,
+          req: cookie,
+        });
+      }
 
       const prevData = [];
       const newData = [];
@@ -3337,14 +3300,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
 
       const columns = await this.model.getColumns(this.context);
 
-      await this.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: this.model.id,
-        permission: PermissionKey.RECORD_FIELD_EDIT,
-        user: cookie?.user,
-        req: cookie,
-      });
-
       const updateData = await this.model.mapAliasToColumn(
         this.context,
         data,
@@ -3352,6 +3307,25 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         this.dbDriver,
         columns,
       );
+
+      const colsToCheck = columns
+        .filter((c) => !isSystemColumn(c))
+        .filter((c) => !c.pk)
+        .filter((c) =>
+          Object.prototype.hasOwnProperty.call(updateData, sanitize(c.column_name)),
+        )
+        .map((c) => c.id);
+
+      if (colsToCheck.length) {
+        await this.checkPermission({
+          entity: PermissionEntity.FIELD,
+          entityId: colsToCheck,
+          permission: PermissionKey.RECORD_FIELD_EDIT,
+          user: cookie?.user,
+          req: cookie,
+        });
+      }
+
       if (!args.skipValidationAndHooks)
         await this.validate(updateData, columns);
 
@@ -3457,14 +3431,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     } = {},
   ) {
     const columns = await this.model.getColumns(this.context);
-
-    await this.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.model.id,
-      permission: PermissionKey.TABLE_RECORD_DELETE,
-      user: cookie?.user,
-      req: cookie,
-    });
 
     let transaction;
     try {
@@ -6189,18 +6155,10 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   }
 
   async ooRead(
-    { colId, id }: { colId; id; apiVersion?: NcApiVersion; cookie?: NcRequest },
+    { colId, id }: { colId; id; apiVersion?: NcApiVersion },
     _args: { limit?; offset?; fieldSet?: Set<string> } = {},
   ) {
     try {
-      const cookie = _args['cookie'] || _args['req'];
-      await this.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: this.model.id,
-        permission: PermissionKey.TABLE_VISIBILITY,
-        user: cookie?.user,
-        req: cookie,
-      });
       await this.model.getColumns(this.context);
 
       const relColumn = this.model.columnsById[colId];
@@ -6248,18 +6206,10 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
   }
 
   async btRead(
-    { colId, id }: { colId; id; apiVersion?: NcApiVersion; cookie?: NcRequest },
+    { colId, id }: { colId; id; apiVersion?: NcApiVersion },
     args: { limit?; offset?; fieldSet?: Set<string> } = {},
   ) {
     try {
-      const cookie = args['cookie'] || args['req'];
-      await this.checkPermission({
-        entity: PermissionEntity.TABLE,
-        entityId: this.model.id,
-        permission: PermissionKey.TABLE_VISIBILITY,
-        user: cookie?.user,
-        req: cookie,
-      });
       await this.model.getColumns(this.context);
 
       const { where, sort } = this._getListArgs(args as any);
@@ -7323,43 +7273,69 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
 
   async statsUpdate(_args: { count: number }) {}
 
-  async checkPermission(params: {
+  async checkPermission(_params: {
     entity: PermissionEntity;
     entityId: string | string[];
     permission: PermissionKey;
     user: any;
     req: any;
   }) {
-    const { entity, entityId, permission, user, req } = params;
+    const { entity, entityId, permission, user } = _params;
 
-    // If it's a system request, bypass permission check
-    if (req?.system) return;
+    if (!user) {
+      NcError.get(this.context).unauthorized('Authentication required');
+    }
 
-    const permissions = await Permission.list(this.context, this.model.base_id);
-    const relevantPermissions = permissions.filter(
-      (p) =>
-        p.entity === entity &&
-        (Array.isArray(entityId)
-          ? entityId.includes(p.entity_id)
-          : p.entity_id === entityId) &&
-        p.permission === permission,
-    );
-
-    if (relevantPermissions.length === 0) {
+    if (user?.is_service_user) {
       return;
     }
 
-    for (const p of relevantPermissions) {
-      if (await Permission.isAllowed(this.context, p, user)) {
-        return;
+    const projectRole = getProjectRole(user) as ProjectRoles;
+    if (projectRole === ProjectRoles.OWNER) {
+      return;
+    }
+
+    const userPermissionRole = (PermissionRoleMap as any)[projectRole];
+    const userPower = (PermissionRolePower as any)[userPermissionRole] ?? 0;
+
+    const minimumRole = (PermissionMeta as any)?.[permission]?.minimumRole;
+    if (minimumRole) {
+      const minimumPower = (PermissionRolePower as any)[minimumRole] ?? 0;
+      if (userPower < minimumPower) {
+        NcError.get(this.context).forbidden('Permission denied');
       }
     }
 
-    NcError.get(this.context).permissionDenied(
-      permission,
-      user?.roles || {},
-      null,
-    );
+    if (!(this.context as any).__permissionsLoaded) {
+      await Permission.list(this.context, this.context.base_id);
+    }
+
+    const permissions = (this.context.permissions ?? []) as Permission[];
+
+    const entityIds = Array.isArray(entityId) ? entityId : [entityId];
+    const uniqueEntityIds = [...new Set(entityIds.filter(Boolean))];
+
+    for (const id of uniqueEntityIds) {
+      const permissionObj = permissions.find(
+        (p) =>
+          p.entity === entity &&
+          p.entity_id === id &&
+          p.permission === permission,
+      );
+
+      if (!permissionObj) {
+        continue;
+      }
+
+      const allowed = await Permission.isAllowed(this.context, permissionObj, {
+        id: user.id,
+        role: projectRole,
+      });
+
+      if (!allowed) {
+        NcError.get(this.context).forbidden('Permission denied');
+      }
+    }
   }
 }
 

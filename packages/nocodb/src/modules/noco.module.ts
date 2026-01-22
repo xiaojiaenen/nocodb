@@ -53,6 +53,7 @@ import { JobsMetaController } from '~/controllers/jobs-meta.controller';
 import { KanbansController } from '~/controllers/kanbans.controller';
 import { MapsController } from '~/controllers/maps.controller';
 import { ModelVisibilitiesController } from '~/controllers/model-visibilities.controller';
+import { PermissionsController } from '~/controllers/permissions.controller';
 import { NotificationsController } from '~/controllers/notifications.controller';
 import { OrgLcenseController } from '~/controllers/org-lcense.controller';
 import { OrgTokensController } from '~/controllers/org-tokens.controller';
@@ -93,6 +94,7 @@ import { KanbansService } from '~/services/kanbans.service';
 import { MapsService } from '~/services/maps.service';
 import { MetaDiffsService } from '~/services/meta-diffs.service';
 import { ModelVisibilitiesService } from '~/services/model-visibilities.service';
+import { PermissionsService } from '~/services/permissions.service';
 import { NocoJobsService } from '~/services/noco-jobs.service';
 import { NotificationsService } from '~/services/notifications/notifications.service';
 import { OrgLcenseService } from '~/services/org-lcense.service';
@@ -212,6 +214,7 @@ export const nocoModuleMetadata = {
           KanbansController,
           MapsController,
           ModelVisibilitiesController,
+          PermissionsController,
           OrgLcenseController,
           OrgTokensController,
           OrgUsersController,
@@ -297,6 +300,7 @@ export const nocoModuleMetadata = {
     MapsService,
     MetaDiffsService,
     ModelVisibilitiesService,
+    PermissionsService,
     OrgLcenseService,
     OrgTokensEeService,
     OrgTokensService,

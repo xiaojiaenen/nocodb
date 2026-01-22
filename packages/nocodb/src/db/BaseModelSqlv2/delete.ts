@@ -3,8 +3,6 @@ import {
   AuditV1OperationTypes,
   extractFilterFromXwhere,
   isLinksOrLTAR,
-  PermissionEntity,
-  PermissionKey,
   UITypes,
 } from 'nocodb-sdk';
 import type { Knex } from 'knex';
@@ -300,15 +298,6 @@ export class BaseModelDelete {
     };
   }) {
     const { skip_hooks = false, cookie } = params;
-
-    await this.baseModel.checkPermission({
-      entity: PermissionEntity.TABLE,
-      entityId: this.baseModel.model.id,
-      permission: PermissionKey.TABLE_RECORD_DELETE,
-      user: cookie?.user,
-      req: cookie,
-    });
-
     const { metaQueries, execQueries, qb, filterObj, attachmentColumns } =
       await this.prepareBulkDeleteAll(params);
 
