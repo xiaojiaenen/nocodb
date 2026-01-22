@@ -19,6 +19,7 @@ import {
 import axios from 'axios'
 import { useColumnDrag } from './useColumnDrag'
 import { useRowDragging } from './useRowDragging'
+import { useVirtualScroll } from './useVirtualScroll'
 import { type CellRange, NavigateDir, type Row, type ViewActionState } from '#imports'
 
 const props = defineProps<{
@@ -240,47 +241,22 @@ const isBulkOperationInProgress = toRef(props, 'isBulkOperationInProgress')
 
 const rowHeight = computed(() => (isMobileMode.value ? 40 : rowHeightInPx[`${props.rowHeightEnum}`] ?? 32))
 
-const rowSlice = reactive({
-  start: 0,
-  end: 100,
+const {
+  rowSlice,
+  updateVisibleRows,
+  calculateSlice,
+  placeholderStartRows,
+  placeholderEndRows,
+  topOffset,
+} = useVirtualScroll({
+  totalRows,
+  rowHeight,
+  gridWrapper,
+  cachedRows,
+  loadData,
+  clearCache,
+  chunkStates,
 })
-
-const CHUNK_SIZE = 50
-const BUFFER_SIZE = 100
-const INITIAL_LOAD_SIZE = 100
-const PREFETCH_THRESHOLD = 40
-
-const fetchChunk = async (chunkId: number, isInitialLoad = false) => {
-  if (chunkStates.value[chunkId]) return
-
-  const offset = chunkId * CHUNK_SIZE
-  const limit = isInitialLoad ? INITIAL_LOAD_SIZE : CHUNK_SIZE
-
-  if (offset >= totalRows.value) {
-    return
-  }
-
-  chunkStates.value[chunkId] = 'loading'
-  if (isInitialLoad) {
-    chunkStates.value[chunkId + 1] = 'loading'
-  }
-
-  try {
-    const newItems = await loadData({ offset, limit })
-    newItems.forEach((item) => cachedRows.value.set(item.rowMeta.rowIndex, item))
-
-    chunkStates.value[chunkId] = 'loaded'
-    if (isInitialLoad) {
-      chunkStates.value[chunkId + 1] = 'loaded'
-    }
-  } catch (error) {
-    console.error(`Error fetching chunk ${chunkId}:`, error)
-    chunkStates.value[chunkId] = undefined
-    if (isInitialLoad) {
-      chunkStates.value[chunkId + 1] = undefined
-    }
-  }
-}
 
 const tableState = reactive<ViewActionState>({
   viewProgress: null,
@@ -305,99 +281,30 @@ const visibleRows = computed(() => {
   })
 })
 
-const totalMaxPlaceholderRows = computed(() => {
-  if (!gridWrapper.value || rowSlice.start <= 1) {
-    return 0
-  }
+let debounceTimeout: any = null
 
-  return parseInt(`${gridWrapper.value?.clientHeight / (rowHeight.value || 32)}`) * 3
-})
-
-const placeholderStartRows = computed(() => {
-  const result = {
-    length: rowSlice.start > 1 ? Math.min(rowSlice.start - 1, totalMaxPlaceholderRows.value) : 0,
-    rowHeight: rowHeight.value!,
-    totalRowHeight: 0,
-  }
-
-  result.totalRowHeight = result.length * result.rowHeight
-
-  return result
-})
-
-const placeholderEndRows = computed(() => {
-  const result = {
-    length: rowSlice.end < totalRows.value - 1 ? Math.min(totalRows.value - 1 - rowSlice.end, totalMaxPlaceholderRows.value) : 0,
-    rowHeight: rowHeight.value!,
-    totalRowHeight: 0,
-  }
-  result.totalRowHeight = result.length * result.rowHeight
-
-  return result
-})
-
-const topOffset = computed(() => {
-  return rowHeight.value! * (rowSlice.start - placeholderStartRows.value.length)
-})
-
-let debounceTimeout: any = null // To store the debounced timeout
-const debounceDelay = 50 // Delay in ms after the last scroll event
-
-const updateVisibleRows = async (fromCalculateSlice = false) => {
-  const { start, end } = rowSlice
-
-  const firstChunkId = Math.floor(start / CHUNK_SIZE)
-  const lastChunkId = Math.floor((end - 1) / CHUNK_SIZE)
-
-  const chunksToFetch = new Set<number>()
-
-  // Collect chunks that need to be fetched (i.e., chunks that are not loaded yet)
-  for (let chunkId = firstChunkId; chunkId <= lastChunkId; chunkId++) {
-    if (!chunkStates.value[chunkId]) chunksToFetch.add(chunkId)
-  }
-
-  // Add adjacent chunks for prefetching
-  const nextChunkId = lastChunkId + 1
-  if (end % CHUNK_SIZE > CHUNK_SIZE - PREFETCH_THRESHOLD && !chunkStates.value[nextChunkId]) {
-    chunksToFetch.add(nextChunkId)
-  }
-
-  const prevChunkId = firstChunkId - 1
-  if (prevChunkId >= 0 && start % CHUNK_SIZE < PREFETCH_THRESHOLD && !chunkStates.value[prevChunkId]) {
-    chunksToFetch.add(prevChunkId)
-  }
-
-  // Early exit if no chunks need to be fetched
-  if (chunksToFetch.size === 0) return
-
-  // Clear the previous timeout if any
+useEventListener(gridWrapper, 'scroll', () => {
+  scrolling.value = true
+  calculateSlice()
   clearTimeout(debounceTimeout)
+  debounceTimeout = setTimeout(() => {
+    scrolling.value = false
+  }, 100)
+})
 
-  // Debounced execution
-  debounceTimeout = setTimeout(
-    async () => {
-      // Execute the function after the debounce delay has passed
-      const isInitialLoad = firstChunkId === 0 && !chunkStates.value[0]
+watch(
+  () => totalRows.value,
+  () => {
+    calculateSlice()
+  },
+)
 
-      if (isInitialLoad) {
-        await fetchChunk(0, true)
-        chunksToFetch.delete(0)
-        chunksToFetch.delete(1)
-      }
-
-      // Fetch the necessary chunks concurrently
-      await Promise.all([...chunksToFetch].map((chunkId) => fetchChunk(chunkId)))
-
-      // Clear cache for chunks that are no longer visible
-      const bufferStart = Math.max(0, start - BUFFER_SIZE)
-      const bufferEnd = Math.min(totalRows.value, end + BUFFER_SIZE)
-
-      // Cache clearing with buffer
-      clearCache(bufferStart, bufferEnd)
-    },
-    fromCalculateSlice ? debounceDelay : 25,
-  )
-}
+watch(
+  () => rowHeight.value,
+  () => {
+    calculateSlice()
+  },
+)
 
 const { isUIAllowed, isDataReadOnly } = useRoles()
 const hasEditPermission = computed(() => isUIAllowed('dataEdit') && !isSqlView.value)

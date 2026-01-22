@@ -128,78 +128,87 @@ export class PermissionsService {
     (context as any).__permissionsLoaded = false;
     context.permissions = [];
 
-    const result = [];
-    for (const item of items) {
-      const { entity, entityId, permission, value, userIds } = item;
+    // Process items in parallel batches to improve performance
+    const BATCH_SIZE = 10;
+    const results = [];
+    
+    for (let i = 0; i < items.length; i += BATCH_SIZE) {
+      const batch = items.slice(i, i + BATCH_SIZE);
+      const batchResults = await Promise.all(
+        batch.map(async (item) => {
+          const { entity, entityId, permission, value, userIds } = item;
 
-      let grantedType: PermissionGrantedType;
-      let grantedRole: PermissionRole | null = null;
-      let subjects: any[] = [];
-      let shouldDelete = false;
+          let grantedType: PermissionGrantedType;
+          let grantedRole: PermissionRole | null = null;
+          let subjects: any[] = [];
+          let shouldDelete = false;
 
-      switch (value) {
-        case PermissionOptionValue.NOBODY:
-          grantedType = PermissionGrantedType.NOBODY;
-          break;
-        case PermissionOptionValue.SPECIFIC_USERS:
-          grantedType = PermissionGrantedType.USER;
-          subjects = (userIds || []).map((id) => ({ id, type: 'user' }));
-          break;
-        case PermissionOptionValue.EVERYONE:
-          if (permission === PermissionKey.TABLE_VISIBILITY) {
-            shouldDelete = true;
-          } else {
-            grantedType = PermissionGrantedType.ROLE;
-            grantedRole = PermissionRole.VIEWER;
+          switch (value) {
+            case PermissionOptionValue.NOBODY:
+              grantedType = PermissionGrantedType.NOBODY;
+              break;
+            case PermissionOptionValue.SPECIFIC_USERS:
+              grantedType = PermissionGrantedType.USER;
+              subjects = (userIds || []).map((id) => ({ id, type: 'user' }));
+              break;
+            case PermissionOptionValue.EVERYONE:
+              if (permission === PermissionKey.TABLE_VISIBILITY) {
+                shouldDelete = true;
+              } else {
+                grantedType = PermissionGrantedType.ROLE;
+                grantedRole = PermissionRole.VIEWER;
+              }
+              break;
+            case PermissionOptionValue.VIEWERS_AND_UP:
+              grantedType = PermissionGrantedType.ROLE;
+              grantedRole = PermissionRole.VIEWER;
+              break;
+            case PermissionOptionValue.COMMENTERS_AND_UP:
+              grantedType = PermissionGrantedType.ROLE;
+              grantedRole = PermissionRole.COMMENTER;
+              break;
+            case PermissionOptionValue.EDITORS_AND_UP:
+              grantedType = PermissionGrantedType.ROLE;
+              grantedRole = PermissionRole.EDITOR;
+              break;
+            case PermissionOptionValue.CREATORS_AND_UP:
+              grantedType = PermissionGrantedType.ROLE;
+              grantedRole = PermissionRole.CREATOR;
+              break;
+            default:
+              return null;
           }
-          break;
-        case PermissionOptionValue.VIEWERS_AND_UP:
-          grantedType = PermissionGrantedType.ROLE;
-          grantedRole = PermissionRole.VIEWER;
-          break;
-        case PermissionOptionValue.COMMENTERS_AND_UP:
-          grantedType = PermissionGrantedType.ROLE;
-          grantedRole = PermissionRole.COMMENTER;
-          break;
-        case PermissionOptionValue.EDITORS_AND_UP:
-          grantedType = PermissionGrantedType.ROLE;
-          grantedRole = PermissionRole.EDITOR;
-          break;
-        case PermissionOptionValue.CREATORS_AND_UP:
-          grantedType = PermissionGrantedType.ROLE;
-          grantedRole = PermissionRole.CREATOR;
-          break;
-        default:
-          continue;
-      }
 
-      if (shouldDelete) {
-        await Permission.delete(context, baseId, {
-          entity,
-          entity_id: entityId,
-          permission,
-        });
-        result.push({ deleted: true });
-      } else {
-        const res = await Permission.upsert(
-          context,
-          baseId,
-          {
-            entity,
-            entity_id: entityId,
-            permission,
-            granted_type: grantedType!,
-            granted_role: grantedRole,
-            subjects,
-            enforce_for_form: true,
-            enforce_for_automation: true,
-          } as any,
-          req.user?.id,
-        );
-        result.push(res);
-      }
+          if (shouldDelete) {
+            await Permission.delete(context, baseId, {
+              entity,
+              entity_id: entityId,
+              permission,
+            });
+            return { deleted: true };
+          } else {
+            return await Permission.upsert(
+              context,
+              baseId,
+              {
+                entity,
+                entity_id: entityId,
+                permission,
+                granted_type: grantedType!,
+                granted_role: grantedRole,
+                subjects,
+                enforce_for_form: true,
+                enforce_for_automation: true,
+              } as any,
+              req.user?.id,
+            );
+          }
+        })
+      );
+      results.push(...batchResults);
     }
-    return result;
+    
+    return results.filter(Boolean);
   }
 
   async delete(
