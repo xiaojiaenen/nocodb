@@ -25,9 +25,7 @@ import { CalendarsService } from '~/services/calendars.service';
 import { CommentsService } from '~/services/comments.service';
 import { BulkDataAliasService } from '~/services/bulk-data-alias.service';
 import { SyncService } from '~/services/sync.service';
-import { SyncSource } from '~/models';
 import { NcError } from '~/helpers/catchError';
-import { JobTypes } from '~/interface/Jobs';
 import { NocoJobsService } from '~/services/noco-jobs.service';
 
 @Injectable()
@@ -123,7 +121,6 @@ export class UiPostOperations
     'syncSourceCreate' as const,
     'syncSourceUpdate' as const,
     'syncSourceDelete' as const,
-    'atImportTrigger' as const,
   ];
   httpMethod = 'POST' as const;
 
@@ -559,43 +556,6 @@ export class UiPostOperations
           syncId: req.query.syncId as string,
           req,
         });
-      case 'atImportTrigger': {
-        const jobs = await this.nocoJobsService.getJobList();
-        const fnd = jobs.find((j) => j.data.syncId === req.query.syncId);
-
-        if (fnd) {
-          NcError.badRequest('Sync already in progress');
-        }
-
-        const syncSource = await SyncSource.get(
-          context,
-          req.query.syncId as string,
-        );
-
-        const user = await syncSource.getUser();
-
-        // Treat default baseUrl as siteUrl from req object
-        let baseURL = (req as any).ncSiteUrl;
-
-        // if environment value avail use it
-        // or if it's docker construct using `PORT`
-        if (process.env.NC_DOCKER) {
-          baseURL = `http://localhost:${process.env.PORT || 8080}`;
-        }
-
-        const job = await this.nocoJobsService.add(JobTypes.AtImport, {
-          context,
-          syncId: req.query.syncId as string,
-          ...(syncSource?.details || {}),
-          baseId: syncSource.base_id,
-          sourceId: syncSource.source_id,
-          authToken: '',
-          baseURL,
-          user: user,
-        });
-
-        return { id: job.id };
-      }
     }
   }
 }

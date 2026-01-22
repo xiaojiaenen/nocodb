@@ -77,7 +77,6 @@ import type {
 import { LTARColsUpdater } from '~/db/BaseModelSqlv2/ltar-cols-updater';
 import { BaseModelDelete } from '~/db/BaseModelSqlv2/delete';
 import { ncIsStringHasValue } from '~/db/field-handler/utils/handlerUtils';
-import { AttachmentUrlUploadPreparator } from '~/db/BaseModelSqlv2/attachment-url-upload-preparator';
 import { FieldHandler } from '~/db/field-handler';
 import { selectObject } from '~/db/BaseModelSqlv2/select-object';
 import { relationDataFetcher } from '~/db/BaseModelSqlv2/relation-data-fetcher';
@@ -2394,23 +2393,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
           insertObj,
           req: request,
         });
-      const attachmentOperations =
-        await new AttachmentUrlUploadPreparator().prepareAttachmentUrlUpload(
-          this,
-          {
-            attachmentCols: columns.filter((c) => isAttachment(c)),
-            data: insertObj,
-            req: request,
-          },
-        );
-      postInsertOps = [
-        ...(postInsertOps ?? []),
-        ...(attachmentOperations.postInsertOps ?? []),
-      ];
-      preInsertOps = [
-        ...(preInsertOps ?? []),
-        ...(attachmentOperations.preInsertOps ?? []),
-      ];
 
       await this.validate(insertObj, columns);
 
@@ -3143,9 +3125,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         pkAndData.push({ pk: pkValues, data: d });
       }
 
-      const attachmentCols = columns.filter((col) => isAttachment(col));
-      let postUpdateOps: (() => Promise<string>)[] = [];
-
       for (let i = 0; i < pkAndData.length; i += readChunkSize) {
         const chunk = pkAndData.slice(i, i + readChunkSize);
         const pksToRead = chunk.map((v) => v.pk);
@@ -3166,22 +3145,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
           }
           await this.prepareNocoData(data, false, cookie, oldRecord);
           prevData.push(oldRecord);
-          if (attachmentCols.length > 0) {
-            const attachmentOperation =
-              await new AttachmentUrlUploadPreparator().prepareAttachmentUrlUpload(
-                this,
-                {
-                  attachmentCols,
-                  data,
-                  req: cookie,
-                },
-              );
-            postUpdateOps = postUpdateOps.concat(
-              attachmentOperation.postInsertOps.map((ops) => {
-                return () => ops(pk);
-              }),
-            );
-          }
 
           const wherePk = await this._wherePk(pk, true);
           toBeUpdated.push({ d: data, wherePk });
@@ -3228,9 +3191,6 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
           datas,
           cookie,
         });
-        profiler.log('postUpdateOps start');
-        await Promise.all(postUpdateOps.map((ops) => ops()));
-        profiler.log('postUpdateOps end');
       }
 
       if (!raw) {

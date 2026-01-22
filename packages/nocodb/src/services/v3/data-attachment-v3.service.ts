@@ -1,24 +1,16 @@
 import path from 'path';
 import { PassThrough } from 'stream';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
-import axios from 'axios';
 import { nanoid } from 'nanoid';
 import { AuditV1OperationTypes, EventType, ncIsNull } from 'nocodb-sdk';
 import slash from 'slash';
-import { useAgent } from 'request-filtering-agent';
 import { getBase64FileSize } from 'src/helpers/stringHelpers';
 import type { DataUpdatePayload, NcContext } from 'nocodb-sdk';
-import type { AttachmentFilePathConstructed } from '~/helpers/attachmentHelpers';
 import type {
   AttachmentBase64UploadParam,
-  AttachmentUrlUploadParam,
 } from '~/types/data-columns/attachment';
+import { NC_ATTACHMENT_FIELD_SIZE } from '~/constants';
 import {
-  NC_ATTACHMENT_FIELD_SIZE,
-  NC_ATTACHMENT_URL_MAX_REDIRECT,
-} from '~/constants';
-import {
-  constructFilePath,
   validateNumberOfFilesInCell,
 } from '~/helpers/attachmentHelpers';
 import { _wherePk, getBaseModelSqlFromModelId } from '~/helpers/dbHelpers';
@@ -48,142 +40,6 @@ export class DataAttachmentV3Service {
     private readonly dataV3Service: DataV3Service,
   ) {}
   logger = new Logger(DataAttachmentV3Service.name);
-
-  async handleUrlUploadCellUpdate(param: AttachmentUrlUploadParam) {
-    const { context, modelId, column, recordId, scope, req, attachments } =
-      param;
-
-    const baseModel = await getBaseModelSqlFromModelId({
-      context: context,
-      modelId: modelId,
-    });
-    await baseModel.model.getColumns(context);
-    const processedAttachments = [];
-    const generateThumbnailAttachments = [];
-
-    for (const attachment of attachments) {
-      try {
-        if (
-          attachment.id &&
-          (!('status' in attachment) ||
-            ('status' in attachment && attachment.status !== 'uploading'))
-        ) {
-          processedAttachments.push(attachment);
-        } else if (
-          attachment.url &&
-          'status' in attachment &&
-          attachment.status === 'uploading'
-        ) {
-          // If attachment has URL, download and process it
-
-          const downloadedAttachment = await this.downloadAndStoreAttachment(
-            context,
-            {
-              filePath: attachment,
-              url: attachment.url,
-              scope,
-            },
-          );
-
-          // update fileSize, url due to fileName, fileSize etc
-          await FileReference.updateById(context, attachment.id, {
-            file_url: downloadedAttachment.url ?? downloadedAttachment.path,
-            file_size: downloadedAttachment.fileSize,
-            deleted: false,
-          });
-          const processedAttachment = {
-            id: attachment.id,
-            url: ncIsNull(downloadedAttachment.url)
-              ? undefined
-              : downloadedAttachment.url,
-            path: ncIsNull(downloadedAttachment.url)
-              ? downloadedAttachment.path
-              : undefined,
-            title: downloadedAttachment.filename,
-            mimetype: downloadedAttachment.mimeType,
-            size: downloadedAttachment.fileSize,
-            signedUrl: undefined,
-          };
-          processedAttachments.push(processedAttachment);
-          if (supportsThumbnails({ mimetype: downloadedAttachment.mimeType })) {
-            generateThumbnailAttachments.push(processedAttachment);
-          }
-        }
-      } catch (error) {
-        console.error(`Failed to process attachment:`, error);
-      }
-    }
-    // direct update to prevent prepare noco data again
-    await baseModel
-      .dbDriver(baseModel.getTnPath(baseModel.model))
-      .update({
-        [column.column_name]: JSON.stringify(processedAttachments),
-      })
-      .where(await _wherePk(baseModel.model.primaryKeys, recordId, true));
-
-    if (generateThumbnailAttachments.length > 0) {
-      await this.jobsService.add(JobTypes.ThumbnailGenerator, {
-        context: {
-          base_id: RootScopes.ROOT,
-          workspace_id: RootScopes.ROOT,
-        },
-        attachments: generateThumbnailAttachments,
-        scope,
-      });
-      for (const processedAttachment of generateThumbnailAttachments) {
-        if (processedAttachment.url) {
-          processedAttachment.signedUrl = await PresignedUrl.getSignedUrl({
-            pathOrUrl: processedAttachment.url,
-            filename: processedAttachment.title,
-            expireSeconds: 3 * 60 * 60, // 3 hours
-            preview: true,
-            mimetype: processedAttachment.mimetype,
-          });
-        }
-      }
-    }
-
-    await Audit.insert(
-      await generateAuditV1Payload<DataUpdatePayload>(
-        AuditV1OperationTypes.DATA_UPDATE,
-        {
-          context: context,
-          row_id: recordId,
-          fk_model_id: baseModel.model.id,
-          fk_workspace_id: context.workspace_id,
-          base_id: context.base_id,
-          source_id: baseModel.model.source_id,
-          details: {
-            table_title: baseModel.model.title,
-            column_meta: extractColsMetaForAudit([column], {
-              [column.title]: processedAttachments,
-            }),
-            data: { [column.title]: processedAttachments },
-            old_data: {
-              [column.title]: attachments.filter(
-                (attr) => !('status' in attr) || attr.status !== 'uploading',
-              ),
-            },
-          },
-          req: req ?? ({ user: context.user } as any),
-        },
-      ),
-    );
-
-    NocoSocket.broadcastEvent(
-      context,
-      {
-        event: EventType.DATA_EVENT,
-        payload: {
-          id: recordId,
-          action: 'update',
-          payload: await baseModel.readByPk(recordId, false),
-        },
-        scopes: [modelId],
-      },
-      context.socket_id,
-    );
-  }
 
   async appendBase64AttachmentToCellData(param: AttachmentBase64UploadParam) {
     const { context, modelId, columnId, recordId, scope, attachment, req } =
@@ -361,88 +217,4 @@ export class DataAttachmentV3Service {
     });
   }
 
-  protected async downloadAndStoreAttachment(
-    context: NcContext,
-    {
-      url,
-      filePath,
-      scope,
-    }: {
-      url: string;
-      filePath: AttachmentFilePathConstructed;
-      scope: string;
-    },
-  ) {
-    // Configure axios for download
-    const response = await axios({
-      method: 'GET',
-      url: url,
-      responseType: 'stream',
-      maxRedirects: NC_ATTACHMENT_URL_MAX_REDIRECT,
-      maxContentLength: NC_ATTACHMENT_FIELD_SIZE,
-      httpAgent: useAgent(url, {}),
-      httpsAgent: useAgent(url, {}),
-    });
-
-    // Extract file information from response headers
-    const contentType =
-      response.headers['content-type'] || 'application/octet-stream';
-    const contentLength = response.headers['content-length'];
-    const contentDisposition = response.headers['content-disposition'];
-
-    const passthrough = new PassThrough(); // Track size via the PassThrough stream
-    let totalBytes = 0;
-    if (!contentLength) {
-      passthrough.on('data', (chunk) => {
-        totalBytes += chunk.length;
-      });
-    }
-
-    const storageAdapter = await NcPluginMgrv2.storageAdapter();
-    const mimeType = contentType.split(';')[0].trim();
-
-    // Extract filename from URL or content-disposition header
-    let filename;
-    let originalFileName;
-    if (contentDisposition) {
-      const filenameMatch = contentDisposition.match(
-        /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
-      );
-      if (filenameMatch && filenameMatch[1]) {
-        originalFileName = filenameMatch[1].replace(/['"]/g, '');
-        filename = scope
-          ? `${normalizeFilename(
-              path.parse(originalFileName).name,
-            )}${path.extname(originalFileName)}`
-          : `${normalizeFilename(path.parse(originalFileName).name)}_${nanoid(
-              5,
-            )}${path.extname(originalFileName)}`;
-      }
-    }
-    const filePathConstructed = filename
-      ? constructFilePath(context, {
-          ...filePath,
-          fileName: filename,
-          originalFileName,
-        })
-      : filePath;
-    const resultAttachmentUrl = await storageAdapter.fileCreateByStream(
-      filePathConstructed.storageDest,
-      response.data.pipe(passthrough),
-    );
-    const fileSize = contentLength ? Number(contentLength) : totalBytes;
-
-    return {
-      storageName: storageAdapter.name,
-      url: resultAttachmentUrl,
-      path: path.join(
-        'download',
-        filePathConstructed.filePath,
-        filePathConstructed.fileName,
-      ),
-      filename: filePathConstructed.originalFileName,
-      mimeType,
-      fileSize,
-    };
-  }
 }

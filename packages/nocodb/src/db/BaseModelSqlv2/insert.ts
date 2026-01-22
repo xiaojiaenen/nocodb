@@ -8,7 +8,6 @@ import {
   type NcRequest,
 } from 'nocodb-sdk';
 import { sanitize } from '~/helpers/sqlSanitize';
-import { AttachmentUrlUploadPreparator } from './attachment-url-upload-preparator';
 import type { Column } from 'src/models';
 import type { IBaseModelSqlV2 } from '../IBaseModelSqlV2';
 import { handleUniqueConstraintError } from '~/helpers/uniqueConstraintErrorHandler';
@@ -273,25 +272,6 @@ export const baseModelInsert = (baseModel: IBaseModelSqlV2) => {
 
             postInsertOpsMap[index] = operations.postInsertOps;
             preInsertOps = operations.preInsertOps;
-          }
-          if (attachmentCols.length > 0) {
-            const attachmentOperations =
-              await new AttachmentUrlUploadPreparator().prepareAttachmentUrlUpload(
-                baseModel,
-                {
-                  attachmentCols,
-                  data: insertObj,
-                  req: cookie,
-                },
-              );
-            postInsertOpsMap[index] = [
-              ...(postInsertOpsMap[index] ?? []),
-              ...(attachmentOperations.postInsertOps ?? []),
-            ];
-            preInsertOps = [].concat(
-              ...(preInsertOps ?? []),
-              ...(attachmentOperations.preInsertOps ?? []),
-            );
           }
 
           insertDatas.push(insertObj);
