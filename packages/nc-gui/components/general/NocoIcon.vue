@@ -28,7 +28,7 @@ const onClick = useThrottleFn(() => {
       <img
         :width="size"
         :height="size"
-        alt="星澜 (XingLan)"
+        alt="星澜"
         src="~/assets/img/brand/logo.svg"
       />
 
