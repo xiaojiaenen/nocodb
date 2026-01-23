@@ -138,7 +138,7 @@ const [useProvideAccountSetupStore, useAccountSetupStore] = createInjectionState
       message.error(await extractSdkResponseErrorMsg(e))
     }
 
-    $e('a:appstore:reset', { app: activePlugin.value.title })
+    $e('a:settings:reset', { app: activePlugin.value.title })
   }
 
   return {

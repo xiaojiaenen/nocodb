@@ -820,7 +820,7 @@ import NcExtUrlPreviewEmptyState from '~icons/nc-icons/extension-url-preview-emp
   loading: MdiLoading,
   arrowCollapse: MdiArrowCollapse,
   markerAlert: MdiMapMarkerAlert,
-  appStore: MdiStorefrontOutline,
+  apps: MdiStorefrontOutline,
   chevronLeft: MdiChevronLeft,
   chevronRight: MdiChevronRight,
   imagePlaceholder: MdiFileImageBox,
