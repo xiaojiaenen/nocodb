@@ -1,7 +1,7 @@
 {
   "onboarding": {
     "question1": {
-      "text": "嘿！你打算用 NocoDB 做什么？",
+      "text": "嘿！你打算用星澜做什么？",
       "option": {
         "work": "工作",
         "school": "学校",
@@ -62,7 +62,7 @@
     },
     "question7": {
       "text": "选择你熟悉的 AI 工具",
-      "description": "解锁 NocoAI 的免费访问权限 🎉",
+      "description": "解锁星澜AI的免费访问权限 🎉",
       "option": {
         "none": "以上都不是"
       }
