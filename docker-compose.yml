@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  xinglan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "xinglan:latest"
+    container_name: xinglan-app
+    environment:
+      # ==========================================
+      # 1. 数据库配置 (外部 MySQL)
+      # ==========================================
+      # 格式: mysql2://host:port?u=user&p=password&d=db_name
+      # 请在此处填入您的真实数据库信息
+      NC_DB: "mysql2://192.168.168.45:3306?u=root&p=123456&d=xinglan"
+
+      # ==========================================
+      # 2. 平台基础配置
+      # ==========================================
+      # 公开访问 URL (用于生成邮件链接、附件链接等)
+      NC_PUBLIC_URL: "http://192.168.168.45"
+      
+      # 禁用遥测 (内网环境推荐)
+      NC_DISABLE_TELE: "true"
+      
+      # 时区
+      TZ: "Asia/Shanghai"
+
+    ports:
+      # 映射到宿主机 80 端口，由 Nginx 处理请求
+      - "80:80"
+
+    volumes:
+      # 持久化存储数据 (上传的文件、日志等)
+      - "xinglan_data:/usr/app/data"
+
+    restart: always
+
+volumes:
+  xinglan_data:
+    driver: local
