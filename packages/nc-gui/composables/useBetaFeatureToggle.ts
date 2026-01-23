@@ -5,7 +5,7 @@ const FEATURES = [
   {
     id: 'bases_v3',
     title: 'Bases V3',
-    description: 'Experience the next generation of NocoDB with Bases V3 with and enhanced performance and optimizations.',
+    description: '通过 Bases V3 体验下一代 星澜，具有增强的性能和优化。',
     enabled: false,
     version: 1,
   },
@@ -64,7 +64,7 @@ const FEATURES = [
   {
     id: 'ai_features',
     title: 'AI features',
-    description: 'Unlock AI features to enhance your NocoDB experience.',
+    description: '解锁 AI 功能以增强您的 星澜 体验。',
     enabled: true,
     version: 3,
     isEE: true,
@@ -72,7 +72,7 @@ const FEATURES = [
   {
     id: 'ai_beta_features',
     title: 'AI beta features',
-    description: 'Unlock AI beta features to enhance your NocoDB experience.',
+    description: '解锁 AI 测试版功能以增强您的 星澜 体验。',
     enabled: false,
     version: 2,
     isEngineering: true,
@@ -96,9 +96,9 @@ const FEATURES = [
     isEE: true,
   },
   {
-    id: 'import_from_nocodb',
-    title: 'OSS to Enterprise migration',
-    description: 'Enable import from NocoDB OSS instance to Enterprise Edition.',
+    id: 'import_from_xinglan',
+    title: 'OSS 到企业版迁移',
+    description: '启用从 星澜 开源实例到企业版的导入。',
     enabled: true,
     version: 2,
     isEE: true,
@@ -131,7 +131,7 @@ const FEATURES = [
   {
     id: 'extensions',
     title: 'Extensions beta features',
-    description: 'Extensions allows you to add new features or functionalities to the NocoDB platform.',
+    description: '扩展允许您为 星澜 平台添加新功能或特性。',
     enabled: ncIsPlaywright(),
     version: 4,
     isEngineering: true,

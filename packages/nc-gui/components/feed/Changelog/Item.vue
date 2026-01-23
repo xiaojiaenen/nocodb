@@ -57,13 +57,13 @@ const renderedText = computedAsync(async () => {
     truncate.value
       ? Description.replace(/[*_~]|\[.*?\]|<\/?[^>]+(>|$)/g, '')
           .replace(/\(https?:\/\/[^\s)]+\)\]\(https?:\/\/[^\s)]+\)/g, '')
-          .replace(/^(\*\*)?#?\s*(\p{Emoji})\s*NocoDB\s*v[\d.]+(\s*-\s*|\*\*$)/u, '# ')
+          .replace(/^(\*\*)?#?\s*(\p{Emoji})\s*星澜\s*v[\d.]+(\s*-\s*|\*\*$)/u, '# ')
           .replace(/(!?\(https?:\/\/[^\s)]+\)(?:\]\(https?:\/\/[^\s)]+(?:\s+"[^"]*")?\))?)/g, '')
           .replace('-', '')
           .substring(0, 100)
           .concat('...')
       : Description.replace(/^\[!\[.*?\]\(https?:\/\/.*?\)\]\(https?:\/\/.*?\)/m, '').replace(
-          /^(\*\*)?#?\s*(\p{Emoji})\s*NocoDB\s*v[\d.]+(\s*-\s*|\*\*$)/u,
+          /^(\*\*)?#?\s*(\p{Emoji})\s*星澜\s*v[\d.]+(\s*-\s*|\*\*$)/u,
           '# ',
         ),
   )

@@ -1048,10 +1048,10 @@ const webhookV2AndV3Diff = computed(() => {
       <div v-if="showUpgradeModal" class="h-full w-full overflow-auto nc-scrollbar-thin">
         <div class="h-full w-full max-w-[1040] min-w-[640px] px-6 md:px-12 py-6 flex flex-col">
           <div class="flex flex-col gap-2 mb-8">
-            <div class="text-base font-bold text-nc-content-gray-emphasis">Change in webhook response</div>
+            <div class="text-base font-bold text-nc-content-gray-emphasis">{{ $t('msg.info.changeInWebhookResponse') }}</div>
             <div class="text-sm font-normal text-nc-content-gray-subtle2">
-              For more information on webhooks v3 visit
-              <span class="nc-link">NocoDB Docs.</span>
+              {{ $t('msg.info.forMoreInfoOnWebhooksV3Visit') }}
+              <span class="nc-link">{{ $t('msg.info.xingLanDocs') }}</span>
             </div>
           </div>
 

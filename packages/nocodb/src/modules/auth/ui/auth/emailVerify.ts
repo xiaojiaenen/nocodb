@@ -1,7 +1,7 @@
 export default `<!DOCTYPE html>
 <html>
 <head>
-    <title>NocoDB - Verify Email</title>
+    <title>星澜 - 验证邮箱</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link href="<%= ncPublicUrl %>/css/fonts.roboto.css" rel="stylesheet">
     <link href="<%= ncPublicUrl %>/css/materialdesignicons.5.x.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@ export default `<!DOCTYPE html>
         <v-row class="justify-center">
             <v-col class="col-12 col-md-6">
                 <v-alert v-if="valid" type="success">
-                    Email verified successfully!
+                    邮箱验证成功！
                 </v-alert>
                 <v-alert v-else-if="errMsg" type="error">
                     {{errMsg}}
@@ -60,7 +60,7 @@ export default `<!DOCTYPE html>
         if(e.response && e.response.data && e.response.data.msg){
           this.errMsg = e.response.data.msg;
         }else{
-          this.errMsg = 'Some error occurred';
+          this.errMsg = '发生了一些错误';
         }
       }
     }

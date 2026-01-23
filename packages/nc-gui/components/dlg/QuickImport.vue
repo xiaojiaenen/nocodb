@@ -58,7 +58,7 @@ const isWorkerSupport = typeof Worker !== 'undefined'
 
 const { t } = useI18n()
 
-const progressMsg = ref('Reading data ...')
+const progressMsg = ref(`${t('msg.info.readingData')} ...`)
 const progressMsgNew = ref<Record<string, string>>({})
 
 const workspace = useWorkspace()

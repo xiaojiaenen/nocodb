@@ -1,7 +1,7 @@
 export default `<!DOCTYPE html>
 <html>
 <head>
-    <title>NocoDB - Reset Password</title>
+    <title>星澜 - 重置密码</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link href="<%= ncPublicUrl %>/css/fonts.roboto.css" rel="stylesheet">
     <link href="<%= ncPublicUrl %>/css/materialdesignicons.5.x.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@ export default `<!DOCTYPE html>
             <v-row class="justify-center">
                 <v-col class="col-12 col-md-6">
                     <v-alert v-if="success" type="success">
-                        Password reset successful!
+                        密码重置成功！
                     </v-alert>
                     <template v-else>
 
@@ -25,18 +25,18 @@ export default `<!DOCTYPE html>
 
                             <v-text-field
                                     name="input-10-2"
-                                    label="New password"
+                                    label="新密码"
                                     type="password"
                                     v-model="formdata.password"
-                                    :rules="[v => !!v ||  'Password is required']"
+                                    :rules="[v => !!v ||  '请输入密码']"
                             ></v-text-field>
 
                             <v-text-field
                                     name="input-10-2"
                                     type="password"
-                                    label="Confirm new password"
+                                    label="确认新密码"
                                     v-model="formdata.newPassword"
-                                    :rules="[v => !!v ||  'Password is required', v =>  v === formdata.password  || 'Password mismatch']"
+                                    :rules="[v => !!v ||  '请输入密码', v =>  v === formdata.password  || '两次输入的密码不一致']"
                             ></v-text-field>
 
                             <v-btn
@@ -44,11 +44,11 @@ export default `<!DOCTYPE html>
                                     large
                                     @click="resetPassword"
                             >
-                                RESET PASSWORD
+                                重置密码
                             </v-btn>
 
                         </v-form>
-                        <div v-else-if="valid === false">Not a valid url</div>
+                        <div v-else-if="valid === false">链接无效</div>
                         <div v-else>
                             <v-skeleton-loader type="actions"></v-skeleton-loader>
                         </div>
@@ -86,9 +86,9 @@ export default `<!DOCTYPE html>
             this.success = true;
           } catch (e) {
             if (e.response && e.response.data && e.response.data.msg) {
-              alert('Failed to reset password: ' + e.response.data.msg)
+              alert('重置密码失败: ' + e.response.data.msg)
             } else {
-              alert('Some error occurred')
+              alert('发生了一些错误')
             }
           }
         }

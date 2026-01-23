@@ -24,35 +24,32 @@ export const Welcome = ({ email, link }: WelcomeTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
-      <Preview>Welcome to NocoDB!</Preview>
+      <Preview>欢迎使用星澜！</Preview>
       <Body className="bg-white">
         <ContentWrapper>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
-            Welcome to NocoDB!
+            欢迎使用星澜！
           </Heading>
           <Section className="py-6 mx-auto font-bold text-center text-gray-900 text-base">
             {email}
           </Section>
           <Text className="text-gray-600 text-center text-sm !mt-0">
-            We're thrilled to have you on board! 🚀 Turn your databases into
-            powerful smart tables and manage your data the way you want — no
-            code required.
+            我们非常高兴您能加入！🚀 将您的数据库转变为强大的智能表格，并以您想要的方式管理您的数据 —— 无需编写代码。
           </Text>
           <Text className="text-gray-600 text-center text-sm !mt-0">
-            Get started by creating your first project or exploring templates to
-            see what’s possible.
+            从创建您的第一个项目或探索模板开始，看看有什么可能。
           </Text>
           <Text className="text-gray-600 text-center text-sm !mt-0">
-            Need help? Our docs and community are just a click away.
+            需要帮助？我们的文档和社区只需点击一下即可。
           </Text>
           <Text className="text-gray-600 text-center text-sm !mt-0 !mb-6">
-            Let’s build something amazing together! 💡
+            让我们一起创造精彩！💡
           </Text>
           <Button
             className="text-center w-full text-base font-bold bg-brand-500 text-white rounded-lg h-10"
             href={link}
           >
-            <Text className="!my-[8px]">Go to your Workspace</Text>
+            <Text className="!my-[8px]">前往您的工作区</Text>
           </Button>
         </ContentWrapper>
         <Footer />

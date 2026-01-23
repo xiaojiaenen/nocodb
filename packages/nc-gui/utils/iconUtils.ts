@@ -96,7 +96,7 @@ import Filter from '~icons/nc-icons/filter'
 import Group from '~icons/nc-icons/group'
 import Sort from '~icons/nc-icons/sort'
 
-// NocoDB Icons
+// 星澜 图标
 import NcEye from '~icons/nc-icons/eye'
 import NcEyeOff from '~icons/nc-icons/eye-off'
 import NcStar from '~icons/nc-icons/star'

@@ -217,7 +217,7 @@ onUnmounted(() => {
     :keyboard="step !== 2"
     :mask-closable="step !== 2"
     width="448px"
-    wrap-class-name="nc-modal-nocodb-import"
+    wrap-class-name="nc-modal-xinglan-import"
     hide
     @keydown.esc="dialogShow = false"
   >
@@ -225,30 +225,30 @@ onUnmounted(() => {
       <GeneralIcon icon="nocodb1" class="w-6 h-6" @dblclick="advancedOptionsCounter++" />
 
       <span v-if="step === 1">
-        {{ $t('title.quickImportNocoDB') }}
+        {{ $t('quickImportXingLan') }}
       </span>
-      <span v-else-if="isInProgress"> {{ `${$t('labels.importingFromNocoDB')}...` }} </span>
-      <span v-else> {{ $t('labels.nocoDBBaseImported') }} </span>
+      <span v-else-if="isInProgress"> {{ `${$t('importingFromXingLan')}...` }} </span>
+      <span v-else> {{ $t('xingLanBaseImported') }} </span>
 
-      <span v-if="step === 1" class="!text-nc-content-gray-muted prose-sm ml-auto">Docs</span>
+      <span v-if="step === 1" class="!text-nc-content-gray-muted prose-sm ml-auto">文档</span>
       <NcButton v-else-if="step === 2" type="text" size="xs" class="ml-auto" @click="detailsIsShown = !detailsIsShown">
-        {{ detailsIsShown ? 'Hide' : 'Show' }} Details
+        {{ detailsIsShown ? '隐藏' : '显示' }} 详情
         <GeneralIcon icon="chevronDown" class="ml-2 transition-all transform" :class="{ 'rotate-180': detailsIsShown }" />
       </NcButton>
     </div>
 
     <div v-if="step === 1">
       <div class="text-nc-content-gray-subtle2 text-sm px-2">
-        <p class="mb-2">Easily migrate your base with the following steps:</p>
+        <p class="mb-2">通过以下步骤轻松迁移您的项目：</p>
         <ol class="list-decimal list-inside mt-2 pl-1">
-          <li>Open <strong>settings</strong> in your NocoDB base</li>
-          <li>Navigate to <strong>Migrate</strong> tab</li>
-          <li>Paste the <strong>URL</strong></li>
-          <li>Click <strong>Migrate</strong></li>
+          <li>在您的 星澜 项目中打开 <strong>设置</strong></li>
+          <li>导航到 <strong>迁移</strong> 选项卡</li>
+          <li>粘贴 <strong>URL</strong></li>
+          <li>点击 <strong>迁移</strong></li>
         </ol>
       </div>
 
-      <a-form ref="form" :model="syncOptions" name="quick-import-nocodb-form" layout="horizontal" class="!m-0 w-full">
+      <a-form ref="form" :model="syncOptions" name="quick-import-xinglan-form" layout="horizontal" class="!m-0 w-full">
         <a-form-item v-if="listeningImport" class="!mt-0 !pb-2 !mb-0">
           <LazyGeneralCopyInput :model-value="migrationUrl" class="!rounded-lg !mt-2 nc-input-shared-base" />
         </a-form-item>
@@ -271,11 +271,11 @@ onUnmounted(() => {
         <a-collapse v-if="!listeningImport" v-model:active-key="collapseKey" ghost class="nc-import-collapse">
           <a-collapse-panel key="advanced-settings">
             <div class="mb-2">
-              <a-checkbox v-model:checked="syncOptions.newBase"> New Base </a-checkbox>
+              <a-checkbox v-model:checked="syncOptions.newBase"> 新项目 </a-checkbox>
             </div>
 
             <div class="mt-2">
-              <a-checkbox v-model:checked="syncOptions.workspaceMode"> Workspace Mode </a-checkbox>
+              <a-checkbox v-model:checked="syncOptions.workspaceMode"> 工作区模式 </a-checkbox>
             </div>
 
             <!--
@@ -317,7 +317,7 @@ onUnmounted(() => {
         </template>
         <div v-else class="flex items-start gap-3">
           <GeneralIcon icon="checkFill" class="text-white w-4 h-4 mt-0.75" />
-          <span> {{ $t('msg.nocoDBImportSuccess') }} </span>
+          <span> {{ $t('xingLanImportSuccess') }} </span>
         </div>
       </div>
 

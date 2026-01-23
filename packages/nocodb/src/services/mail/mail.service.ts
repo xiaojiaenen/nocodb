@@ -154,7 +154,7 @@ export class MailService {
           const invitee = req.user;
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'You’ve been invited to a Base',
+            subject: '您已被邀请加入项目',
             html: await this.renderMail('BaseInvite', {
               baseTitle: base.title,
               name: extractDisplayNameFromEmail(
@@ -177,7 +177,7 @@ export class MailService {
 
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'Your Base role has been updated',
+            subject: '您的项目角色已更新',
             html: await this.renderMail('BaseRoleUpdate', {
               baseTitle: base.title,
               name: extractDisplayNameFromEmail(
@@ -200,7 +200,7 @@ export class MailService {
 
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'Reset your password',
+            subject: '重置您的密码',
             html: await this.renderMail('PasswordReset', {
               email: user.email,
               link: this.buildUrl(req, {
@@ -215,7 +215,7 @@ export class MailService {
           const { user, req } = payload;
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'Verify your email',
+            subject: '验证您的电子邮箱',
             html: await this.renderMail('VerifyEmail', {
               email: user.email,
               link: this.buildUrl(req, {
@@ -229,7 +229,7 @@ export class MailService {
           const { req, user } = payload;
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'Welcome to NocoDB!',
+            subject: '欢迎使用星澜！',
             html: await this.renderMail('Welcome', {
               email: user.email,
               link: this.buildUrl(req, {}),
@@ -242,7 +242,7 @@ export class MailService {
           const invitee = req.user;
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'You have been invited to join NocoDB',
+            subject: '您已被邀请加入星澜',
             html: await this.renderMail('OrganizationInvite', {
               name: extractDisplayNameFromEmail(
                 invitee.email,
@@ -261,7 +261,7 @@ export class MailService {
           const invitee = req.user;
           await mailerAdapter.mailSend({
             to: user.email,
-            subject: 'Role updated in NocoDB',
+            subject: '星澜角色已更新',
             html: await this.renderMail('OrganizationRoleUpdate', {
               name: extractDisplayNameFromEmail(
                 invitee.email,
@@ -281,7 +281,7 @@ export class MailService {
 
             await mailerAdapter.mailSend({
               to: emails.join(','),
-              subject: `NocoDB Forms: Someone has responded to ${formView.title}`,
+              subject: `星澜表单：有人回复了 ${formView.title}`,
               html: await this.renderMail('FormSubmission', {
                 formTitle: formView.title,
                 tableTitle: model.title,

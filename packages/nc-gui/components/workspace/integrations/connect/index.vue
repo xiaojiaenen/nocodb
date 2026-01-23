@@ -56,7 +56,7 @@ onMounted(async () => {
           <img
             src="~assets/img/placeholder/nocodb-pg-integration.png"
             class="!w-full !max-w-[864px] flex-none"
-            alt="NocoDb X Pg integration"
+            alt="星澜 X Pg integration"
           />
           <span class="text-base font-bold">Connect with your favorite tools</span>
           <span class="text-sm text-nc-content-gray-subtle2">Integrate with your favourite tools by bypassing our APIs</span>
@@ -84,7 +84,7 @@ onMounted(async () => {
                       <a-row :gutter="24">
                         <a-col :span="12">
                           <a-form-item label="Connection name">
-                            <a-input value="NocoDB" disabled />
+                            <a-input value="星澜" disabled />
                           </a-form-item>
                         </a-col>
                       </a-row>

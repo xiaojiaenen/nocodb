@@ -12,7 +12,7 @@ import NcConnectionMgrv2 from '~/utils/common/NcConnectionMgrv2';
 export class DuplicateDetectionService {
   /**
    * Checks for duplicate non-empty values in a column
-   * @param context - NocoDB context
+   * @param context - 星澜 上下文
    * @param column - Column to check
    * @param excludeRowId - Row ID to exclude from duplicate check (for updates)
    * @returns object with hasDuplicates flag and count

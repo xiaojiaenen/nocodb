@@ -10,6 +10,6 @@ const item = toRef(props, 'item')
 
 <template>
   <NotificationItemWrapper :item="item">
-    <div>{{ $t('msg.info.welcomeToNocoDB') }}</div>
+    <div>{{ $t('msg.info.welcomeToXingLan') }}</div>
   </NotificationItemWrapper>
 </template>

@@ -362,7 +362,7 @@ const customRow = (record: Record<string, any>) => ({
             <div class="h-8 w-8 grid place-items-center">
               <GeneralIcon icon="nocodb1" />
             </div>
-            <div class="text-sm !leading-5 capitalize font-semibold truncate">NocoDB Cloud</div>
+            <div class="text-sm !leading-5 capitalize font-semibold truncate">星澜 云</div>
           </div>
           <NcTooltip v-else :disabled="!isUserDeleted(integration.created_by)" class="w-full">
             <template #title>

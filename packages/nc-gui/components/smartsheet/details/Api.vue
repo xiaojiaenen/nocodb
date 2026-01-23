@@ -41,7 +41,7 @@ const langs = [
     icon: iconMap.langNode,
   },
   {
-    name: 'NocoDB-SDK',
+    name: '星澜-SDK',
     clients: ['javascript', 'node'],
     icon: iconMap.langNocodbSdk,
   },
@@ -108,7 +108,7 @@ const snippet = computed(
 const activeLang = computed(() => langs.find((lang) => lang.name === selectedLangName.value))
 
 const code = computed(() => {
-  if (activeLang.value?.name === 'NocoDB-SDK') {
+  if (activeLang.value?.name === '星澜-SDK') {
     return `${selectedClient.value === 'node' ? 'const { Api } = require("nocodb-sdk");' : 'import { Api } from "nocodb-sdk";'}
 
 const api = new Api({

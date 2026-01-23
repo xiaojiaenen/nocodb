@@ -40,7 +40,7 @@ export class McpService {
     res: Response,
   ) {
     const server = new McpServer({
-      name: `NoocDB MCP Server`,
+      name: `星澜 MCP 服务`,
       version: '1.0.0',
     });
 
@@ -78,8 +78,8 @@ export class McpService {
     server.registerTool(
       'getBaseInfo',
       {
-        title: 'Get Base Info',
-        description: 'Fetch information about current base',
+        title: '获取项目信息',
+        description: '获取当前项目的详细信息',
         annotations: {
           readOnlyHint: true,
           idempotentHint: true,
@@ -109,12 +109,12 @@ export class McpService {
     server.registerTool(
       'getTablesList',
       {
-        title: 'List Tables',
+        title: '列出数据表',
         annotations: {
           readOnlyHint: true,
           idempotentHint: true,
         },
-        description: 'List tables accessible by user',
+        description: '列出用户可访问的数据表',
       },
       async () => {
         try {
@@ -144,11 +144,11 @@ export class McpService {
     server.registerTool(
       'getTableSchema',
       {
-        title: 'Get the table schema',
+        title: '获取表结构',
         description:
-          'Get the table schema including fields and views information',
+          '获取表结构，包括字段和视图信息',
         inputSchema: {
-          tableId: z.string().describe('Table Id'),
+          tableId: z.string().describe('数据表 ID'),
         },
         annotations: {
           readOnlyHint: true,
@@ -189,31 +189,31 @@ export class McpService {
     server.registerTool(
       'queryRecords',
       {
-        title: 'Query Records',
-        description: 'Query Records from a Table',
+        title: '查询记录',
+        description: '从数据表中查询记录',
         inputSchema: {
-          tableId: z.string().describe('Table ID'),
+          tableId: z.string().describe('数据表 ID'),
           pageSize: z
             .number()
             .optional()
-            .describe('Number of records to fetch (default: 50)'),
+            .describe('要获取的记录数量 (默认: 50)'),
           page: z
             .number()
             .optional()
-            .describe('Page number for pagination (default: 1)'),
+            .describe('分页页码 (默认: 1)'),
           where: z.string().optional().describe(whereDescription),
           sort: z
             .array(
               z.object({
-                field: z.string().describe('Field Name'),
-                description: z.enum(['asc', 'desc']).describe('Sort Direction'),
+                field: z.string().describe('字段名称'),
+                description: z.enum(['asc', 'desc']).describe('排序方向'),
               }),
             )
             .optional(),
           fields: z
             .array(z.string())
             .optional()
-            .describe('Fields to fetch')
+            .describe('要获取的字段')
             .optional(),
         },
         annotations: {
@@ -252,15 +252,15 @@ export class McpService {
     server.registerTool(
       'getRecord',
       {
-        title: 'Get Record',
-        description: 'Fetch a record by ID',
+        title: '获取单条记录',
+        description: '通过 ID 获取单条记录',
         inputSchema: {
-          tableId: z.string().describe('Table ID'),
-          recordId: z.string().describe('Record ID or primary key value'),
+          tableId: z.string().describe('数据表 ID'),
+          recordId: z.string().describe('记录 ID 或主键值'),
           fields: z
             .string()
             .optional()
-            .describe('Comma-separated list of fields to include'),
+            .describe('以逗号分隔的字段列表'),
         },
         annotations: {
           readOnlyHint: true,
@@ -294,10 +294,10 @@ export class McpService {
     server.registerTool(
       'countRecords',
       {
-        title: 'Count Records',
-        description: 'Count Records in a Table',
+        title: '统计记录数',
+        description: '统计数据表中的记录总数',
         inputSchema: {
-          tableId: z.string().describe('Table ID'),
+          tableId: z.string().describe('数据表 ID'),
           where: z.string().optional().describe(whereDescription),
         },
         annotations: {
@@ -331,19 +331,19 @@ export class McpService {
     server.registerTool(
       'readAttachment',
       {
-        title: 'Read Attachments',
-        description: 'Read attachments in a record',
+        title: '读取附件',
+        description: '读取记录中的附件内容',
         inputSchema: {
           files: z
             .array(
               z
                 .object({
-                  title: z.string().nullable().describe('Attachment title'),
+                  title: z.string().nullable().describe('附件标题'),
                   mimeType: z
                     .string()
                     .nullable()
-                    .describe('Attachment mime type'),
-                  size: z.number().nullable().describe('Attachment size'),
+                    .describe('附件 MIME 类型'),
+                  size: z.number().nullable().describe('附件大小'),
                 })
                 .and(
                   z.union([
@@ -352,13 +352,13 @@ export class McpService {
                         .string()
                         .nullable()
                         .describe(
-                          'Attachment URL. Required if `path` is not provided.',
+                          '附件 URL。如果未提供 path，则必填。',
                         ),
                       signedUrl: z
                         .string()
                         .nullable()
                         .describe(
-                          'Attachment signed URL. Required if `path` is not provided.',
+                          '附件签名 URL。如果未提供 path，则必填。',
                         ),
                       path: z.null(),
                       signedPath: z.null(),
@@ -368,13 +368,13 @@ export class McpService {
                         .string()
                         .nullable()
                         .describe(
-                          'Attachment path. Required if `url` is not provided.',
+                          '附件路径。如果未提供 url，则必填。',
                         ),
                       signedPath: z
                         .string()
                         .nullable()
                         .describe(
-                          'Attachment signed Path. Required if `url` is not provided.',
+                          '附件签名路径。如果未提供 url，则必填。',
                         ),
                       url: z.null(),
                       signedUrl: z.null(),
@@ -382,7 +382,7 @@ export class McpService {
                   ]),
                 ),
             )
-            .describe('Array of attachment objects from NocoDB'),
+            .describe('来自星澜的附件对象数组'),
         },
         annotations: {
           readOnlyHint: true,
@@ -509,19 +509,19 @@ export class McpService {
       server.registerTool(
         'aggregate_single',
         {
-          title: 'Aggregate',
+          title: '聚合统计',
           description:
-            'Perform aggregations on a table with a filter condition',
+            '在带有筛选条件的数据表上执行聚合统计',
           annotations: {
             readOnlyHint: true,
             idempotentHint: true,
           },
           inputSchema: {
-            tableId: z.string().describe('Table ID'),
+            tableId: z.string().describe('数据表 ID'),
             aggregations: z
               .array(
                 z.object({
-                  field: z.string().describe('Field/column ID to aggregate'),
+                  field: z.string().describe('要聚合的字段/列 ID'),
                   type: z
                     .enum([
                       // Numerical aggregations
@@ -556,12 +556,12 @@ export class McpService {
                     .describe(aggregationDescription),
                 }),
               )
-              .describe('Array of aggregations to perform'),
+              .describe('要执行的聚合操作数组'),
             where: z.string().optional().describe(whereDescription),
             viewId: z
               .string()
               .optional()
-              .describe('Optional view ID to use view-specific configurations'),
+              .describe('可选的视图 ID，用于使用特定视图的配置'),
           },
         },
         async ({ aggregations, tableId, where, viewId }) => {
@@ -599,24 +599,24 @@ export class McpService {
       server.registerTool(
         'createRecords',
         {
-          title: 'Create Records',
-          description: 'Create records in a table',
+          title: '创建记录',
+          description: '在数据表中创建新记录',
           annotations: {
             readOnlyHint: true,
             idempotentHint: true,
           },
           inputSchema: {
-            tableId: z.string().describe('Table ID'),
+            tableId: z.string().describe('数据表 ID'),
             records: z
               .array(
                 z.object({
                   fields: z.record(
-                    z.string().describe('Field name/title'),
-                    z.any().describe('Field value'),
+                    z.string().describe('字段名称/标题'),
+                    z.any().describe('字段值'),
                   ),
                 }),
               )
-              .describe('Array of records with fields as key-value pairs'),
+              .describe('包含字段键值对的记录数组'),
           },
         },
         async ({ tableId, records }) => {
@@ -648,21 +648,21 @@ export class McpService {
       server.registerTool(
         'updateRecords',
         {
-          title: 'Update Records',
-          description: 'Update records in a table',
+          title: '更新记录',
+          description: '更新数据表中的现有记录',
           inputSchema: {
-            tableId: z.string().describe('Table ID'),
+            tableId: z.string().describe('数据表 ID'),
             records: z
               .array(
                 z.object({
-                  id: z.union([z.string(), z.number()]).describe('Record ID'),
+                  id: z.union([z.string(), z.number()]).describe('记录 ID'),
                   fields: z.record(
-                    z.string().describe('Field name/title'),
-                    z.any().describe('Field value'),
+                    z.string().describe('字段名称/标题'),
+                    z.any().describe('字段值'),
                   ),
                 }),
               )
-              .describe('Array of records with ID and fields to update'),
+              .describe('包含 ID 和待更新字段的记录数组'),
           },
           annotations: {
             destructiveHint: true,
@@ -697,20 +697,20 @@ export class McpService {
       server.registerTool(
         'deleteRecords',
         {
-          title: 'Delete Records',
-          description: 'Delete records in a table',
+          title: '删除记录',
+          description: '删除数据表中的记录',
           annotations: {
             destructiveHint: true,
           },
           inputSchema: {
-            tableId: z.string().describe('Table ID'),
+            tableId: z.string().describe('数据表 ID'),
             records: z
               .array(
                 z.object({
-                  id: z.union([z.string(), z.number()]).describe('Record ID'),
+                  id: z.union([z.string(), z.number()]).describe('记录 ID'),
                 }),
               )
-              .describe('Array of records with IDs to delete'),
+              .describe('包含待删除记录 ID 的数组'),
           },
         },
         async ({ tableId, records }) => {
@@ -741,9 +741,9 @@ export class McpService {
 }
 
 function formatFileSize(bytes?: number | null): string {
-  if (bytes === undefined || bytes === null) return 'Unknown size';
+  if (bytes === undefined || bytes === null) return '未知大小';
 
-  if (bytes < 1024) return `${bytes} bytes`;
+  if (bytes < 1024) return `${bytes} 字节`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   if (bytes < 1024 * 1024 * 1024)
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;

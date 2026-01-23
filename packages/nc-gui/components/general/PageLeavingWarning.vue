@@ -32,7 +32,7 @@ const handleRedirect = (proceedToLink = false) => {
     <div>
       <img width="56px" height="56px" alt="星澜" src="~/assets/img/brand/logo.svg" />
     </div>
-    <div class="text-xl font-bold text-nc-content-gray">{{ $t('title.youAreLeavingNocoDB') }}</div>
+    <div class="text-xl font-bold text-nc-content-gray">{{ $t('title.youAreLeavingXingLan') }}</div>
     <div class="text-sm font-weight-500 text-nc-content-gray-subtle2">{{ $t('title.onlyProceedIfYouTrustThisLink') }}</div>
     <a class="text-sm font-weight-500 text-nc-content-gray-subtle" :href="redirectUrl">{{ redirectUrl }}</a>
     <div class="flex items-center gap-3 mt-3">

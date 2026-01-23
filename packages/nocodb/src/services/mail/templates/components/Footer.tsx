@@ -13,8 +13,7 @@ export const Footer = () => {
   return (
     <Container className="px-3">
       <Text className="text-gray-500 m-auto text-sm max-w-[400px] text-center">
-        NocoDB is your solution for all your no-code needs. Now on cloud, we
-        help organisations maintain critical data with our solutions.
+        星澜是您的全方位无代码解决方案。
       </Text>
       <Section className="mt-12">
         <Row className="max-w-[100px] m-auto">
@@ -76,30 +75,30 @@ export const Footer = () => {
       <Section className="mt-6">
         <Row className="max-w-[380px] m-auto">
           <Column className="border pr-1 border-y-0 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="https://app.nocodb.com/" target="_blank">
+            <Link href="#" target="_blank">
               <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                Getting Started
+                开始使用
               </Text>
             </Link>
           </Column>
           <Column className="border border-y-0 px-1 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="https://blog.nocodb.com" target="_blank">
+            <Link href="#" target="_blank">
               <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                Blog
+                博客
               </Text>
             </Link>
           </Column>
           <Column className="border px-1 border-y-0 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="https://docs.nocodb.com/" target="_blank">
+            <Link href="#" target="_blank">
               <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                Docs
+                文档
               </Text>
             </Link>
           </Column>
           <Column className="pl-1">
-            <Link href="https://nocodb.com/terms-of-service" target="_blank">
+            <Link href="#" target="_blank">
               <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                Terms of Service
+                服务条款
               </Text>
             </Link>
           </Column>
@@ -108,7 +107,7 @@ export const Footer = () => {
         <Row className="mt-6">
           <Column>
             <Text className="text-center !my-0 text-gray-500 text-[13px]">
-              {new Date().getFullYear()} — © NocoDB Inc.
+              {new Date().getFullYear()} — © 星澜 Inc.
             </Text>
           </Column>
         </Row>

@@ -747,7 +747,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
           // },
           {
             value: 'Import Data',
-            description: 'Bring your existing spreadsheets or databases into NocoDB.',
+            description: '将您现有的电子表格或数据库导入 星澜。',
             icons: [
               {
                 icon: 'ncDownload',

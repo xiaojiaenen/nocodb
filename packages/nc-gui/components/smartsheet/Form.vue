@@ -1988,7 +1988,7 @@ const { message: templatedMessage } = useTemplatedMessage(
                                 <!-- Hide NocoDB Branding -->
 
                                 <span class="flex items-center gap-3">
-                                  {{ $t('labels.hideNocodbBranding') }}
+                                  {{ $t('hideXingLanBranding') }}
 
                                   <LazyPaymentUpgradeBadge
                                     :feature="PlanFeatureTypes.FEATURE_HIDE_BRANDING"

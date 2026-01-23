@@ -13,7 +13,7 @@ export const ContentWrapper = ({
     <Container className="px-3 mt-16 !my-0 max-w-[480px]">
       <Section className="py-6 m-auto bg-gray-50 border border-gray-200 border-solid rounded-t-xl">
         <Img
-          alt="NocoDB"
+          alt="星澜"
           src={`${NC_EMAIL_ASSETS_BASE_URL}/nocodb-logo.png`}
           width={40}
           style={{ display: 'block', margin: 'auto auto' }}

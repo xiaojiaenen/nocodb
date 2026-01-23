@@ -196,7 +196,7 @@ if (props.isCreateNewActionMenu) {
         <GeneralProjectIcon :color="formState.meta.iconColor" class="mr-2.5" />
         {{
           $t('general.createEntity', {
-            entity: 'Base',
+            entity: '项目',
           })
         }}
       </div>
@@ -242,19 +242,19 @@ if (props.isCreateNewActionMenu) {
             type="primary"
             size="small"
             :disabled="creating"
-            :label="`${$t('general.create')} Base`"
-            :loading-label="`${$t('general.creating')} Base`"
+            :label="`${$t('general.create')} 项目`"
+            :loading-label="`${$t('general.creating')} 项目`"
             @click="createProject"
           >
             {{
               $t('general.createEntity', {
-                entity: 'Base',
+                entity: '项目',
               })
             }}
             <template #loading>
               {{
                 $t('general.creatingEntity', {
-                  entity: 'Base',
+                  entity: '项目',
                 })
               }}
             </template>

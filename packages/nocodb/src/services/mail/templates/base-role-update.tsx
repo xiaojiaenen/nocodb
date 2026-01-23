@@ -39,11 +39,11 @@ export const BaseRoleUpdate = ({
   <Html>
     <RootWrapper>
       <Head />
-      <Preview>Your base role has been updated</Preview>
+      <Preview>您的项目角色已更新</Preview>
       <Body className="bg-white">
         <ContentWrapper>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
-            Your base role has been updated
+            您的项目角色已更新
           </Heading>
           <Section className="py-6 text-center font-bold text-gray-900 text-base">
             {baseTitle}
@@ -67,14 +67,14 @@ export const BaseRoleUpdate = ({
           </Section>
           <Text className="text-gray-600 text-center text-sm !mt-0 !mb-6">
             <span className="font-bold text-gray-800">{` ${name}`}</span> (
-            {email}) has updated your access in base
-            <span className="font-bold text-gray-800"> {baseTitle}. </span>
+            {email}) 更新了您在项目
+            <span className="font-bold text-gray-800"> {baseTitle} </span> 中的访问权限。
           </Text>
           <Button
             className="text-center w-full text-base font-bold bg-brand-500 text-white rounded-lg h-10"
             href={link}
           >
-            <Text className="!my-[8px]">Go to Base</Text>
+            <Text className="!my-[8px]">前往项目</Text>
           </Button>
         </ContentWrapper>
         <Footer />

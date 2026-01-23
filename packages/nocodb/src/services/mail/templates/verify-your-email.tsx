@@ -27,23 +27,23 @@ export const VerifyYourEmail = ({
   <Html>
     <RootWrapper>
       <Head />
-      <Preview>Verify your Email</Preview>
+      <Preview>验证您的电子邮箱</Preview>
       <Body className="bg-white">
         <ContentWrapper>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
-            Verify your Email
+            验证您的电子邮箱
           </Heading>
           <Section className="py-6 mx-auto font-bold text-center text-gray-900 text-base">
             {email}
           </Section>
           <Text className="text-gray-600 text-center text-sm !mt-0 !mb-6">
-            Please verify your account to complete the sign-up process.
+            请验证您的账户以完成注册流程。
           </Text>
           <Button
             className="text-center w-full text-base font-bold bg-brand-500 text-white rounded-lg h-10"
             href={link}
           >
-            <Text className="!my-[8px]">Verify Email</Text>
+            <Text className="!my-[8px]">验证电子邮箱</Text>
           </Button>
         </ContentWrapper>
         <Footer />

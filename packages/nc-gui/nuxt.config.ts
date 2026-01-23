@@ -104,7 +104,7 @@ export default defineNuxtConfig({
           hid: 'twitter:description',
           name: 'twitter:description',
           content:
-            '星澜 (XingLan) provides an intuitive spreadsheet interface for creating online databases, either from scratch or by connecting to any Postgres/MySQL. Access your data through interactive UIs or via API and SQL. Get started for free.',
+            '星澜 (XingLan) 提供直观的表格界面，用于创建在线数据库，无论是从头开始还是连接到任何 Postgres/MySQL。通过交互式 UI 或 API 和 SQL 访问您的数据。免费开始使用。',
         },
         {
           hid: 'twitter:image',

@@ -46,10 +46,10 @@ const serverName = computed(() => {
 
   if (props.showWorkspaceBaseInfo) {
     title = isEeUI
-      ? `NocoDB ${token.value.workspace?.title || 'Workspace'} - ${token.value.base?.title || 'Base'}`
-      : `NocoDB - ${token.value.base?.title || 'Base'}`
+      ? `星澜 ${token.value.workspace?.title || 'Workspace'} - ${token.value.base?.title || 'Base'}`
+      : `星澜 - ${token.value.base?.title || 'Base'}`
   } else {
-    title = `NocoDB Base - ${openedProject.value?.title}`
+    title = `星澜 Base - ${openedProject.value?.title}`
   }
 
   if (activeTab.value === 'antigravity') {
@@ -141,12 +141,12 @@ const code = computed(
                 </span>
               </template>
               <div class="relative flex flex-col leading-6 text-nc-content-gray-subtle2 gap-3 my-3">
-                Get started with the NocoDB MCP with Claude Desktop in 3 simple steps
+                只需 3 个简单的步骤，即可开始在 Claude Desktop 中使用 星澜 MCP
 
                 <ol class="list-decimal pl-5">
-                  <li>Navigate to Claude Desktop settings from the navigation bar.</li>
-                  <li>Go to the Develop Tab, and click on “Edit Config”.</li>
-                  <li>Add the JSON configuration that’s provided after creating a token in claude_desktop_config.json</li>
+                  <li>从导航栏进入 Claude Desktop 设置。</li>
+                  <li>转到 Develop 选项卡，然后点击 “Edit Config”。</li>
+                  <li>将创建令牌后提供的 JSON 配置添加到 claude_desktop_config.json 中。</li>
                 </ol>
 
                 <NcButton
@@ -176,12 +176,12 @@ const code = computed(
                 </span>
               </template>
               <div class="relative flex flex-col leading-6 text-nc-content-gray-subtle2 gap-3 my-3">
-                Get started with the NocoDB MCP with Cursor in 3 simple steps
+                只需 3 个简单的步骤，即可开始在 Cursor 中使用 星澜 MCP
 
                 <ol class="list-decimal pl-5">
-                  <li>Open Cursor Settings (press Shift+Cmd+J)</li>
-                  <li>Select the "MCP" tab and click "Add Custom MCP" .</li>
-                  <li>Add the JSON configuration that’s provided after creating a token.</li>
+                  <li>打开 Cursor 设置（按 Shift+Cmd+J）。</li>
+                  <li>选择 "MCP" 选项卡并点击 "Add Custom MCP"。</li>
+                  <li>添加创建令牌后提供的 JSON 配置。</li>
                 </ol>
 
                 <NcButton
@@ -210,13 +210,13 @@ const code = computed(
                 </span>
               </template>
               <div class="relative flex flex-col leading-6 text-nc-content-gray-subtle2 gap-3 my-3">
-                Get started with the NocoDB MCP with Windsurf in 4 simple steps
+                只需 4 个简单的步骤，即可开始在 Windsurf 中使用 星澜 MCP
 
                 <ol class="list-decimal pl-5">
-                  <li>Access Windsurf settings and Select Cascade Tab in the left sidebar</li>
-                  <li>Click on Manage MCP.</li>
-                  <li>Now click on View raw config.</li>
-                  <li>Paste the JSON configuration that’s provided after creating a token in the opened file</li>
+                  <li>进入 Windsurf 设置并在左侧栏选择 Cascade 选项卡。</li>
+                  <li>点击 Manage MCP。</li>
+                  <li>现在点击 View raw config。</li>
+                  <li>将创建令牌后提供的 JSON 配置粘贴到打开的文件中。</li>
                 </ol>
 
                 <NcButton
@@ -246,13 +246,13 @@ const code = computed(
                 </span>
               </template>
               <div class="relative flex flex-col leading-6 text-nc-content-gray-subtle2 gap-3 my-3">
-                Get started with the NocoDB MCP with AntiGravity in 4 simple steps
+                只需 4 个简单的步骤，即可开始在 AntiGravity 中使用 星澜 MCP
 
                 <ol class="list-decimal pl-5">
-                  <li>Click on the three dots in the top right of the agent window, and click on "MCP Servers"</li>
-                  <li>Click on Manage MCP Servers.</li>
-                  <li>Now click on View raw config.</li>
-                  <li>Paste the JSON configuration that’s provided after creating a token in the opened file</li>
+                  <li>点击代理窗口右上角的三个点，然后点击 "MCP Servers"。</li>
+                  <li>点击 Manage MCP Servers。</li>
+                  <li>现在点击 View raw config。</li>
+                  <li>将创建令牌后提供的 JSON 配置粘贴到打开的文件中。</li>
                 </ol>
 
                 <NcButton

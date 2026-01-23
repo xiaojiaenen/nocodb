@@ -7,7 +7,7 @@ export default ({
 }): string => `<!DOCTYPE html>
 <html>
 <head>
-    <title>NocoDB : API Docs</title>
+    <title>星澜 : API 文档</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="shortcut icon" href="${ncSiteUrl}/favicon.ico" />
     <link rel="stylesheet" href="${ncSiteUrl}/css/swagger-ui.css"/>
@@ -65,7 +65,7 @@ xmlhttp.send();
     '  height: 40px;',
     '}',
     '.swagger-ui .topbar .link::after {',
-    '  content: "NocoDB API Docs";',
+    '  content: "星澜 API 文档";',
     '  color: #1348ba;',
     '  font-weight: bold;',
     '  margin-left: 10px;',
