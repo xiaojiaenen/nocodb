@@ -33,7 +33,7 @@ const { appInfo } = useGlobal()
         >
           <NcTooltip :disabled="!appInfo?.version || isEeUI">
             <template #title>{{ appInfo?.version }}</template>
-            <img alt="星澜 (XingLan)" src="~/assets/img/brand/full-logo.svg" />
+            <img alt="星澜" src="~/assets/img/brand/full-logo.svg" />
           </NcTooltip>
         </a>
         <div class="flex flex-grow"></div>

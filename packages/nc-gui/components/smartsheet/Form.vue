@@ -982,71 +982,75 @@ const { message: templatedMessage } = useTemplatedMessage(
           <div
             class="transition-all duration-300 ease-in relative my-6 bg-nc-bg-default rounded-3xl border-1 border-nc-border-gray-medium px-4 py-8 lg:p-12 md:(p-8)"
           >
-            <div v-if="formViewData" class="items-center justify-center text-left mt-2">
-              <div>
-                <h1 class="text-2xl font-bold text-nc-content-gray-emphasis mb-4">
-                  {{ formViewData.heading }}
-                </h1>
+        <div v-if="formViewData" class="items-center justify-center text-center mt-2">
+          <div class="mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 text-green-600 rounded-full mb-4">
+              <GeneralIcon icon="check" class="w-8 h-8" />
+            </div>
+            <h1 class="text-3xl font-bold text-nc-content-gray-emphasis mb-2">
+              {{ formViewData.heading }}
+            </h1>
+            <p class="text-lg text-nc-content-gray-muted">
+              {{ $t('msg.successfullySubmittedFormData') }}
+            </p>
+          </div>
 
-                <div v-if="formViewData.subheading?.trim()">
-                  <CellRichText
-                    :value="formViewData.subheading"
-                    class="font-medium text-base text-nc-content-gray-muted !h-auto mb-4 -ml-1"
-                    is-form-field
-                    read-only
-                    sync-value-change
-                  />
-                </div>
+          <div v-if="formViewData.subheading?.trim()" class="mb-8">
+            <CellRichText
+              :value="formViewData.subheading"
+              class="font-medium text-base text-nc-content-gray-muted !h-auto -ml-1 inline-block"
+              is-form-field
+              read-only
+              sync-value-change
+            />
+          </div>
+
+          <div class="flex justify-center">
+            <div class="w-full max-w-md">
+              <div v-if="templatedMessage" class="bg-white p-6 rounded-2xl shadow-sm border border-nc-border-gray-light text-left mb-8">
+                <CellRichText
+                  :value="templatedMessage"
+                  class="!h-auto"
+                  is-form-field
+                  read-only
+                  sync-value-change
+                />
               </div>
 
-              <div class="flex justify-center">
-                <div class="w-full">
-                  <a-alert class="nc-form-success-msg !my-4 !py-4 text-left !rounded-lg" type="success" outlined>
-                    <template #message>
-                      <CellRichText
-                        v-if="templatedMessage"
-                        :value="templatedMessage"
-                        class="!h-auto -ml-1"
-                        is-form-field
-                        read-only
-                        sync-value-change
-                      />
-                      <span v-else> {{ $t('msg.successfullySubmittedFormData') }} </span>
-                    </template>
-                  </a-alert>
+              <div class="flex flex-col items-center gap-4">
+                <div v-if="formViewData.show_blank_form" class="text-nc-content-gray-disabled text-sm">
+                  {{
+                    $t('msg.newFormWillBeLoaded', {
+                      seconds: secondsRemain,
+                    })
+                  }}
+                </div>
 
-                  <div class="mt-16 w-full flex justify-between items-center gap-3">
-                    <div v-if="formViewData.show_blank_form" class="text-nc-content-gray-disabled">
-                      {{
-                        $t('msg.newFormWillBeLoaded', {
-                          seconds: secondsRemain,
-                        })
-                      }}
-                    </div>
-
-                    <div v-if="formViewData.submit_another_form || !isPublic" class="flex-1 flex justify-end">
-                      <NcButton
-                        type="primary"
-                        size="small"
-                        @click="
-                          () => {
-                            submitted = false
-                            clearForm()
-                          }
-                        "
-                      >
-                        {{ $t('activity.submitAnotherForm') }}
-                      </NcButton>
-                    </div>
-                  </div>
+                <div v-if="formViewData.submit_another_form || !isPublic" class="w-full">
+                  <NcButton
+                    type="primary"
+                    size="large"
+                    block
+                    class="!rounded-xl h-12 text-lg font-semibold"
+                    @click="
+                      () => {
+                        submitted = false
+                        clearForm()
+                      }
+                    "
+                  >
+                    {{ $t('activity.submitAnotherForm') }}
+                  </NcButton>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div v-else class="nc-form-wrapper h-full w-full flex relative" data-testid="nc-form-wrapper">
+    <div v-else class="nc-form-wrapper h-full w-full flex relative" data-testid="nc-form-wrapper">
         <div v-if="isLoadingFormView" class="flex-1 flex items-center justify-center text-center h-full">
           <div>
             <GeneralLoader size="xlarge" />
@@ -1059,7 +1063,7 @@ const { message: templatedMessage } = useTemplatedMessage(
           <SmartsheetFormLayout :is-sidebar-visible="isSidebarVisible">
             <template #preview>
               <div
-                class="w-full h-full overflow-auto nc-scrollbar-thin p-6"
+                class="w-full h-full overflow-auto nc-scrollbar-thin p-6 relative"
                 :style="{
                   background: parseProp(formViewData?.meta)?.background_color
                     ? getSelectTypeFieldOptionBgColor({
@@ -1067,9 +1071,15 @@ const { message: templatedMessage } = useTemplatedMessage(
                         isDark,
                         shade: 0,
                       })
-                    : 'var(--nc-bg-gray-extralight)',
+                    : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
                 }"
               >
+                <!-- Background Decoration -->
+                <div class="absolute inset-0 pointer-events-none opacity-40 overflow-hidden">
+                  <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-100 rounded-full blur-3xl"></div>
+                  <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-100 rounded-full blur-3xl"></div>
+                </div>
+
                 <Transition
                   enter-active-class="transition-opacity delay-300 duration-300"
                   enter-from-class="opacity-0"
@@ -1115,68 +1125,6 @@ const { message: templatedMessage } = useTemplatedMessage(
                       :key="formViewData.banner_image_url?.path"
                       :banner-image-url="formViewData.banner_image_url"
                     />
-                    <div class="absolute bottom-0 right-0 hidden group-hover:block">
-                      <div class="flex items-center space-x-1 m-2">
-                        <NcTooltip :disabled="isEeUI || isLocked">
-                          <template #title>
-                            <div class="text-center">
-                              {{ $t('msg.info.thisFeatureIsOnlyAvailableInEnterpriseEdition') }}
-                            </div>
-                          </template>
-                          <PaymentUpgradeBadgeProvider :feature="PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO">
-                            <template #default="{ click }">
-                              <NcButton
-                                type="secondary"
-                                size="small"
-                                class="nc-form-upload-banner-btn"
-                                data-testid="nc-form-upload-banner-btn"
-                                :disabled="!isEeUI || isLocked"
-                                @click.stop="click(PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO, () => openUploadImage(true))"
-                              >
-                                <div class="flex gap-2 items-center">
-                                  <component :is="iconMap.upload" class="w-4 h-4" />
-                                  <span>
-                                    {{ formViewData.banner_image_url ? $t('general.replace') : $t('general.upload') }}
-                                    {{ $t('general.banner') }}
-                                  </span>
-                                  <PaymentUpgradeBadge
-                                    v-if="!isLocked"
-                                    :feature="PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO"
-                                    :content="
-                                      $t('upgrade.upgradeToAddCustomBannerSubtitle', {
-                                        plan: getPlanTitle(PlanTitles.PLUS),
-                                      })
-                                    "
-                                  />
-                                </div>
-                              </NcButton>
-                            </template>
-                          </PaymentUpgradeBadgeProvider>
-                        </NcTooltip>
-                        <NcTooltip v-if="isEeUI && formViewData.banner_image_url" :disabled="isLocked">
-                          <template #title> {{ $t('general.delete') }} {{ $t('general.banner') }} </template>
-                          <NcButton
-                            type="secondary"
-                            size="small"
-                            class="nc-form-delete-banner-btn"
-                            data-testid="nc-form-delete-banner-btn"
-                            :disabled="isLocked"
-                            @click.stop="
-                              () => {
-                                if (isEditable) {
-                                  formViewData!.banner_image_url = null
-                                  updateView()
-                                }
-                              }
-                            "
-                          >
-                            <div class="flex gap-2 items-center">
-                              <component :is="iconMap.delete" class="w-4 h-4" />
-                            </div>
-                          </NcButton>
-                        </NcTooltip>
-                      </div>
-                    </div>
                   </div>
                   <NcAlert
                     v-if="blockAddNewRecord"
@@ -1203,7 +1151,7 @@ const { message: templatedMessage } = useTemplatedMessage(
                     </template>
                   </NcAlert>
                   <a-card
-                    class="!py-8 !lg:py-12 !border-nc-border-gray-medium !rounded-3xl !mt-6 !max-w-[max(33%,688px)] !mx-auto"
+                    class="!py-8 !lg:py-12 !border-transparent !shadow-2xl !rounded-[2rem] !mt-6 !max-w-[max(33%,688px)] !mx-auto !bg-white/95 !backdrop-blur-sm"
                     :body-style="{
                       margin: '0 auto',
                       padding: '0px !important',
@@ -1211,93 +1159,7 @@ const { message: templatedMessage } = useTemplatedMessage(
                   >
                     <a-form :model="formState" class="nc-form" no-style>
                       <!-- form header -->
-                      <div class="flex flex-col px-4 lg:px-6">
-                        <!-- Form logo  -->
-                        <div class="mb-4">
-                          <div
-                            class="nc-form-logo-wrapper mx-6 group relative h-56px overflow-hidden inline-flex items-center"
-                            :class="
-                              formViewData.logo_url
-                                ? 'max-w-189px hover:(w-full bg-nc-bg-gray-light rounded-xl) '
-                                : 'bg-nc-bg-gray-light  rounded-xl'
-                            "
-                            style="transition: all 0.3s ease-in"
-                          >
-                            <CellAttachmentPreviewImage
-                              v-if="formViewData.logo_url"
-                              :key="formViewData.logo_url?.path"
-                              :srcs="getFormLogoSrc"
-                              class="flex-none nc-form-logo !object-contain object-left max-h-full max-w-full !m-0"
-                              :is-cell-preview="false"
-                            />
-                            <div
-                              class="items-center space-x-1 flex-nowrap m-3"
-                              :class="formViewData.logo_url ? 'hidden absolute top-0 left-0 group-hover:flex' : 'flex'"
-                            >
-                              <NcTooltip :disabled="isEeUI || isLocked">
-                                <template #title>
-                                  <div class="text-center">
-                                    {{ $t('msg.info.thisFeatureIsOnlyAvailableInEnterpriseEdition') }}
-                                  </div>
-                                </template>
-                                <PaymentUpgradeBadgeProvider
-                                  v-if="isEditable"
-                                  :feature="PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO"
-                                >
-                                  <template #default="{ click }">
-                                    <NcButton
-                                      type="secondary"
-                                      size="small"
-                                      class="nc-form-upload-logo-btn group"
-                                      data-testid="nc-form-upload-log-btn"
-                                      :disabled="!isEeUI || isLocked"
-                                      @click.stop="click(PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO, () => openUploadImage(false))"
-                                    >
-                                      <div class="flex gap-2 items-center">
-                                        <component :is="iconMap.upload" class="w-4 h-4" />
-                                        <span>
-                                          {{ formViewData.logo_url ? $t('general.replace') : $t('general.upload') }} Logo</span
-                                        >
-                                        <PaymentUpgradeBadge
-                                          v-if="!isLocked"
-                                          :feature="PlanFeatureTypes.FEATURE_FORM_CUSTOM_LOGO"
-                                          :content="
-                                            $t('upgrade.upgradeToAddCustomLogoSubtitle', {
-                                              plan: getPlanTitle(PlanTitles.PLUS),
-                                            })
-                                          "
-                                          class="-my-1"
-                                        />
-                                      </div>
-                                    </NcButton>
-                                  </template>
-                                </PaymentUpgradeBadgeProvider>
-                              </NcTooltip>
-                              <NcTooltip v-if="isEeUI && formViewData.logo_url" :disabled="isLocked">
-                                <template #title> {{ $t('general.delete') }} {{ $t('general.logo') }} </template>
-                                <NcButton
-                                  type="secondary"
-                                  size="small"
-                                  class="nc-form-delete-logo-btn"
-                                  data-testid="nc-form-delete-logo-btn"
-                                  :disabled="isLocked"
-                                  @click.stop="
-                                    () => {
-                                      if (isEditable) {
-                                        formViewData!.logo_url = null
-                                        updateView()
-                                      }
-                                  }"
-                                >
-                                  <div class="flex gap-2 items-center">
-                                    <component :is="iconMap.delete" class="w-4 h-4" />
-                                  </div>
-                                </NcButton>
-                              </NcTooltip>
-                            </div>
-                          </div>
-                        </div>
-
+                      <div class="flex flex-col px-4 lg:px-6 mt-4">
                         <!-- form title -->
                         <div
                           class="border-transparent px-4 lg:px-6"
@@ -1403,34 +1265,34 @@ const { message: templatedMessage } = useTemplatedMessage(
                         @change="onMove($event, true)"
                       >
                         <template #item="{ element }">
-                          <div
-                            v-if="!isLocked || (isLocked && element?.visible)"
-                            :key="element.id"
-                            class="nc-editable nc-form-focus-element item relative bg-nc-bg-default p-4 lg:p-6"
-                            :class="[
-                              `nc-form-drag-${element.title.replaceAll(' ', '')}`,
-                              {
-                                'rounded-2xl border-2 my-1': isEditable,
-                              },
-                              {
-                                'border-transparent my-0': !isEditable,
-                              },
-                              {
-                                'nc-form-field-drag-handler border-transparent hover:(bg-nc-bg-gray-extralight) cursor-pointer':
-                                  activeRow !== element.id && isEditable,
-                              },
+                            <div
+                              v-if="!isLocked || (isLocked && element?.visible)"
+                              :key="element.id"
+                              class="nc-editable nc-form-focus-element item relative bg-white/50 p-4 lg:p-6 transition-all duration-300"
+                              :class="[
+                                `nc-form-drag-${element.title.replaceAll(' ', '')}`,
+                                {
+                                  'rounded-2xl border-2 my-2 hover:shadow-md': isEditable,
+                                },
+                                {
+                                  'border-transparent my-1 rounded-xl hover:bg-white/80': !isEditable,
+                                },
+                                {
+                                  'nc-form-field-drag-handler border-transparent hover:(bg-nc-bg-gray-extralight) cursor-pointer':
+                                    activeRow !== element.id && isEditable,
+                                },
 
-                              {
-                                'border-nc-border-brand': activeRow === element.id,
-                              },
-                              {
-                                '!hover:bg-nc-bg-default !ring-0 !cursor-auto': isLocked,
-                              },
-                            ]"
-                            :data-title="element.title"
-                            data-testid="nc-form-fields"
-                            @click.stop="onFormItemClick(element)"
-                          >
+                                {
+                                  'border-nc-border-brand bg-white shadow-lg': activeRow === element.id,
+                                },
+                                {
+                                  '!hover:bg-white/80 !ring-0 !cursor-auto': isLocked,
+                                },
+                              ]"
+                              :data-title="element.title"
+                              data-testid="nc-form-fields"
+                              @click.stop="onFormItemClick(element)"
+                            >
                             <template v-if="activeRow === element.id">
                               <div class="absolute -left-3 top-6">
                                 <NcButton
@@ -1493,15 +1355,15 @@ const { message: templatedMessage } = useTemplatedMessage(
                                   />
                                 </Transition>
                               </NcTooltip>
-                              <div class="text-sm font-semibold text-nc-content-gray">
+                              <div class="text-[15px] font-semibold text-nc-content-gray-emphasis tracking-tight">
                                 <span data-testid="nc-form-input-label">
                                   {{ element.label || element.title }}
                                 </span>
                                 <span
                                   v-if="isRequired(element, element.required)"
-                                  class="text-nc-content-red-medium text-base leading-[18px]"
+                                  class="text-nc-content-red-medium text-base leading-[18px] ml-0.5"
                                 >
-                                  &nbsp;*
+                                  *
                                 </span>
                               </div>
                             </div>
@@ -1512,7 +1374,7 @@ const { message: templatedMessage } = useTemplatedMessage(
                               is-form-field
                               read-only
                               sync-value-change
-                              class="nc-form-help-text text-nc-content-gray-muted text-sm mt-2 -ml-1"
+                              class="nc-form-help-text text-nc-content-gray-muted text-[13px] leading-relaxed mt-1.5 opacity-80"
                               data-testid="nc-form-help-text"
                               @update:value="updateColMeta(element)"
                             />
@@ -1570,12 +1432,12 @@ const { message: templatedMessage } = useTemplatedMessage(
                         </template>
                       </Draggable>
 
-                      <div class="flex justify-between items-center mt-6 !px-8 !lg:px-12">
+                      <div class="flex justify-between items-center mt-10 !px-8 !lg:px-12 pb-6">
                         <NcButton
                           type="secondary"
-                          size="small"
+                          size="large"
                           :disabled="disableFormSubmit"
-                          class="nc-form-clear nc-form-focus-element"
+                          class="nc-form-clear nc-form-focus-element !rounded-xl !px-8 !border-nc-border-gray-dark !text-nc-content-gray-emphasis hover:!bg-nc-bg-gray-extralight transition-all duration-200"
                           data-testid="nc-form-clear"
                           data-title="nc-form-clear"
                           @click.stop="clearForm"
@@ -1585,10 +1447,10 @@ const { message: templatedMessage } = useTemplatedMessage(
 
                         <NcButton
                           type="primary"
-                          size="small"
+                          size="large"
                           :disabled="disableFormSubmit"
                           :loading="isFormSubmitting"
-                          class="nc-form-submit nc-form-focus-element"
+                          class="nc-form-submit nc-form-focus-element !rounded-xl !px-12 !text-lg !font-bold shadow-lg shadow-nc-brand/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
                           data-testid="nc-form-submit"
                           data-title="nc-form-submit"
                           @click.stop="submitForm"
@@ -2288,6 +2150,16 @@ const { message: templatedMessage } = useTemplatedMessage(
   }
 }
 
+.nc-form-input-item {
+  :deep(.nc-data-cell) {
+    @apply !bg-white/70 !border-1 !border-nc-border-gray-light !rounded-xl !transition-all !duration-200;
+    
+    &:focus-within {
+      @apply !bg-white !border-nc-border-brand !shadow-[0_0_0_4px_rgba(59,130,246,0.1)];
+    }
+  }
+}
+
 .nc-form-input-label {
   @apply !px-4 !py-2 font-semibold text-nc-content-gray !rounded-lg !text-sm;
 }
@@ -2332,11 +2204,13 @@ const { message: templatedMessage } = useTemplatedMessage(
   }
 }
 
-.nc-form-input-item .nc-data-cell {
-  @apply !border-none rounded-none;
-
-  &:focus-within {
-    @apply !border-none;
+.nc-form-input-item {
+  :deep(.nc-data-cell) {
+    @apply !bg-white/70 !border-1 !border-nc-border-gray-light !rounded-xl !transition-all !duration-200;
+    
+    &:focus-within {
+      @apply !bg-white !border-nc-border-brand !shadow-[0_0_0_4px_rgba(59,130,246,0.1)];
+    }
   }
 }
 

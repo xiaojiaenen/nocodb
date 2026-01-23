@@ -6,7 +6,9 @@ defineProps<{ title?: string; subtitle?: string; containerClass?: string; action
   <div class="nc-h-screen grid place-items-center text-center">
     <div class="flex flex-col items-center gap-5 mx-4" :class="containerClass">
       <slot name="icon">
-        <img width="48" alt="星澜" src="~/assets/img/brand/logo.svg" />
+        <div class="flex items-center justify-center bg-primary rounded-lg text-white font-bold w-12 h-12 text-lg">
+          星澜
+        </div>
       </slot>
 
       <div class="text-xl text-nc-content-gray font-bold">

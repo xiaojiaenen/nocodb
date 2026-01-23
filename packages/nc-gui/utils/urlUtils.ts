@@ -111,7 +111,7 @@ export function getFormulaTextSegments(anchorLinkHTML: string) {
 
 export const openLink = (path: string, baseURL?: string, target = '_blank') => {
   try {
-    const url = new URL(path, baseURL)
+    const url = new URL(path, baseURL || (typeof window !== 'undefined' ? window.location.origin : undefined))
     window.open(url.href, target, 'noopener,noreferrer')
   } catch (e) {
     console.error(`Failed constructing URL'${path}'`, e)

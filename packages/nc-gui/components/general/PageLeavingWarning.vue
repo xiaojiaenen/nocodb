@@ -29,8 +29,8 @@ const handleRedirect = (proceedToLink = false) => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-3 max-w-[420px] mx-auto text-center">
-    <div>
-      <img width="56px" height="56px" alt="星澜" src="~/assets/img/brand/logo.svg" />
+    <div class="flex items-center justify-center bg-primary rounded-lg text-white font-bold w-14 h-14 text-xl">
+      星澜
     </div>
     <div class="text-xl font-bold text-nc-content-gray">{{ $t('title.youAreLeavingXingLan') }}</div>
     <div class="text-sm font-weight-500 text-nc-content-gray-subtle2">{{ $t('title.onlyProceedIfYouTrustThisLink') }}</div>

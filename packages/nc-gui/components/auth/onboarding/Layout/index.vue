@@ -77,7 +77,9 @@ watch(stepIndex, (newIndex, oldIndex, cleanup) => {
         data-testid="nc-onboarding-flow-header"
         class="px-4 pt-4 pb-2 lg:(pt-8 pb-2 px-8) flex items-center justify-between w-full max-w-[672px] lg:max-w-[704px] mx-auto sticky top-0 bg-nc-bg-default z-10"
       >
-        <img src="~/assets/img/brand/logo.svg" alt="星澜 (XingLan)" class="w-12 h-12 flex-none" />
+        <div class="flex items-center justify-center bg-primary rounded-lg text-white font-bold w-12 h-12 flex-none text-lg">
+          星澜
+        </div>
 
         <div class="w-[200px] text-bodyBold pr-1">
           <a-progress

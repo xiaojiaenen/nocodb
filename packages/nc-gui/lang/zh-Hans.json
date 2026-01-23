@@ -1369,6 +1369,7 @@
     "duplicateAttachment": "文件{filename} 已附加",
     "tableIdColon": "表格编号： {tableId}",
     "baseIdColon": "项目ID：{baseId}",
+    "sourceIdColon": "源ID：{sourceId}",
     "scriptIdColon": "脚本ID: {scriptId}",
     "dashboardIdColon": "仪表板 ID: {dashboardId}",
     "viewIdColon": "查看 ID:{viewId}",

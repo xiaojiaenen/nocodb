@@ -79,11 +79,8 @@ const hasTableCreatePermission = computed(() => {
             data-testid="nc-workspace-menu"
             class="flex items-center nc-workspace-menu overflow-hidden py-1.25 pr-0.25 justify-center w-full"
           >
-            <div
-              class="w-24 min-w-10 transition-all duration-200 p-1 transform"
-            >
-              <img v-if="isDark" width="96" alt="星澜" src="~/assets/img/brand/full-logo-dark.svg" />
-              <img v-else width="96" alt="星澜" src="~/assets/img/brand/full-logo.svg" />
+            <div class="min-w-10 transition-all duration-200 p-1 transform">
+              <img alt="星澜" src="~/assets/img/brand/logo.svg" width="32" height="32" />
             </div>
 
             <div class="flex flex-grow"></div>

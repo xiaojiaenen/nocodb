@@ -24,37 +24,11 @@ const onClick = useThrottleFn(() => {
     class="color-transition absolute rounded-lg pt-1 pl-1 -ml-1"
     @click="onClick"
   >
-    <div class="relative">
-      <img
-        :width="size"
-        :height="size"
-        alt="星澜"
-        src="~/assets/img/brand/logo.svg"
-      />
-
-      <TransitionGroup name="layout" :duration="500">
-        <template v-if="animate || ping">
-          <div
-            :class="ping ? 'bg-primary bg-opacity-100' : 'animated-bg-gradient'"
-            :style="{
-              bottom: `${6.25 / (90 / size)}px`,
-              right: `${6.25 / (90 / size)}px`,
-              width: `${1.1 / (90 / size)}rem`,
-              height: `${1.1 / (90 / size)}rem`,
-            }"
-            class="rounded-full z-0 absolute transform scale-102"
-          />
-          <div
-            :style="{
-              bottom: `${0.225 / (90 / size)}rem`,
-              right: `${0.25 / (90 / size)}rem`,
-              width: `${1.375 / (90 / size)}rem`,
-              height: `${1.375 / (90 / size)}rem`,
-            }"
-            class="animate-ping bg-primary bg-opacity-50 rounded-full z-0 absolute"
-          />
-        </template>
-      </TransitionGroup>
-    </div>
+    <img
+      v-else
+      src="~/assets/img/brand/logo.svg"
+      :style="{ width: `${size}px`, height: `${size}px` }"
+      alt="星澜"
+    />
   </div>
 </template>
