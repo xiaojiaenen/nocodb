@@ -336,7 +336,7 @@ export class UsersService {
         });
       } catch (e) {
         return NcError.badRequest(
-          'Email Plugin is not found. Please contact administrators to configure it in App Store first.',
+          'Email Plugin is not found. Please contact administrators to configure it in Settings first.',
         );
       }
 

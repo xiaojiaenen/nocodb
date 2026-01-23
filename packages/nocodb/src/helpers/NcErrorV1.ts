@@ -136,9 +136,6 @@ export class NcErrorV1 extends NcErrorBase {
   }
 
   schemaLocked(message?: string): never {
-    return this.forbidden(
-      message ||
-        'Schema modifications are not allowed on installed sandbox bases',
-    );
+    return this.forbidden(message || 'Schema modifications are not allowed');
   }
 }

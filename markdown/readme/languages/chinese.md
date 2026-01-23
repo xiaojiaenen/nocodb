@@ -138,9 +138,9 @@ bash <(curl -sSL http://install.nocodb.com/noco.sh) <(mktemp)
 - ⚡ &nbsp;基于角色的访问控制：不同级别的细粒度访问控制
 - ⚡ &nbsp;等其他功能......
 
-### 支持工作流程自动化的应用商店
+### 支持工作流程自动化的集成
 
-我们在三个主要类别中提供不同的集成。详见 <a href="https://docs.nocodb.com/account-settings/oss-specific-details/#app-store" target="_blank">App Store</a>。
+我们在三个主要类别中提供不同的集成。详见 <a href="https://docs.nocodb.com/account-settings/oss-specific-details/#integrations" target="_blank">设置</a>。
 
 - ⚡ &nbsp;聊天：Slack、Discord、Mattermost 等
 - ⚡ &nbsp;电子邮件: AWS SES，SMTP，MailerSend 等

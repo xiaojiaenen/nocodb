@@ -59,7 +59,18 @@ xmlhttp.send();
   linkEl.setAttribute('class', 'we-are-hiring')
   linkEl.innerHTML = '🚀 We are Hiring!!! 🚀'
   const styleEl = document.createElement('style');
-  styleEl.innerHTML = \`
+  styleEl.innerHTML = `
+.swagger-ui .topbar .link img {
+  content: url('${ncSiteUrl}/icon.png');
+  height: 40px;
+}
+.swagger-ui .topbar .link::after {
+  content: 'NocoDB API Docs';
+  color: #1348ba;
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 1.2em;
+}
 .we-are-hiring {
   position: fixed;
   bottom: 50px;

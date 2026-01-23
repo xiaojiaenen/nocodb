@@ -40,10 +40,6 @@
     }
   },
   "betaFeatures": {
-    "sandboxes": {
-      "title": "沙盒",
-      "description": "允许用户创建可复制的沙盒环境"
-    },
     "bases_v3": {
       "title": "Bases V3",
       "description": "体验具有增强性能和优化的下一代 NocoDB Bases V3。"
@@ -429,7 +425,6 @@
     "condition": "条件",
     "after": "后",
     "before": "前",
-    "requestIntegration": "请求集成",
     "body": "正文",
     "export": "导出",
     "exporting": "导出中",
@@ -932,7 +927,6 @@
     "collaborative": "协作",
     "locked": "锁定",
     "personal": "个人",
-    "appStore": "应用市场",
     "teamAndAuth": "团队和认证",
     "rolesUserMgmt": "角色和用户管理",
     "userMgmt": "用户管理",
@@ -2700,7 +2694,7 @@
       "inviteUrlCopy": "复制邀请链接到剪贴板",
       "createView": "视图创建成功",
       "createField": "字段创建成功",
-      "formEmailSMTP": "请激活App Store中的SMTP插件以启用电子邮件通知",
+      "formEmailSMTP": "请在设置中激活 SMTP 插件以启用电子邮件通知",
       "collabView": "成功转换为协作视图",
       "lockedView": "成功转换为锁定视图",
       "futureRelease": "即将推出！",

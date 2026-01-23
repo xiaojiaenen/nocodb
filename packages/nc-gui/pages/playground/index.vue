@@ -15,7 +15,7 @@ const navItems = [
     name: 'Components',
     path: '#/playground/components',
     description: 'Test NcComponents',
-    icon: 'appStore',
+    icon: 'apps',
   },
 ]
 </script>

@@ -137,9 +137,9 @@ For more installation methods, please refer to [our docs](https://docs.nocodb.co
 - ⚡ &nbsp;Access Control with Roles: Fine-grained Access Control at different levels
 - ⚡ &nbsp;and more ...
 
-### App Store for Workflow Automations
+### Integrations for Workflow Automations
 
-We provide different integrations in three main categories. See <a href="https://docs.nocodb.com/account-settings/oss-specific-details/#app-store" target="_blank">App Store</a> for details.
+We provide different integrations in three main categories. See <a href="https://docs.nocodb.com/account-settings/oss-specific-details/#integrations" target="_blank">Settings</a> for details.
 
 - ⚡ &nbsp;Chat: Slack, Discord, Mattermost, and etc
 - ⚡ &nbsp;Email: AWS SES, SMTP, MailerSend, and etc

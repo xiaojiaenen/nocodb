@@ -562,7 +562,7 @@ async function checkSMTPStatus() {
     const emailPluginActive = await $api.plugin.status('smtp')
     if (!emailPluginActive) {
       emailMe.value = false
-      // Please activate SMTP plugin in App store for enabling email notification
+      // Please activate SMTP plugin in Settings for enabling email notification
       message.info(t('msg.toast.formEmailSMTP'))
       return false
     }

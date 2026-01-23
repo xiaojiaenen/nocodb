@@ -1046,7 +1046,7 @@ export const iconMap = {
   'loading': h('span', { class: 'material-symbols' }, 'autorenew'),
   'arrowCollapse': Up,
   'markerAlert': h('span', { class: 'material-symbols' }, 'warning'),
-  'appStore': h('span', { class: 'material-symbols' }, 'apps'),
+  'apps': h('span', { class: 'material-symbols' }, 'apps'),
   'chevronLeft': NcChevronLeftIcon,
   'chevronRight': NcChevronRightIcon,
   'imagePlaceholder': h('span', { class: 'material-symbols' }, 'insert_photo'),

@@ -259,7 +259,7 @@ export class OrgUsersService {
 
     if (!pluginData) {
       NcError.badRequest(
-        `No Email Plugin is found. Please go to App Store to configure first or copy the invitation URL to users instead.`,
+        `No Email Plugin is found. Please go to Settings to configure first or copy the invitation URL to users instead.`,
       );
     }
 

@@ -173,7 +173,7 @@ Access Dashboard using: [http://localhost:8080/dashboard](http://localhost:8080/
 - [Table of Contents](#table-of-contents)
 - [Features](#features)
   - [Rich Spreadsheet Interface](#rich-spreadsheet-interface)
-  - [App Store for Workflow Automations](#app-store-for-workflow-automations)
+  - [Integrations for Workflow Automations](#integrations-for-workflow-automations)
   - [Programmatic Access](#programmatic-access)
   - [Sync Schema](#sync-schema)
   - [Audit](#audit)
@@ -199,9 +199,9 @@ Access Dashboard using: [http://localhost:8080/dashboard](http://localhost:8080/
 - ⚡ &nbsp;Access Control with Roles: Fine-grained Access Control at different levels
 - ⚡ &nbsp;and more ...
 
-### App Store for Workflow Automations
+### Integrations for Workflow Automations
 
-We provide different integrations in three main categories. See <a href="https://docs.nocodb.com/setup-and-usages/account-settings#app-store" target="_blank">App Store</a> for details.
+We provide different integrations in three main categories. See <a href="https://docs.nocodb.com/setup-and-usages/account-settings#integrations" target="_blank">Settings</a> for details.
 
 - ⚡ &nbsp;Chat: Slack, Discord, Mattermost, and etc
 - ⚡ &nbsp;Email: AWS SES, SMTP, MailerSend, and etc

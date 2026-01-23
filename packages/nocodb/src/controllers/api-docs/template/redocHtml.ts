@@ -43,7 +43,7 @@ export default ({
   xhttp.onload = function () {
     
       // if invalid token then redirect to signin page
-      if (xmlhttp.status === 401) {
+      if (xhttp.status === 401) {
         window.location.href = ${JSON.stringify(ncSiteUrl)} + ${JSON.stringify(
   dashboardPath,
 )} + '#/signin?continueAfterSignIn=' + encodeURIComponent(window.location.href);
@@ -67,7 +67,12 @@ export default ({
   linkEl.setAttribute('class', 'we-are-hiring')
   linkEl.innerHTML = '🚀 We are Hiring!!! 🚀'
   const styleEl = document.createElement('style');
-  styleEl.innerHTML = \`
+  styleEl.innerHTML = `
+.menu-content img {
+  content: url('${ncSiteUrl}/icon.png');
+  height: 40px !important;
+  width: auto !important;
+}
 .we-are-hiring {
   position: fixed;
   bottom: 50px;

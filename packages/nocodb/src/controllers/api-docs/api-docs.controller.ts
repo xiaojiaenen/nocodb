@@ -57,10 +57,14 @@ export class ApiDocsController {
 
   @Get(['/api/v1/db/meta/projects/:baseId/swagger'])
   @UseGuards(PublicApiLimiterGuard)
-  swaggerHtml(@Param('baseId') baseId: string, @Response() res) {
+  swaggerHtml(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getSwaggerHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
@@ -68,10 +72,14 @@ export class ApiDocsController {
 
   @UseGuards(PublicApiLimiterGuard)
   @Get(['/api/v1/db/meta/projects/:baseId/redoc'])
-  redocHtml(@Param('baseId') baseId: string, @Response() res) {
+  redocHtml(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getRedocHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
@@ -79,10 +87,14 @@ export class ApiDocsController {
 
   @Get(['/api/v2/meta/bases/:baseId/swagger'])
   @UseGuards(PublicApiLimiterGuard)
-  swaggerHtmlV2(@Param('baseId') baseId: string, @Response() res) {
+  swaggerHtmlV2(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getSwaggerHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
@@ -90,10 +102,14 @@ export class ApiDocsController {
 
   @UseGuards(PublicApiLimiterGuard)
   @Get(['/api/v2/meta/bases/:baseId/redoc'])
-  redocHtmlV2(@Param('baseId') baseId: string, @Response() res) {
+  redocHtmlV2(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getRedocHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
@@ -118,10 +134,14 @@ export class ApiDocsController {
 
   @Get(['/api/v3/meta/bases/:baseId/swagger'])
   @UseGuards(PublicApiLimiterGuard)
-  swaggerHtmlV3(@Param('baseId') baseId: string, @Response() res) {
+  swaggerHtmlV3(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getSwaggerHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
@@ -129,10 +149,14 @@ export class ApiDocsController {
 
   @UseGuards(PublicApiLimiterGuard)
   @Get(['/api/v3/meta/bases/:baseId/redoc'])
-  redocHtmlV3(@Param('baseId') baseId: string, @Response() res) {
+  redocHtmlV3(
+    @Param('baseId') baseId: string,
+    @Request() req,
+    @Response() res,
+  ) {
     res.send(
       getRedocHtml({
-        ncSiteUrl: process.env.NC_PUBLIC_URL || '',
+        ncSiteUrl: req.ncSiteUrl,
         dashboardPath: Noco.getConfig().dashboardPath || '',
       }),
     );
