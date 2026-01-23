@@ -52,7 +52,7 @@ function resetError() {
   <div>
     <NuxtLayout>
       <div
-        class="md:bg-primary signin bg-opacity-5 forgot-password h-full min-h-[600px] flex flex-col justify-center items-center"
+        class="auth-bg signin bg-opacity-5 forgot-password h-full min-h-[600px] flex flex-col justify-center items-center"
       >
         <div
           class="bg-nc-bg-default md:mt-[60px] relative flex flex-col justify-center gap-2 w-full max-w-[500px] mx-auto p-8 md:(rounded-lg border-1 border-nc-border-gray-medium shadow-xl)"
@@ -122,6 +122,10 @@ function resetError() {
 </template>
 
 <style lang="scss">
+.auth-bg {
+  background: linear-gradient(135deg, #f6f8fb 0%, #e5ebee 100%);
+}
+
 .signin {
   .ant-input-affix-wrapper,
   .ant-input {

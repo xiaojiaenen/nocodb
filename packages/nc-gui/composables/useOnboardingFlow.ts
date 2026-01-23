@@ -100,6 +100,8 @@ export interface OnboardingQuestionType {
 export const useOnboardingFlow = createSharedComposable(() => {
   const { $e } = useNuxtApp()
 
+  const { t: $t } = useI18n()
+
   const router = useRouter()
 
   const route = router.currentRoute
@@ -146,11 +148,11 @@ export const useOnboardingFlow = createSharedComposable(() => {
     const list: OnboardingQuestionType[] = [
       {
         id: 1,
-        question: 'Hey! What do you plan on using NocoDB for?',
+        question: $t('onboarding.question1.text'),
         inputType: 'singleSelect',
         options: [
           {
-            value: 'Work',
+            value: $t('onboarding.question1.option.work'),
             icons: [
               {
                 icon: 'ncBriefcase',
@@ -159,7 +161,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'School',
+            value: $t('onboarding.question1.option.school'),
             icons: [
               {
                 icon: 'ncGraduationCap',
@@ -168,7 +170,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Non-Profit',
+            value: $t('onboarding.question1.option.non_profit'),
             icons: [
               {
                 icon: 'ncHeart',
@@ -177,7 +179,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Personal',
+            value: $t('onboarding.question1.option.personal'),
             icons: [
               {
                 icon: 'ncUser',
@@ -201,38 +203,43 @@ export const useOnboardingFlow = createSharedComposable(() => {
       },
       {
         id: 2,
-        question: 'What best describes your role currently?',
+        question: $t('onboarding.question2.text'),
         inputType: 'singleSelect',
         options: (state = formState.value) => {
           const firstQuestionAns = state[1] ?? ''
 
-          if (searchCompare('personal', firstQuestionAns as string)) {
+          if (searchCompare('personal', firstQuestionAns as string) || searchCompare($t('onboarding.question1.option.personal'), firstQuestionAns as string)) {
             return [
-              'Undergraduate student',
-              'Graduate student',
-              'Consultant at Digital Agency',
-              'Individual Contributor',
-              'Team Leader',
-              'Director',
-              'C-level',
-              'VP',
-              'Business Owner',
-              'Other',
+              $t('onboarding.question2.option.undergraduate_student'),
+              $t('onboarding.question2.option.graduate_student'),
+              $t('onboarding.question2.option.consultant'),
+              $t('onboarding.question2.option.individual_contributor'),
+              $t('onboarding.question2.option.team_leader'),
+              $t('onboarding.question2.option.director'),
+              $t('onboarding.question2.option.c_level'),
+              $t('onboarding.question2.option.vp'),
+              $t('onboarding.question2.option.business_owner'),
+              $t('onboarding.question2.option.other'),
             ].map((value) => ({ value }))
           }
 
-          if (searchCompare('school', firstQuestionAns as string)) {
-            return ['Undergraduate student', 'Graduate student', 'Faculty', 'Other'].map((value) => ({ value }))
+          if (searchCompare('school', firstQuestionAns as string) || searchCompare($t('onboarding.question1.option.school'), firstQuestionAns as string)) {
+            return [
+              $t('onboarding.question2.option.undergraduate_student'),
+              $t('onboarding.question2.option.graduate_student'),
+              $t('onboarding.question2.option.faculty'),
+              $t('onboarding.question2.option.other'),
+            ].map((value) => ({ value }))
           }
 
           return [
-            'Consultant at Digital Agency',
-            'Individual Contributor',
-            'Team Leader',
-            'Head of Department',
-            'VP',
-            'C-level',
-            'Business Owner',
+            $t('onboarding.question2.option.consultant'),
+            $t('onboarding.question2.option.individual_contributor'),
+            $t('onboarding.question2.option.team_leader'),
+            $t('onboarding.question2.option.head_of_department'),
+            $t('onboarding.question2.option.vp'),
+            $t('onboarding.question2.option.c_level'),
+            $t('onboarding.question2.option.business_owner'),
           ].map((value) => ({ value }))
         },
         rightSection: (state = formState.value) => {
@@ -241,12 +248,12 @@ export const useOnboardingFlow = createSharedComposable(() => {
 
           const firstQuestionAns = state[1] ?? ''
 
-          if (searchCompare('personal', firstQuestionAns as string)) {
+          if (searchCompare('personal', firstQuestionAns as string) || searchCompare($t('onboarding.question1.option.personal'), firstQuestionAns as string)) {
             themeColor = 'green'
             moscot = 'moscotWelcomeGreen'
           }
 
-          if (searchCompare('school', firstQuestionAns as string)) {
+          if (searchCompare('school', firstQuestionAns as string) || searchCompare($t('onboarding.question1.option.school'), firstQuestionAns as string)) {
             themeColor = 'purple'
             moscot = 'moscotWelcomePurple'
           }
@@ -260,11 +267,11 @@ export const useOnboardingFlow = createSharedComposable(() => {
       },
       {
         id: 3,
-        question: 'Which department are you in?',
+        question: $t('onboarding.question3.text'),
         inputType: 'singleSelect',
         options: [
           {
-            value: 'Human Resources',
+            value: $t('onboarding.question3.option.hr'),
             iconPosition: 'right',
             icons: [
               {
@@ -279,7 +286,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Marketing',
+            value: $t('onboarding.question3.option.marketing'),
             iconPosition: 'right',
             icons: [
               {
@@ -294,7 +301,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Sales',
+            value: $t('onboarding.question3.option.sales'),
             iconPosition: 'right',
             icons: [
               {
@@ -309,7 +316,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Product',
+            value: $t('onboarding.question3.option.product'),
             iconPosition: 'right',
             icons: [
               {
@@ -324,7 +331,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Finance',
+            value: $t('onboarding.question3.option.finance'),
             iconPosition: 'right',
             icons: [
               {
@@ -340,7 +347,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Design',
+            value: $t('onboarding.question3.option.design'),
             iconPosition: 'right',
             icons: [
               {
@@ -355,7 +362,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Data Analyst',
+            value: $t('onboarding.question3.option.data_analyst'),
             iconPosition: 'right',
             icons: [
               {
@@ -370,7 +377,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Engineering',
+            value: $t('onboarding.question3.option.engineering'),
             iconPosition: 'right',
             icons: [
               {
@@ -385,7 +392,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Legal',
+            value: $t('onboarding.question3.option.legal'),
             iconPosition: 'right',
             icons: [
               {
@@ -403,7 +410,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Customer Support',
+            value: $t('onboarding.question3.option.customer_support'),
             iconPosition: 'right',
             icons: [
               {
@@ -418,7 +425,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Operations',
+            value: $t('onboarding.question3.option.operations'),
             iconPosition: 'right',
             icons: [
               {
@@ -449,7 +456,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
       },
       {
         id: 4,
-        question: 'How many people work at your company?',
+        question: $t('onboarding.question4.text'),
         inputType: 'singleSelect',
         options: ['0-10', '11-50', '51-250', '251-1000', '1000+'].reverse().map((value) => ({ value })),
         rightSection: {
@@ -460,9 +467,9 @@ export const useOnboardingFlow = createSharedComposable(() => {
       },
       {
         id: 5,
-        question: 'How many people are in your team?',
+        question: $t('onboarding.question5.text'),
         inputType: 'singleSelect',
-        options: ['20+', '11-20', '1-10', 'Only me'].map((value) => ({ value })),
+        options: ['20+', '11-20', '1-10', $t('onboarding.question5.option.only_me')].map((value) => ({ value })),
         rightSection: {
           themeColor: 'orange',
           moscot: 'moscotCollaboration',
@@ -471,11 +478,11 @@ export const useOnboardingFlow = createSharedComposable(() => {
       },
       {
         id: 6,
-        question: 'How experienced are you with app building?',
+        question: $t('onboarding.question6.text'),
         inputType: 'singleSelect',
         options: [
           {
-            value: 'Beginner',
+            value: $t('onboarding.question6.option.beginner'),
             icons: [
               {
                 iconType: 'indexedStepProgressBar',
@@ -483,7 +490,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Intermediate',
+            value: $t('onboarding.question6.option.intermediate'),
             icons: [
               {
                 iconType: 'indexedStepProgressBar',
@@ -491,7 +498,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Advanced',
+            value: $t('onboarding.question6.option.advanced'),
             icons: [
               {
                 iconType: 'indexedStepProgressBar',
@@ -499,7 +506,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'Expert',
+            value: $t('onboarding.question6.option.expert'),
             icons: [
               {
                 iconType: 'indexedStepProgressBar',
@@ -516,8 +523,8 @@ export const useOnboardingFlow = createSharedComposable(() => {
       {
         id: 7,
         key: 'ai',
-        question: 'Choose AI Tools That You Are Familiar With',
-        description: 'Unlocks Free Access To NocoAI 🎉 ',
+        question: $t('onboarding.question7.text'),
+        description: $t('onboarding.question7.description'),
         inputType: 'multiSelect',
         options: [
           {
@@ -675,7 +682,7 @@ export const useOnboardingFlow = createSharedComposable(() => {
             ],
           },
           {
-            value: 'None of the above',
+            value: $t('onboarding.question7.option.none'),
             resetOnSelect: true,
             icons: [
               {

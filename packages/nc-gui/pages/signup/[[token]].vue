@@ -152,7 +152,7 @@ onMounted(async () => {
 <template>
   <div>
     <NuxtLayout>
-      <div class="md:bg-primary bg-opacity-5 signup h-full min-h-[600px] flex flex-col justify-center items-center">
+      <div class="auth-bg signup h-full min-h-[600px] flex flex-col justify-center items-center">
         <div
           class="bg-nc-bg-default md:mt-[60px] relative flex flex-col justify-center gap-2 w-full max-w-[500px] mx-auto p-8 md:(rounded-lg border-1 border-nc-border-gray-medium shadow-xl)"
         >
@@ -246,15 +246,6 @@ onMounted(async () => {
                 </a>
               </div>
 
-              <div v-if="!appInfo.disableEmailAuth" class="flex items-center gap-2">
-                <a-switch
-                  v-model:checked="subscribe"
-                  size="small"
-                  class="my-1 hover:(ring ring-accent ring-opacity-100) focus:(!ring !ring-accent ring-opacity-100)"
-                />
-                <div class="prose-xs text-nc-content-gray-muted">{{ $t('msg.subscribeToOurWeeklyNewsletter') }}</div>
-              </div>
-
               <div class="text-end prose-sm">
                 {{ $t('msg.info.signUp.alreadyHaveAccount') }}
 
@@ -263,19 +254,16 @@ onMounted(async () => {
             </div>
           </a-form>
         </div>
-
-        <div class="prose-sm mt-4 text-nc-content-gray-muted">
-          {{ $t('msg.bySigningUp') }}
-          <span class="prose-sm !text-nc-content-gray-muted underline">
-            {{ $t('title.termsOfService') }}
-          </span>
-        </div>
       </div>
     </NuxtLayout>
   </div>
 </template>
 
 <style lang="scss">
+.auth-bg {
+  background: linear-gradient(135deg, #f6f8fb 0%, #e5ebee 100%);
+}
+
 .signup {
   .ant-input-affix-wrapper,
   .ant-input {

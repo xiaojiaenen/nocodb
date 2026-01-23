@@ -1,4 +1,73 @@
 {
+  "onboarding": {
+    "question1": {
+      "text": "嘿！你打算用 NocoDB 做什么？",
+      "option": {
+        "work": "工作",
+        "school": "学校",
+        "non_profit": "非营利组织",
+        "personal": "个人"
+      }
+    },
+    "question2": {
+      "text": "目前什么最能描述你的角色？",
+      "option": {
+        "undergraduate_student": "本科生",
+        "graduate_student": "研究生",
+        "consultant": "数字代理机构顾问",
+        "individual_contributor": "个人贡献者",
+        "team_leader": "团队负责人",
+        "director": "总监",
+        "c_level": "C级管理层",
+        "vp": "副总裁",
+        "business_owner": "企业所有者",
+        "faculty": "教职员工",
+        "head_of_department": "部门主管",
+        "other": "其他"
+      }
+    },
+    "question3": {
+      "text": "你在哪个部门？",
+      "option": {
+        "hr": "人力资源",
+        "marketing": "市场营销",
+        "sales": "销售",
+        "product": "产品",
+        "finance": "财务",
+        "design": "设计",
+        "data_analyst": "数据分析师",
+        "engineering": "工程",
+        "legal": "法务",
+        "customer_support": "客户支持",
+        "operations": "运营"
+      }
+    },
+    "question4": {
+      "text": "你们公司有多少人？"
+    },
+    "question5": {
+      "text": "你的团队有多少人？",
+      "option": {
+        "only_me": "只有我"
+      }
+    },
+    "question6": {
+      "text": "你在应用构建方面的经验如何？",
+      "option": {
+        "beginner": "初学者",
+        "intermediate": "中级",
+        "advanced": "高级",
+        "expert": "专家"
+      }
+    },
+    "question7": {
+      "text": "选择你熟悉的 AI 工具",
+      "description": "解锁 NocoAI 的免费访问权限 🎉",
+      "option": {
+        "none": "以上都不是"
+      }
+    }
+  },
   "dashboards": {
     "create_new_dashboard_project": "创建新界面",
     "create_new_table": "创建新表",
