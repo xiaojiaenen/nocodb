@@ -18,15 +18,20 @@ import {
 interface PasswordResetTemplateProps {
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
-export const PasswordReset = ({ email, link }: PasswordResetTemplateProps) => (
+export const PasswordReset = ({
+  email,
+  link,
+  siteUrl,
+}: PasswordResetTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>请求重置密码</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             请求重置密码
           </Heading>
@@ -50,8 +55,8 @@ export const PasswordReset = ({ email, link }: PasswordResetTemplateProps) => (
 );
 
 PasswordReset.PreviewProps = {
-  email: 'janedoe@nocodb.com',
-  link: 'https://nocodb.com',
+  email: 'user@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default PasswordReset;

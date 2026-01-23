@@ -5,7 +5,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Preview,
   Row,
   Section,
@@ -17,7 +16,6 @@ import {
   Footer,
   RootWrapper,
 } from '~/services/mail/templates/components';
-import { NC_EMAIL_ASSETS_BASE_URL } from '~/constants';
 
 interface BaseRoleUpdateTemplateProps {
   baseTitle: string;
@@ -26,6 +24,7 @@ interface BaseRoleUpdateTemplateProps {
   name: string;
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
 export const BaseRoleUpdate = ({
@@ -35,13 +34,14 @@ export const BaseRoleUpdate = ({
   oldRole,
   newRole,
   name,
+  siteUrl,
 }: BaseRoleUpdateTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>您的项目角色已更新</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             您的项目角色已更新
           </Heading>
@@ -49,19 +49,17 @@ export const BaseRoleUpdate = ({
             {baseTitle}
           </Section>
           <Section className="pb-6 text-center">
-            <Row>
-              <Column className="flex max-w-[210px] mx-auto">
-                <Img
-                  src={`${NC_EMAIL_ASSETS_BASE_URL}/badges/${oldRole}.png`}
-                  alt={oldRole}
-                  className="h-7"
-                />
-                <Text className="h-5 text-gray-800 !mt-0.5 !ml-2">➜</Text>
-                <Img
-                  src={`${NC_EMAIL_ASSETS_BASE_URL}/badges/${newRole}.png`}
-                  alt={newRole}
-                  className="h-7 ml-2"
-                />
+            <Row align="center">
+              <Column className="text-right pr-2">
+                <Text className="text-gray-500 text-sm m-0">旧角色</Text>
+                <Text className="text-gray-800 font-bold m-0 capitalize">{oldRole}</Text>
+              </Column>
+              <Column className="w-8 text-center">
+                <Text className="text-gray-400 text-xl m-0">➜</Text>
+              </Column>
+              <Column className="text-left pl-2">
+                <Text className="text-gray-500 text-sm m-0">新角色</Text>
+                <Text className="text-brand-600 font-bold m-0 capitalize">{newRole}</Text>
               </Column>
             </Row>
           </Section>
@@ -84,12 +82,12 @@ export const BaseRoleUpdate = ({
 );
 
 BaseRoleUpdate.PreviewProps = {
-  baseTitle: 'Base Title',
+  baseTitle: '项目名称',
   oldRole: 'creator',
   newRole: 'editor',
-  name: 'John Doe',
-  email: 'johndoe@nocodb.com',
-  link: 'www.nocodb.com',
+  name: '张三',
+  email: 'zhangsan@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default BaseRoleUpdate;

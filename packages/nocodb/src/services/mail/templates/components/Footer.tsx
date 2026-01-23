@@ -1,124 +1,17 @@
-import {
-  Column,
-  Container,
-  Img,
-  Link,
-  Row,
-  Section,
-  Text,
-} from '@react-email/components';
+import { Container, Text } from '@react-email/components';
 import * as React from 'react';
-import { NC_EMAIL_ASSETS_BASE_URL } from '~/constants';
-export const Footer = () => {
-  return (
-    <Container className="px-3">
-      <Text className="text-gray-500 m-auto text-sm max-w-[400px] text-center">
-        星澜是您的全方位无代码解决方案。
-      </Text>
-      <Section className="mt-12">
-        <Row className="max-w-[100px] m-auto">
-          <Column>
-            <Link href="https://github.com/nocodb" target="_blank">
-              <Img
-                alt="Github"
-                src={`${NC_EMAIL_ASSETS_BASE_URL}/social/github.png`}
-                height={32}
-                width={32}
-              />
-            </Link>
-          </Column>
-          <Column>
-            <Link href="https://twitter.com/nocodb" target="_blank">
-              <Img
-                alt="X"
-                src={`${NC_EMAIL_ASSETS_BASE_URL}/social/x.png`}
-                height={32}
-                width={32}
-              />
-            </Link>
-          </Column>
-          <Column>
-            <Link href="https://www.youtube.com/@nocodb" target="_blank">
-              <Img
-                alt="Youtube"
-                height={32}
-                width={32}
-                src={`${NC_EMAIL_ASSETS_BASE_URL}/social/youtube.png`}
-              />
-            </Link>
-          </Column>
-          <Column>
-            <Link href="http://discord.nocodb.com/" target="_blank">
-              <Img
-                alt="Discord"
-                src={`${NC_EMAIL_ASSETS_BASE_URL}/social/discord.png`}
-                height={32}
-                width={32}
-              />
-            </Link>
-          </Column>
-          <Column>
-            <Link
-              href="https://www.linkedin.com/company/nocodb"
-              target="_blank"
-            >
-              <Img
-                alt="Linkedin"
-                src={`${NC_EMAIL_ASSETS_BASE_URL}/social/linkedin.png`}
-                height={32}
-                width={32}
-              />
-            </Link>
-          </Column>
-        </Row>
-      </Section>
-      <Section className="mt-6">
-        <Row className="max-w-[380px] m-auto">
-          <Column className="border pr-1 border-y-0 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="#" target="_blank">
-              <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                开始使用
-              </Text>
-            </Link>
-          </Column>
-          <Column className="border border-y-0 px-1 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="#" target="_blank">
-              <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                博客
-              </Text>
-            </Link>
-          </Column>
-          <Column className="border px-1 border-y-0 border-l-0 border-r-1 border-solid border-gray-200">
-            <Link href="#" target="_blank">
-              <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                文档
-              </Text>
-            </Link>
-          </Column>
-          <Column className="pl-1">
-            <Link href="#" target="_blank">
-              <Text className="text-center underline py-0 !my-0 text-gray-500 text-[13px]">
-                服务条款
-              </Text>
-            </Link>
-          </Column>
-        </Row>
 
-        <Row className="mt-6">
-          <Column>
-            <Text className="text-center !my-0 text-gray-500 text-[13px]">
-              {new Date().getFullYear()} — © 星澜 Inc.
-            </Text>
-          </Column>
-        </Row>
-        <Row className="mt-6">
-          <Column>
-            <Text className="text-center !my-0 text-gray-500 text-[13px]">
-              All rights reserved.
-            </Text>
-          </Column>
-        </Row>
-      </Section>
+export const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  
+  return (
+    <Container className="px-4">
+      <Text className="text-gray-400 text-xs text-center leading-6">
+        &copy; {currentYear} 星澜 (XingLan). 保留所有权利。
+      </Text>
+      <Text className="text-gray-400 text-xs text-center leading-6 mt-2">
+        此邮件由系统自动发送，请勿直接回复。
+      </Text>
     </Container>
   );
 };

@@ -18,15 +18,16 @@ import {
 interface WelcomeTemplateProps {
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
-export const Welcome = ({ email, link }: WelcomeTemplateProps) => (
+export const Welcome = ({ email, link, siteUrl }: WelcomeTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>欢迎使用星澜！</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             欢迎使用星澜！
           </Heading>
@@ -59,8 +60,8 @@ export const Welcome = ({ email, link }: WelcomeTemplateProps) => (
 );
 
 Welcome.PreviewProps = {
-  email: 'janedoe@nocodb.com',
-  link: 'https://nocodb.com',
+  email: 'user@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default Welcome;

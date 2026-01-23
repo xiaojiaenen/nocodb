@@ -5,7 +5,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Preview,
   Row,
   Section,
@@ -18,7 +17,6 @@ import {
   Footer,
   RootWrapper,
 } from '~/services/mail/templates/components';
-import { NC_EMAIL_ASSETS_BASE_URL } from '~/constants';
 
 interface FormSubmissionTemplateProps {
   formTitle: string;
@@ -29,6 +27,7 @@ interface FormSubmissionTemplateProps {
     columnTitle: string;
     uidt: UITypes | string;
   }>;
+  siteUrl?: string;
 }
 
 const FormSubmission = ({
@@ -36,16 +35,17 @@ const FormSubmission = ({
   baseTitle,
   tableTitle,
   submissionData,
+  siteUrl,
 }: FormSubmissionTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
-      <Preview>You have a new response!</Preview>
+      <Preview>您有新的表单提交！</Preview>
       <Body className="bg-white">
-        <ContentWrapper disableContainerPadding>
+        <ContentWrapper disableContainerPadding siteUrl={siteUrl}>
           <Section className="p-6 mx-auto">
             <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
-              You have a new response!
+              您有新的表单提交！
             </Heading>
 
             <Section
@@ -59,26 +59,16 @@ const FormSubmission = ({
                 style={{ display: 'inline-block', verticalAlign: 'middle' }}
               >
                 <tr>
-                  <td style={{ paddingRight: '8px', verticalAlign: 'middle' }}>
-                    <Img
-                      src={`${NC_EMAIL_ASSETS_BASE_URL}/icons/form-view.png`}
-                      alt="Form View Icon"
-                      height={24}
-                      width={24}
-                      className="!h-6 inline-block"
-                      style={{ verticalAlign: 'middle' }}
-                    />
-                  </td>
                   <td style={{ verticalAlign: 'middle' }}>
                     <span
-                      className="text-base font-bold mt-0.5 text-gray-900"
+                      className="text-base font-bold mt-0.5 text-brand-600"
                       style={{
                         verticalAlign: 'middle',
                         display: 'inline-block',
                         lineHeight: '28px',
                       }}
                     >
-                      {formTitle}
+                      📄 {formTitle}
                     </span>
                   </td>
                 </tr>
@@ -86,48 +76,32 @@ const FormSubmission = ({
             </Section>
 
             <Text className="text-center font-weight-thin text-gray-600 !my-0">
-              Someone has responded to your form, a record has been added to
-              <span className="font-bold text-gray-800"> {tableTitle} </span>
-              in
-              <span className="font-bold text-gray-800"> {baseTitle}</span>.
+              有人提交了您的表单，记录已添加到项目
+              <span className="font-bold text-gray-800"> {baseTitle} </span>
+              中的表
+              <span className="font-bold text-gray-800"> {tableTitle}</span>。
             </Text>
           </Section>
 
-          <Hr />
+          <Hr className="border-gray-100" />
 
           <Section className="p-6 mx-auto">
-            <Text className="text-lg font-bold text-center !my-0">
-              Here is a copy of the response
+            <Text className="text-lg font-bold text-center !my-0 text-gray-800">
+              提交内容详情
             </Text>
-            <Section>
-              {submissionData.map((s) => (
-                <Section className="mt-6" key={s.columnTitle}>
-                  <Row>
-                    <Column className="flex align-middle items-center">
-                      <Img
-                        className="align-middle"
-                        width={16}
-                        height={16}
-                        src={`${NC_EMAIL_ASSETS_BASE_URL}/icons/${s.uidt}.png`}
-                      />
-                      <Section className="!ml-2 truncate inline-block text-[13px] !my-0 !mr-0 leading-4.5 text-gray-600 align-middle">
-                        {s.columnTitle}
-                      </Section>
-                    </Column>
-                  </Row>
-                  <Row
-                    className="px-4 py-2 border border-1 mt-2 border-solid rounded-lg border-gray-200"
-                    style={{
-                      boxShadow: `0px 0px 4px 0px rgba(0, 0, 0, 0.08)`,
-                    }}
-                  >
-                    <Column>
-                      <Text className="text-gray-800 max-w-xs truncate !my-0">
-                        {s.parsedValue}
-                      </Text>
-                    </Column>
-                  </Row>
-                </Section>
+
+            <Section className="mt-6">
+              {submissionData.map((item, index) => (
+                <Row key={index} className="mb-4">
+                  <Column className="py-2 border-b border-gray-50">
+                    <Text className="text-xs font-bold text-gray-400 uppercase mb-1">
+                      {item.columnTitle}
+                    </Text>
+                    <Text className="text-sm text-gray-700 m-0">
+                      {String(item.parsedValue || '-')}
+                    </Text>
+                  </Column>
+                </Row>
               ))}
             </Section>
           </Section>
@@ -139,19 +113,19 @@ const FormSubmission = ({
 );
 
 FormSubmission.PreviewProps = {
-  formTitle: 'Form Name',
-  tableTitle: 'Table Name',
-  baseTitle: 'Base Name',
+  formTitle: '表单标题',
+  baseTitle: '项目名称',
+  tableTitle: '数据表名称',
   submissionData: [
     {
-      parsedValue: '$344',
-      uidt: UITypes.Currency,
-      columnTitle: 'Currency',
+      columnTitle: '姓名',
+      parsedValue: '张三',
+      uidt: UITypes.SingleLineText,
     },
     {
-      parsedValue: 'Checked',
-      uidt: UITypes.Checkbox,
-      columnTitle: 'Checkbox',
+      columnTitle: '电子邮箱',
+      parsedValue: 'zhangsan@example.com',
+      uidt: UITypes.Email,
     },
   ],
 };

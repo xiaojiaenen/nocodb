@@ -20,6 +20,7 @@ interface BaseInviteTemplateProps {
   name: string;
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
 export const BaseInvite = ({
@@ -27,13 +28,14 @@ export const BaseInvite = ({
   name,
   email,
   link,
+  siteUrl,
 }: BaseInviteTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>您已被邀请加入项目</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             您已被邀请加入项目
           </Heading>
@@ -59,10 +61,10 @@ export const BaseInvite = ({
 );
 
 BaseInvite.PreviewProps = {
-  baseTitle: 'Base Title',
-  name: 'John Doe',
-  email: 'johndoe@nocodb.com',
-  link: 'https://app.nocodb.com',
+  baseTitle: '项目名称',
+  name: '张三',
+  email: 'zhangsan@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default BaseInvite;

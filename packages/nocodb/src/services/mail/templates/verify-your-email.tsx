@@ -18,18 +18,20 @@ import {
 interface VerifyYourEmailTemplateProps {
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
 export const VerifyYourEmail = ({
   email,
   link,
+  siteUrl,
 }: VerifyYourEmailTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>验证您的电子邮箱</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             验证您的电子邮箱
           </Heading>
@@ -53,8 +55,8 @@ export const VerifyYourEmail = ({
 );
 
 VerifyYourEmail.PreviewProps = {
-  email: 'janedoe@gmail.com',
-  link: 'https://nocodb.com',
+  email: 'user@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default VerifyYourEmail;

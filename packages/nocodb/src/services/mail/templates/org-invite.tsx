@@ -18,19 +18,21 @@ interface OrganizationInviteTemplateProps {
   name: string;
   email: string;
   link: string;
+  siteUrl?: string;
 }
 
 export const OrganizationInvite = ({
   name,
   email,
   link,
+  siteUrl,
 }: OrganizationInviteTemplateProps) => (
   <Html>
     <RootWrapper>
       <Head />
       <Preview>您已被邀请加入星澜</Preview>
       <Body className="bg-white">
-        <ContentWrapper>
+        <ContentWrapper siteUrl={siteUrl}>
           <Heading className="text-gray-900 text-center font-bold m-auto text-xl md:text-2xl">
             您已被邀请加入星澜
           </Heading>
@@ -52,9 +54,9 @@ export const OrganizationInvite = ({
 );
 
 OrganizationInvite.PreviewProps = {
-  name: 'John Doe',
-  email: 'johndoe@gmail.com',
-  link: 'https://nocodb.com',
+  name: '张三',
+  email: 'zhangsan@example.com',
+  link: 'https://xinglan.com',
 };
 
 export default OrganizationInvite;

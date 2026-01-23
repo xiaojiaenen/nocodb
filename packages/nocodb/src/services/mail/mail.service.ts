@@ -32,10 +32,11 @@ export class MailService {
   protected async renderMail<K extends keyof typeof MailTemplates>(
     template: K,
     props: TemplateProps<K>,
+    siteUrl?: string,
   ) {
     const Component = MailTemplates[template];
     // TODO: Fix Type here
-    return await render(Component(props as TemplateProps<any>));
+    return await render(Component({ ...props, siteUrl } as TemplateProps<any>));
   }
 
   buildUrl(
@@ -155,19 +156,23 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '您已被邀请加入项目',
-            html: await this.renderMail('BaseInvite', {
-              baseTitle: base.title,
-              name: extractDisplayNameFromEmail(
-                invitee.email,
-                invitee.display_name,
-              ),
-              email: invitee.email,
-              link: this.buildUrl(req, {
-                workspaceId: base.fk_workspace_id,
-                baseId: base.id,
-                token,
-              }),
-            }),
+            html: await this.renderMail(
+              'BaseInvite',
+              {
+                baseTitle: base.title,
+                name: extractDisplayNameFromEmail(
+                  invitee.email,
+                  invitee.display_name,
+                ),
+                email: invitee.email,
+                link: this.buildUrl(req, {
+                  workspaceId: base.fk_workspace_id,
+                  baseId: base.id,
+                  token,
+                }),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -178,20 +183,24 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '您的项目角色已更新',
-            html: await this.renderMail('BaseRoleUpdate', {
-              baseTitle: base.title,
-              name: extractDisplayNameFromEmail(
-                invitee.email,
-                invitee.display_name,
-              ),
-              email: invitee.email,
-              oldRole: RoleLabels[oldRole],
-              newRole: RoleLabels[newRole],
-              link: this.buildUrl(req, {
-                workspaceId: base.fk_workspace_id,
-                baseId: base.id,
-              }),
-            }),
+            html: await this.renderMail(
+              'BaseRoleUpdate',
+              {
+                baseTitle: base.title,
+                name: extractDisplayNameFromEmail(
+                  invitee.email,
+                  invitee.display_name,
+                ),
+                email: invitee.email,
+                oldRole: RoleLabels[oldRole],
+                newRole: RoleLabels[newRole],
+                link: this.buildUrl(req, {
+                  workspaceId: base.fk_workspace_id,
+                  baseId: base.id,
+                }),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -201,12 +210,16 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '重置您的密码',
-            html: await this.renderMail('PasswordReset', {
-              email: user.email,
-              link: this.buildUrl(req, {
-                resetPassword: (user as any).reset_password_token,
-              }),
-            }),
+            html: await this.renderMail(
+              'PasswordReset',
+              {
+                email: user.email,
+                link: this.buildUrl(req, {
+                  resetPassword: (user as any).reset_password_token,
+                }),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -216,12 +229,16 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '验证您的电子邮箱',
-            html: await this.renderMail('VerifyEmail', {
-              email: user.email,
-              link: this.buildUrl(req, {
-                verificationToken: (user as any).email_verification_token,
-              }),
-            }),
+            html: await this.renderMail(
+              'VerifyEmail',
+              {
+                email: user.email,
+                link: this.buildUrl(req, {
+                  verificationToken: (user as any).email_verification_token,
+                }),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -230,10 +247,14 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '欢迎使用星澜！',
-            html: await this.renderMail('Welcome', {
-              email: user.email,
-              link: this.buildUrl(req, {}),
-            }),
+            html: await this.renderMail(
+              'Welcome',
+              {
+                email: user.email,
+                link: this.buildUrl(req, {}),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -243,16 +264,20 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '您已被邀请加入星澜',
-            html: await this.renderMail('OrganizationInvite', {
-              name: extractDisplayNameFromEmail(
-                invitee.email,
-                invitee.display_name,
-              ),
-              email: invitee.email,
-              link: this.buildUrl(req, {
-                token,
-              }),
-            }),
+            html: await this.renderMail(
+              'OrganizationInvite',
+              {
+                name: extractDisplayNameFromEmail(
+                  invitee.email,
+                  invitee.display_name,
+                ),
+                email: invitee.email,
+                link: this.buildUrl(req, {
+                  token,
+                }),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
@@ -262,33 +287,41 @@ export class MailService {
           await mailerAdapter.mailSend({
             to: user.email,
             subject: '星澜角色已更新',
-            html: await this.renderMail('OrganizationRoleUpdate', {
-              name: extractDisplayNameFromEmail(
-                invitee.email,
-                invitee.display_name,
-              ),
-              email: invitee.email,
-              oldRole: RoleLabels[oldRole],
-              newRole: RoleLabels[newRole],
-              link: this.buildUrl(req, {}),
-            }),
+            html: await this.renderMail(
+              'OrganizationRoleUpdate',
+              {
+                name: extractDisplayNameFromEmail(
+                  invitee.email,
+                  invitee.display_name,
+                ),
+                email: invitee.email,
+                oldRole: RoleLabels[oldRole],
+                newRole: RoleLabels[newRole],
+                link: this.buildUrl(req, {}),
+              },
+              req.ncSiteUrl,
+            ),
           });
           break;
         }
         case MailEvent.FORM_SUBMISSION:
           {
-            const { formView, data, model, emails, base } = payload;
+            const { formView, data, model, emails, base, req } = payload;
 
             await mailerAdapter.mailSend({
-              to: emails.join(','),
-              subject: `星澜表单：有人回复了 ${formView.title}`,
-              html: await this.renderMail('FormSubmission', {
+            to: emails.join(','),
+            subject: `星澜表单：有人回复了 ${formView.title}`,
+            html: await this.renderMail(
+              'FormSubmission',
+              {
                 formTitle: formView.title,
                 tableTitle: model.title,
                 submissionData: data,
                 baseTitle: base.title,
-              }),
-            });
+              },
+              req?.ncSiteUrl,
+            ),
+          });
           }
           break;
       }
