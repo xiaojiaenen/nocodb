@@ -68,12 +68,6 @@ export class HooksService {
       isTableDuplicate?: boolean;
     },
   ) {
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     // if isTableDuplicate, we let v2 to be created
     if (
       !option?.isTableDuplicate &&
@@ -120,12 +114,6 @@ export class HooksService {
     context: NcContext,
     param: { hookId: string; req: NcRequest },
   ) {
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     const hook = await Hook.get(context, param.hookId);
 
     if (!hook) {

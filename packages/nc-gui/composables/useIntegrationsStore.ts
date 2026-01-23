@@ -98,12 +98,6 @@ const [useProvideIntegrationViewStore, _useIntegrationStore] = useInjectionState
 
   const integrationsRefreshKey = ref(0)
 
-  const requestIntegration = ref({
-    isOpen: false,
-    msg: '',
-    isLoading: false,
-  })
-
   const successConfirmModal = ref({
     isOpen: false,
     title: t('msg.success.connectionAdded'),
@@ -116,10 +110,6 @@ const [useProvideIntegrationViewStore, _useIntegrationStore] = useInjectionState
       return (route.value.query?.tab as string) ?? 'integrations'
     },
     set(tab: string) {
-      if (requestIntegration.value.isOpen) {
-        requestIntegration.value.isOpen = false
-      }
-
       router.push({ query: { ...route.value.query, tab } })
     },
   })
@@ -428,26 +418,6 @@ const [useProvideIntegrationViewStore, _useIntegrationStore] = useInjectionState
     } catch {}
   }
 
-  const saveIntegrationRequest = async (msg: string) => {
-    if (!msg?.trim()) return
-
-    requestIntegration.value.isLoading = true
-    try {
-      $e('a:integration:new-request', {
-        value: requestIntegration.value.msg,
-      })
-
-      requestIntegration.value.isLoading = false
-      requestIntegration.value.isOpen = false
-      requestIntegration.value.msg = ''
-
-      await message.success('Your request has been successfully submitted')
-    } catch (e) {
-      requestIntegration.value.isLoading = false
-      await message.error(await extractSdkResponseErrorMsg(e))
-    }
-  }
-
   const listIntegrationByType = async (type: IntegrationsType) => {
     if (!activeWorkspaceId.value) return
 
@@ -536,7 +506,6 @@ const [useProvideIntegrationViewStore, _useIntegrationStore] = useInjectionState
     isLoadedIntegrations,
     deleteConfirmText,
     eventBus,
-    requestIntegration,
     integrationPaginationData,
     activeViewTab,
     isFromIntegrationPage,
@@ -550,7 +519,6 @@ const [useProvideIntegrationViewStore, _useIntegrationStore] = useInjectionState
     saveIntegration,
     editIntegration,
     duplicateIntegration,
-    saveIntegrationRequest,
     getIntegration,
     setDefaultIntegration,
     integrationsIconMap,

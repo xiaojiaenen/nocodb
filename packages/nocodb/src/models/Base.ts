@@ -54,23 +54,12 @@ export default class Base implements BaseType {
   roles?: string;
   fk_custom_url_id?: string;
 
-  // sandbox props
-  sandbox_master?: boolean; // Is this base a sandbox master?
-  sandbox_id?: string; // Points to SANDBOXES (for both master and installed instances)
-  sandbox_version_id?: string; // Current version ID from SANDBOX_VERSIONS
-  auto_update?: boolean; // For installed instances: auto-update to new published versions
-  sandbox_schema_locked?: boolean; // Computed: whether schema modifications are allowed
-
   constructor(base: Partial<Base>) {
     Object.assign(this, base);
   }
 
   public static castType(base: Base): Base {
     return base && new Base(base);
-  }
-
-  public static async computeSchemaLocked(_base: Base): Promise<boolean> {
-    return false;
   }
 
   public static async createProject(
@@ -88,10 +77,6 @@ export default class Base implements BaseType {
       'color',
       'order',
       'version',
-      'sandbox_master',
-      'sandbox_id',
-      'sandbox_version_id',
-      'auto_update',
     ]);
 
     if (!insertObj.order) {
@@ -289,11 +274,6 @@ export default class Base implements BaseType {
     }
     const base = this.castType(baseData);
 
-    // Compute sandbox_schema_locked
-    if (base && base.sandbox_id) {
-      base.sandbox_schema_locked = await this.computeSchemaLocked(base);
-    }
-
     return base;
   }
 
@@ -369,11 +349,6 @@ export default class Base implements BaseType {
     }
     if (baseData) {
       const base = this.castType(baseData);
-
-      // Compute sandbox_schema_locked
-      if (base.sandbox_id) {
-        base.sandbox_schema_locked = await this.computeSchemaLocked(base);
-      }
 
       await base.getSources(includeConfig, ncMeta);
 
@@ -471,10 +446,6 @@ export default class Base implements BaseType {
       'password',
       'roles',
       'version',
-      'sandbox_master',
-      'sandbox_id',
-      'sandbox_version_id',
-      'auto_update',
     ]);
 
     // stringify meta

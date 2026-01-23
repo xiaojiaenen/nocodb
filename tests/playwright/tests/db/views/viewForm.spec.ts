@@ -167,40 +167,6 @@ test.describe('Form view', () => {
       message: 'Please activate SMTP plugin in App store for enabling email notification',
     });
     // const url = dashboard.rootPage.url();
-
-    // activate SMTP plugin
-    // await accountAppStorePage.goto();
-    //
-    // // install SMTP
-    // await accountAppStorePage.install({ name: 'SMTP' });
-    // await accountAppStorePage.configureSMTP({
-    //   email: 'a@b.com',
-    //   host: 'smtp.gmail.com',
-    //   port: '587',
-    // });
-    // await dashboard.verifyToast({
-    //   message: 'Successfully installed and email notification will use SMTP configuration',
-    // });
-    //
-    // // revisit form view
-    // await page.goto(url);
-    //
-    // // enable 'email-me' option
-    // await dashboard.viewSidebar.openView({ title: 'CountryForm' });
-    // await form.emailMeRadioButton.click();
-    // await form.verifyAfterSubmitMenuState({
-    //   emailMe: true,
-    //   submitAnotherForm: false,
-    //   showBlankForm: false,
-    // });
-    //
-    // // Uninstall SMTP
-    // await accountAppStorePage.goto();
-    // await accountAppStorePage.uninstall({ name: 'SMTP' });
-    //
-    // await dashboard.verifyToast({
-    //   message: 'Plugin uninstalled successfully',
-    // });
   });
 
   test('Form share, verify attachment file', async () => {

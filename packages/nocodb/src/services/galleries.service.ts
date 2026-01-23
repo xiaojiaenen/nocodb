@@ -44,12 +44,6 @@ export class GalleriesService {
       param.gallery,
     );
 
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     const model = await Model.get(context, param.tableId, ncMeta);
 
     param.gallery.title = param.gallery.title?.trim();

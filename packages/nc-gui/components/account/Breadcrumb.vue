@@ -59,13 +59,6 @@ const breadcrumb = computed<BreadcrumbType[]>(() => {
       })
       break
     }
-    case 'apps': {
-      payload.push({
-        title: t('title.appStore'),
-        active: true,
-      })
-      break
-    }
   }
 
   switch (route.params.nestedPage) {

@@ -202,13 +202,13 @@ const notificationTypes = computed(() => {
   return [
     {
       type: 'URL',
-      label: 'HTTP Webhook',
+      label: t('labels.httpWebhook'),
     },
     ...(hookRef.event !== 'view'
       ? [
           {
             type: 'Script',
-            label: 'Run Script',
+            label: t('labels.runScript'),
           },
         ]
       : []),
@@ -220,7 +220,7 @@ const filterScripts = (script: any) => {
     return {
       ...script,
       ncItemDisabled: true,
-      ncItemTooltip: `Script with user inputs can't be used with webhooks`,
+      ncItemTooltip: t('msg.scriptWithInputsNotAllowed'),
     }
   }
   return script
@@ -635,12 +635,12 @@ async function saveHooks() {
   try {
     await validate()
     if (hookRef.operation?.length === 0 && sendMeEverythingChecked.value === false) {
-      message.error('At least one operation need to be selected')
-      throw new Error('At least one operation need to be selected')
+      message.error(t('msg.atLeastOneOperation'))
+      throw new Error(t('msg.atLeastOneOperation'))
     }
     if (hookRef.notification.trigger_form && !hookRef.notification.trigger_form_id) {
-      message.error('You must select a trigger form')
-      throw new Error('You must select a trigger form')
+      message.error(t('msg.mustSelectTriggerForm'))
+      throw new Error(t('msg.mustSelectTriggerForm'))
     }
   } catch (error: any) {
     console.error('validation error', error)
@@ -727,7 +727,7 @@ async function saveHooks() {
     emits('close', hookRef)
 
     if (showUpgradeModal.value) {
-      message.success('Webhook upgraded to v3 successfully!')
+      message.success(t('msg.webhookUpgradedSuccess'))
     }
   } catch (e: any) {
     message.error(await extractSdkResponseErrorMsg(e))

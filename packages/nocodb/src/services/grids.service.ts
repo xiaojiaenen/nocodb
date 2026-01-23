@@ -35,12 +35,6 @@ export class GridsService {
       param.grid,
     );
 
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     const model = await Model.get(context, param.tableId, ncMeta);
 
     // check for duplicated view title

@@ -11,11 +11,13 @@ import {
 import { extensionUserPrefsManager } from '~/helpers/extensionUserPrefsManager'
 
 const jobStatusTooltip = {
-  [JobStatus.COMPLETED]: 'Export successful',
-  [JobStatus.FAILED]: 'Export failed',
+  [JobStatus.COMPLETED]: t('msg.exportSuccessful'),
+  [JobStatus.FAILED]: t('msg.exportFailed'),
 } as Record<string, string>
 
 const { $api, $poller, $e } = useNuxtApp()
+
+const { t } = useI18n()
 
 const { appInfo, user } = useGlobal()
 
@@ -177,7 +179,7 @@ async function exportDataAsync() {
         if (data.status !== 'close') {
           if (data.status === JobStatus.COMPLETED) {
             // Export completed successfully
-            message.toast('Successfully exported data!')
+            message.toast(t('msg.successfullyExportedData'))
 
             const job = jobList.value.find((j) => j.id === data.id)
             if (job) {
@@ -188,7 +190,7 @@ async function exportDataAsync() {
             isExporting.value = false
             $e(`a:extension:${EXTENSION_ID}:export:completed`)
           } else if (data.status === JobStatus.FAILED) {
-            message.error('Failed to export data!')
+            message.error(t('msg.failedToExportData'))
 
             const job = jobList.value.find((j) => j.id === data.id)
             if (job) {
@@ -306,9 +308,9 @@ onMounted(async () => {
   >
     <template v-if="fullscreen" #headerExtra>
       <NcTooltip class="flex" placement="topRight" :disabled="!isExporting">
-        <template #title> The CSV file is being prepared in the background. You'll be notified once it's ready. </template>
+        <template #title> {{ $t('msg.csvFilePreparedBackground') }} </template>
         <NcButton :disabled="!exportPayload?.viewId" :loading="isExporting" size="small" @click="exportDataAsync">{{
-          isExporting ? 'Generating' : 'Export'
+          isExporting ? $t('general.generating') : $t('general.export')
         }}</NcButton>
       </NcTooltip>
     </template>
@@ -438,13 +440,13 @@ onMounted(async () => {
           v-if="fullscreen"
           class="w-[320px] border-r-1 border-r-nc-border-gray-medium bg-nc-bg-default p-4 pt-t flex flex-col gap-5 nc-scrollbar-thin"
         >
-          <div class="text-base font-bold text-nc-content-gray-extreme">Settings</div>
+          <div class="text-base font-bold text-nc-content-gray-extreme">{{ $t('labels.settings') }}</div>
           <div class="flex flex-col gap-2">
-            <div class="text-nc-content-gray font-medium">Table</div>
+            <div class="text-nc-content-gray font-medium">{{ $t('objects.table') }}</div>
             <a-form-item class="!my-0">
               <NcSelect
                 v-model:value="exportPayload.tableId"
-                placeholder="-select table-"
+                :placeholder="$t('placeholder.selectTable')"
                 :disabled="isExporting"
                 class="nc-data-exporter-table-select-sidebar nc-select-shadow"
                 :filter-option="filterOption"
@@ -477,11 +479,11 @@ onMounted(async () => {
             </a-form-item>
           </div>
           <div class="flex flex-col gap-2">
-            <div class="text-nc-content-gray font-medium">View</div>
+            <div class="text-nc-content-gray font-medium">{{ $t('objects.view') }}</div>
             <a-form-item class="!my-0 min-w-1/2">
               <NcSelect
                 v-model:value="exportPayload.viewId"
-                placeholder="-select view-"
+                :placeholder="$t('placeholder.selectView')"
                 :disabled="isExporting"
                 class="nc-data-exporter-view-select-sidebar nc-select-shadow"
                 dropdown-class-name="w-[250px]"
@@ -514,11 +516,11 @@ onMounted(async () => {
             </a-form-item>
           </div>
           <div class="flex flex-col gap-2">
-            <div>Separator</div>
+            <div>{{ $t('labels.separator') }}</div>
             <a-form-item class="!my-0 flex-1">
               <NcSelect
                 v-model:value="exportPayload.delimiter"
-                placeholder="-select separator-"
+                :placeholder="$t('placeholder.selectSeparator')"
                 :disabled="isExporting"
                 class="nc-data-exporter-separator nc-select-shadow"
                 dropdown-class-name="w-[180px]"
@@ -542,11 +544,11 @@ onMounted(async () => {
             </a-form-item>
           </div>
           <div class="flex flex-col gap-2">
-            <div class="min-w-[65px]">Encoding</div>
+            <div class="min-w-[65px]">{{ $t('labels.encoding') }}</div>
             <a-form-item class="!my-0 flex-1">
               <NcSelect
                 v-model:value="exportPayload.encoding"
-                placeholder="-select encoding-"
+                :placeholder="$t('placeholder.selectEncoding')"
                 class="nc-data-exporter-encoding nc-select-shadow"
                 dropdown-class-name="w-[190px]"
                 :filter-option="filterOption"
@@ -572,7 +574,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex flex-col flex-1 nc-scrollbar-thin">
-          <div v-if="fullscreen" class="data-exporter-header sticky top-0 z-100">Recent Exports</div>
+          <div v-if="fullscreen" class="data-exporter-header sticky top-0 z-100">{{ $t('labels.recentExports') }}</div>
           <div v-if="exportedFiles.length" class="flex-1 flex flex-col max-h-[calc(100%_-_25px)]">
             <template v-for="exp of exportedFiles">
               <div

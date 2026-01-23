@@ -27,12 +27,6 @@ export class FormColumnsService {
     },
     ncMeta?: MetaService,
   ) {
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     validatePayload(
       'swagger.json#/components/schemas/FormColumnReq',
       param.formViewColumn,

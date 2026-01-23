@@ -18,8 +18,6 @@ export const useBase = defineStore('baseStore', () => {
 
   const basesStore = useBases()
 
-  const isSandboxMaster = ref(false)
-
   const baseId = computed(() => {
     // In shared base mode, use activeProjectId from basesStore which has the correct base ID
     if (route.value.params.typeOrId === 'base') {
@@ -342,7 +340,6 @@ export const useBase = defineStore('baseStore', () => {
     idUserMap,
     isPrivateBase,
     showBaseAccessRequestOverlay,
-    isSandboxMaster,
   }
 })
 

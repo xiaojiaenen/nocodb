@@ -3,14 +3,6 @@ import rfdc from 'rfdc'
 const deepClone = rfdc()
 const FEATURES = [
   {
-    id: 'sandboxes',
-    title: 'Sandboxes',
-    description: 'Allow users to create replicable sandbox environments',
-    enabled: false,
-    isEngineering: true,
-    isAdvanced: true,
-  },
-  {
     id: 'bases_v3',
     title: 'Bases V3',
     description: 'Experience the next generation of NocoDB with Bases V3 with and enhanced performance and optimizations.',

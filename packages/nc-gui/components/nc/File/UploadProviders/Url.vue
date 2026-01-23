@@ -54,11 +54,11 @@ const uploadAndParseUrl = async () => {
       url.value = ''
     } else {
       isValidUrl.value = false
-      errorMessage.value = 'Failed to upload URL'
+      errorMessage.value = $t('msg.failedToUploadUrl')
     }
   } catch (error: any) {
     isValidUrl.value = false
-    errorMessage.value = error.message || 'Failed to upload URL'
+    errorMessage.value = error.message || $t('msg.failedToUploadUrl')
   } finally {
     isParsing.value = false
   }

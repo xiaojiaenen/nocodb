@@ -71,12 +71,6 @@ export class TablesService {
       req: NcRequest;
     },
   ) {
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     const model = await Model.get(context, param.tableId);
 
     const base = await Base.getWithInfo(
@@ -305,12 +299,6 @@ export class TablesService {
       req?: any;
     },
   ) {
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
-
     const table = await Model.getByIdOrName(context, { id: param.tableId });
 
     if (table?.synced && !param.forceDeleteSyncs) {
@@ -715,12 +703,6 @@ export class TablesService {
       ...param.table,
       ...(param.synced ? { synced: true } : {}),
     };
-
-    if (context.schema_locked) {
-      NcError.get(context).schemaLocked(
-        'Schema modifications are not allowed on installed sandbox bases',
-      );
-    }
 
     const base = await Base.getWithInfo(context, param.baseId);
     let source = base.sources[0];

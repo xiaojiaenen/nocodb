@@ -156,9 +156,10 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
           // verify file size
           if (file?.size && file.size > attachmentMeta.maxAttachmentSize) {
             message.error(
-              `The size of ${
-                (file as File)?.name || (file as AttachmentReqType)?.fileName
-              } exceeds the maximum file size ${getReadableFileSize(attachmentMeta.maxAttachmentSize)}.`,
+              t('msg.fileSizeExceeds', {
+                fileName: (file as File)?.name || (file as AttachmentReqType)?.fileName,
+                maxSize: getReadableFileSize(attachmentMeta.maxAttachmentSize),
+              }),
             )
             continue
           }
@@ -172,9 +173,10 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
             )
           ) {
             message.error(
-              `${(file as File)?.name || (file as AttachmentReqType)?.fileName} has the mime type ${
-                (file as File)?.type || (file as AttachmentReqType)?.mimetype
-              } which is not allowed in this column.`,
+              t('msg.invalidMimeType', {
+                fileName: (file as File)?.name || (file as AttachmentReqType)?.fileName,
+                mimeType: (file as File)?.type || (file as AttachmentReqType)?.mimetype,
+              }),
             )
             continue
           }
@@ -276,9 +278,9 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
       } catch (e: any) {
         console.log(e)
         if (returnError) {
-          return "File couldn't be uploaded. Verify URL & try again."
+          return t('msg.failedToUploadUrlVerify')
         }
-        message.error("File couldn't be uploaded. Verify URL & try again.")
+        message.error(t('msg.failedToUploadUrlVerify'))
         return null
       } finally {
         uploadingCount.value--

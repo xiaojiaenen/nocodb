@@ -18,7 +18,6 @@ export interface NcContext {
   timezone?: string;
   suppressDependencyEvaluation?: boolean;
   additionalContext?: Record<string, any>;
-  schema_locked?: boolean;
 }
 
 export interface NcRequest extends Partial<Request> {
