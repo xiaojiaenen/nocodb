@@ -351,7 +351,7 @@ defineExpose({
 
       <!-- Search -->
       <div class="px-3 py-2 border-b border-nc-border-gray-light">
-        <a-input v-model:value="searchQuery" placeholder="Search..." class="!rounded-md nc-input-shadow" allow-clear @click.stop>
+        <a-input v-model:value="searchQuery" :placeholder="$t('general.search')" class="!rounded-md nc-input-shadow" allow-clear @click.stop>
           <template #prefix>
             <GeneralIcon icon="search" class="text-nc-content-gray-disabled w-4 h-4" />
           </template>

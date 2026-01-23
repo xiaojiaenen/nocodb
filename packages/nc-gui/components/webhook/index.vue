@@ -1372,7 +1372,7 @@ const webhookV2AndV3Diff = computed(() => {
                           <a-input
                             v-model:value="hookRef.notification.payload.path"
                             size="medium"
-                            placeholder="http://example.com"
+                            :placeholder="$t('placeholder.exampleUrl')"
                             class="nc-text-field-hook-url-path nc-input-shadow h-9 !rounded-lg"
                           />
                           <div v-if="showCyclicCallsWarning" class="text-xs text-warning pl-2">
@@ -1397,7 +1397,7 @@ const webhookV2AndV3Diff = computed(() => {
                       <LazyApiClientHeaders v-model="hookRef.notification.payload.headers" />
                     </a-tab-pane>
 
-                    <a-tab-pane key="body" tab="Body">
+                    <a-tab-pane key="body" :tab="$t('general.body')">
                       <div
                         style="
                           box-shadow: 0px 0px 4px 0px rgba(var(--rgb-base), 0.08), 0px 0px 4px 0px rgba(var(--rgb-base), 0.08);

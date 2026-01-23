@@ -314,7 +314,7 @@ const handleClickRow = (source: SourceType, tab?: string) => {
         v-model:value="searchQuery"
         type="text"
         class="nc-search-data-source-input nc-input-border-on-value !max-w-90 nc-input-sm"
-        placeholder="Search data source"
+        :placeholder="$t('placeholder.searchDataSource')"
         allow-clear
       >
         <template #prefix>

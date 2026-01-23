@@ -2099,14 +2099,14 @@ const { message: templatedMessage } = useTemplatedMessage(
                                   v-model:value="formViewData.redirect_url"
                                   type="text"
                                   class="!h-8 !px-3 !py-1 !rounded-lg"
-                                  placeholder="Paste redirect URL here"
+                                  :placeholder="$t('placeholder.pasteRedirectUrlHere')"
                                   data-testid="nc-form-redirect-url-input"
                                   @input="handleUpdateRedirectUrl"
                                 ></a-input>
                               </a-form-item>
                               <div class="text-small leading-[18px] text-nc-content-gray-disabled pl-3">
-                                Use {record_id} to get ID of the newly created record.
-                                <span class="!no-underline !hover:underline">Learn more</span>
+                                {{ $t('msg.info.useRecordIdToGetId') }}
+                                <span class="!no-underline !hover:underline">{{ $t('msg.learnMore') }}</span>
                               </div>
                             </div>
                           </div>

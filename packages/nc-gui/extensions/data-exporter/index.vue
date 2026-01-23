@@ -345,7 +345,7 @@ onMounted(async () => {
             >
               <NcSelect
                 v-model:value="exportPayload.tableId"
-                placeholder="-select table-"
+                :placeholder="$t('placeholder.selectTable')"
                 :disabled="isExporting"
                 class="nc-data-exporter-table-select nc-select-shadow"
                 :filter-option="filterOption"
@@ -386,7 +386,7 @@ onMounted(async () => {
             >
               <NcSelect
                 v-model:value="exportPayload.viewId"
-                placeholder="-select view-"
+                :placeholder="$t('placeholder.selectView')"
                 :disabled="isExporting"
                 class="nc-data-exporter-view-select nc-select-shadow"
                 dropdown-class-name="w-[250px]"
@@ -419,9 +419,9 @@ onMounted(async () => {
           </div>
           <div class="flex-none flex justify-end">
             <NcTooltip class="flex" placement="topRight" :disabled="!isExporting">
-              <template #title> The CSV file is being prepared in the background. You'll be notified once it's ready. </template>
+              <template #title> {{ $t('msg.csvFilePreparedBackground') }} </template>
               <NcButton :disabled="!exportPayload?.viewId" :loading="isExporting" size="small" @click="exportDataAsync">{{
-                isExporting ? 'Generating' : 'Export'
+                isExporting ? $t('general.generating') : $t('general.export')
               }}</NcButton>
             </NcTooltip>
           </div>

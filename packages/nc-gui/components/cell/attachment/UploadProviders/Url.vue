@@ -101,7 +101,7 @@ watch(url, () => {
           type="url"
           :disabled="isParsing"
           class="flex-grow"
-          placeholder="www.google.com/hello.png"
+          :placeholder="$t('placeholder.exampleImageUrl')"
           @keydown.enter="uploadAndParseUrl"
         />
 

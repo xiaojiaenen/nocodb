@@ -30,9 +30,9 @@ export const useCommandPalette = createSharedComposable(() => {
 
   const needRefresh = ref(true)
 
-  const cmdPlaceholder = ref('Search workspace, bases, tables, views & more...')
-
   const { token, user, signOut } = useGlobal()
+
+  const { t } = useI18n()
 
   const { workspacesList } = storeToRefs(useWorkspace())
 
@@ -48,7 +48,7 @@ export const useCommandPalette = createSharedComposable(() => {
         icon: workspace.meta?.icon || 'workspace',
         iconType: workspace.meta?.iconType,
         iconColor: workspace.meta?.color,
-        section: 'Workspaces',
+        section: t('objects.workspaces'),
         scopePayload: {
           scope: `ws-${workspace.id}`,
           data: {
@@ -66,7 +66,12 @@ export const useCommandPalette = createSharedComposable(() => {
   const commands = ref({
     homeCommands,
     baseCommands: [],
-  } as Record<string, CmdAction[]>)
+    tableCommands: [],
+    viewCommands: [],
+    workspaceCommands: workspacesCmd,
+  })
+
+  const cmdPlaceholder = computed(() => t('placeholder.searchWorkspaceBasesTablesViews'))
 
   const staticData = computed(() => {
     const staticCmd = commands.value.homeCommands

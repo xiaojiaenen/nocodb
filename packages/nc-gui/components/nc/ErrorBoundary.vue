@@ -1,5 +1,5 @@
 <script lang="ts">
-// modified version of default NuxtErrorBoundary component - https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/components/nuxt-error-boundary.ts
+// modified version of default NuxtErrorBoundary component - nuxt/nuxt nuxt-error-boundary.ts
 import { message } from 'ant-design-vue'
 
 const MESSAGE_KEY = 'ErrorMessageKey'

@@ -315,7 +315,7 @@ watch(activeViewTab, (value) => {
                     v-model:value="searchQuery"
                     type="text"
                     class="flex-1 nc-input-border-on-value nc-search-integration-input !min-w-[300px] nc-input-sm flex-none"
-                    placeholder="Search integration"
+                    :placeholder="$t('placeholder.searchIntegration')"
                     allow-clear
                   >
                     <template #prefix>
@@ -340,7 +340,7 @@ watch(activeViewTab, (value) => {
                         v-model:value="categoriesQuery"
                         v-model:open="isOpenFilter"
                         :list="integrationCategoriesRef"
-                        search-input-placeholder="Search category"
+                        :search-input-placeholder="$t('placeholder.searchCategory')"
                         :close-on-select="false"
                         is-multi-select
                         variant="medium"
@@ -373,7 +373,7 @@ watch(activeViewTab, (value) => {
                 class="!text-primary"
                 @click="requestIntegration.isOpen = true"
               >
-                Request Integration
+                {{ $t('general.requestIntegration') }}
               </NcButton>
             </div>
           </div>
@@ -505,7 +505,7 @@ watch(activeViewTab, (value) => {
         >
           <div v-show="requestIntegration.isOpen" class="flex flex-col gap-4">
             <div class="flex items-center justify-between gap-4">
-              <div class="text-base font-bold text-nc-content-gray">Request Integration</div>
+              <div class="text-base font-bold text-nc-content-gray">{{ $t('general.requestIntegration') }}</div>
               <NcButton size="small" type="text" @click="requestIntegration.isOpen = false">
                 <GeneralIcon icon="close" class="text-nc-content-gray-subtle2" />
               </NcButton>
@@ -517,7 +517,7 @@ watch(activeViewTab, (value) => {
                 class="!rounded-md !text-sm !min-h-[120px] max-h-[500px] nc-scrollbar-thin"
                 size="large"
                 hide-details
-                placeholder="Provide integration name and your use-case."
+                :placeholder="$t('placeholder.provideIntegrationName')"
               />
             </div>
             <div class="flex items-center justify-end gap-3">

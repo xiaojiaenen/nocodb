@@ -426,7 +426,7 @@ onMounted(() => {
             <a-textarea
               ref="aiPromptInputRef"
               :value="aiFormState.onHoverTagPrompt || aiFormState.prompt"
-              placeholder="Type something..."
+              :placeholder="$t('placeholder.typeSomething')"
               class="!w-full !min-h-[120px] !rounded-lg mt-2 overflow-y-auto nc-scrollbar-thin nc-input-shadow nc-ai-input"
               size="middle"
               :disabled="!aiIntegrationAvailable || (aiLoading && callFunction === 'onPredictSchema')"
@@ -487,7 +487,7 @@ onMounted(() => {
             <GeneralIcon icon="ncInfoSolid" class="flex-none !text-nc-content-red-dark w-6 h-6" />
 
             <div class="w-[calc(100%_-_36px)] flex flex-col gap-1">
-              <div class="font-bold text-base text-nc-content-gray">Something went wrong</div>
+              <div class="font-bold text-base text-nc-content-gray">{{ $t('msg.somethingWentWrong') }}</div>
               <NcTooltip class="truncate text-sm text-nc-content-gray-subtle" show-on-truncate-only>
                 <template #title>
                   {{ aiError }}

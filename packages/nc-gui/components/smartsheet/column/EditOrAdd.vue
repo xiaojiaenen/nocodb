@@ -311,7 +311,7 @@ const uiTypesOptions = computed<(UiTypesType & { disabled?: boolean; tooltip?: s
         disabled: isColumnTypeDisabled,
         tooltip:
           isColumnTypeDisabled && UITypesName[type.name]
-            ? `${UITypesName[type.name]} field cannot be used as display value field`
+            ? t('msg.fieldCannotBeUsedAsDisplayValueField', { field: UITypesName[type.name] })
             : '',
       }
     })
@@ -633,7 +633,7 @@ const filterOption = (input: string, option: { value: UITypes }) => {
   return searchCompare([...(UITypesSearchTerms[option.value as string] || [])], input, (matchKeyword) => {
     if (!matchKeyword) return
 
-    searchBasisInfoMap.value[option.value] = `Matched by keyword: ${matchKeyword}`
+    searchBasisInfoMap.value[option.value] = t('general.matchedByKeyword', { matchKeyword })
   })
 }
 
@@ -658,6 +658,23 @@ const isFullUpdateAllowed = computed(() => {
   }
 
   return true
+})
+
+const uniqueConstraintReason = computed(() => {
+  const { reason } = canEnableUniqueConstraint(formState.value, isXcdbBase(meta.value?.source_id))
+  if (!reason) return ''
+
+  if (reason.includes('Unique constraint is only supported for NC-DB')) {
+    return t('info.uniqueConstraintNotSupportedForExternalDb')
+  }
+  if (reason.includes('Unique constraint is not supported for field type')) {
+    const fieldTypeName = UITypesName[formState.value.uidt] || formState.value.uidt
+    return t('info.uniqueConstraintNotSupportedForFieldType', { type: fieldTypeName })
+  }
+  if (reason.includes('Cannot enable unique constraint because a default value is set')) {
+    return t('info.uniqueConstraintDefaultValueConflict')
+  }
+  return reason
 })
 
 const onPredictFieldType = async () => {
@@ -827,7 +844,7 @@ const unique = computed({
               v-if="isAiFeaturesEnabled"
               :ai-mode="aiAutoSuggestMode"
               :ai-loading="aiLoading"
-              :off-tooltip="`Auto suggest fields for ${meta?.title || 'the current table'}`"
+              :off-tooltip="$t('msg.autoSuggestFieldsFor', { title: meta?.title || $t('general.currentTable') })"
               @click="aiAutoSuggestMode ? disableAiMode() : toggleAiMode()"
             />
           </div>
@@ -862,7 +879,7 @@ const unique = computed({
                       <GeneralLoader size="regular" class="!text-nc-content-purple-dark" />
 
                       <!-- Todo: add table name  -->
-                      <div class="nc-animate-dots">Auto suggesting fields for {{ meta?.title }}</div>
+                      <div class="nc-animate-dots">{{ $t('msg.autoSuggestFieldsFor', { title: meta?.title }) }}</div>
                     </div>
                   </div>
                   <div v-else-if="aiAutoSuggestModeStep === 'pick'" class="flex gap-3 items-start">
@@ -871,7 +888,7 @@ const unique = computed({
                         <template v-for="f of activeTabPredictedFields" :key="f.title">
                           <NcTooltip :disabled="selected.length < maxSelectionCount || f.selected">
                             <template #title>
-                              <div class="w-[150px]">You can only select {{ maxSelectionCount }} fields to create at a time.</div>
+                              <div class="w-[150px]">{{ $t('msg.maxSelectionCountReached', { count: maxSelectionCount }) }}</div>
                             </template>
 
                             <a-tag
@@ -917,7 +934,7 @@ const unique = computed({
                             ? activeTabPredictHistory.length + activeTabSelectedFields.length < 10
                             : activeTabPredictHistory.length < 10
                         "
-                        title="Suggest more"
+                        :title="$t('placeholder.suggestMore')"
                         placement="top"
                       >
                         <NcButton
@@ -935,7 +952,7 @@ const unique = computed({
                           </template>
                         </NcButton>
                       </NcTooltip>
-                      <NcTooltip title="Clear all and Re-suggest" placement="top">
+                      <NcTooltip :title="$t('placeholder.clearAndResuggest')" placement="top">
                         <NcButton
                           size="xs"
                           class="!px-1"
@@ -969,7 +986,7 @@ const unique = computed({
                       ref="aiPromptInputRef"
                       v-model:value="prompt"
                       :disabled="saving"
-                      placeholder="Enter your prompt to get field suggestions.."
+                      :placeholder="$t('placeholder.enterPromptForSuggestions')"
                       class="nc-ai-input nc-input-shadow !px-3 !pt-2 !pb-3 !text-sm !min-h-[68px] !rounded-lg"
                       @keydown.enter.stop
                     >
@@ -1015,13 +1032,13 @@ const unique = computed({
                   </div>
 
                   <div v-else-if="isPromtAlreadyGenerated" class="flex flex-col gap-3">
-                    <div class="text-nc-content-purple-dark font-semibold text-xs">Generated Field(s)</div>
+                    <div class="text-nc-content-purple-dark font-semibold text-xs">{{ $t('general.generatedFields') }}</div>
                     <div class="flex gap-2 flex-wrap">
                       <template v-if="activeTabPredictedFields.length">
                         <template v-for="f of activeTabPredictedFields" :key="f.title">
                           <NcTooltip :disabled="selected.length < maxSelectionCount || f.selected">
                             <template #title>
-                              <div class="w-[150px]">You can only select {{ maxSelectionCount }} fields to create at a time.</div>
+                              <div class="w-[150px]">{{ $t('msg.maxSelectionCountReached', { count: maxSelectionCount }) }}</div>
                             </template>
 
                             <a-tag
@@ -1071,9 +1088,9 @@ const unique = computed({
             >
               <GeneralIcon icon="ncInfoSolid" class="flex-none text-nc-content-red-dark" />
               <div class="flex flex-col gap-1">
-                <div class="text-nc-content-gray text-base font-bold">Failed to add fields</div>
+                <div class="text-nc-content-gray text-base font-bold">{{ $t('general.failedToAddFields') }}</div>
                 <div class="text-nc-content-gray-muted text-sm">
-                  NocoDB was unable to add {{ predicted.length }} fields to the table. Please retry adding the fields.
+                  {{ $t('msg.failedToAddFieldsMsg', { count: predicted.length }) }}
                 </div>
               </div>
               <NcButton size="xsmall" type="text" class="!px-1" @click.stop="failedToSaveFields = false">
@@ -1120,7 +1137,9 @@ const unique = computed({
                   {{ submitBtnLabel.loadingLabel }}
                 </template>
               </NcButton>
-              <NcButton v-else type="primary" size="small" @click="handleNavigateToIntegrations"> Add AI integration </NcButton>
+              <NcButton v-else type="primary" size="small" @click="handleNavigateToIntegrations">
+                {{ $t('general.addAiIntegration') }}
+              </NcButton>
             </div>
           </a-form-item>
         </div>
@@ -1194,7 +1213,7 @@ const unique = computed({
               {{
                 isSyncedField
                   ? $t('msg.info.updateTypeSyncedCol')
-                  : 'You cannot edit field types of AI-generated fields. Edits can be made after the field is created.'
+                  : $t('msg.cannotEditAiFieldType')
               }}
             </template>
             <a-select
@@ -1410,7 +1429,7 @@ const unique = computed({
               >
                 <template #title>
                   <div class="max-w-xs">
-                    {{ canEnableUniqueConstraint(formState, isXcdbBase(meta?.source_id)).reason }}
+                    {{ uniqueConstraintReason }}
                   </div>
                 </template>
                 <NcSwitch
@@ -1452,7 +1471,7 @@ const unique = computed({
             Default Value for JSON & LongText is not supported in MySQL  -->
             <NcTooltip
               v-if="isTextArea(formState) && formState.meta?.richMode && formState.unique"
-              title="Cannot set default value as Unique constraint is set. Please disable unique constraint to configure default value"
+              :title="$t('placeholder.cannotSetDefaultValueUnique')"
               placement="right"
             >
               <div class="pointer-events-none opacity-60">
@@ -1476,7 +1495,7 @@ const unique = computed({
                 formState.unique &&
                 !isAI(formState)
               "
-              title="Cannot set default value as Unique constraint is set. Please disable unique constraint to configure default value"
+              :title="$t('placeholder.cannotSetDefaultValueUnique')"
               placement="right"
             >
               <div class="pointer-events-none opacity-60">

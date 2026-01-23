@@ -97,9 +97,9 @@ onMounted(() => {
 <template>
   <ExtensionsExtensionWrapper>
     <div class="flex flex-col gap-2 p-3">
-      <NcSelect v-model:value="exportPayload.tableId" :options="tableList" placeholder="-select table-" @change="onTableSelect" />
-      <NcSelect v-model:value="exportPayload.viewId" :options="viewList" placeholder="-select view-" @change="onViewSelect" />
-      <NcButton @click="exportJson">Export</NcButton>
+      <NcSelect v-model:value="exportPayload.tableId" :options="tableList" :placeholder="$t('placeholder.selectTable')" @change="onTableSelect" />
+      <NcSelect v-model:value="exportPayload.viewId" :options="viewList" :placeholder="$t('placeholder.selectView')" @change="onViewSelect" />
+      <NcButton @click="exportJson">{{ $t('general.export') }}</NcButton>
     </div>
   </ExtensionsExtensionWrapper>
 </template>

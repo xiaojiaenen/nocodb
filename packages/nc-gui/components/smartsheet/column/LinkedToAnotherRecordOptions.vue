@@ -530,7 +530,7 @@ const handleScrollIntoView = () => {
             show-search
             :disabled="isEdit"
             :filter-option="filterOption"
-            placeholder="Select base"
+            :placeholder="$t('placeholder.selectBase')"
             dropdown-class-name="nc-dropdown-ltar-child-table"
             @change="onBaseChange(referenceBaseId)"
           >
@@ -545,7 +545,7 @@ const handleScrollIntoView = () => {
             >
               <a-tooltip>
                 <template v-if="!canCreateCrossBaseLink(base)" #title>
-                  You can only link to tables in bases where you have creator access or above.
+                  {{ $t('placeholder.canOnlyLinkCreatorAccess') }}
                 </template>
                 <div class="flex w-full items-center gap-2">
                   <div class="min-w-5 flex items-center justify-center">
@@ -574,7 +574,7 @@ const handleScrollIntoView = () => {
             show-search
             :disabled="isEdit || isLinkedTablePrivate"
             :filter-option="filterOption"
-            placeholder="select table to link"
+            :placeholder="$t('placeholder.selectTableToLink')"
             dropdown-class-name="nc-dropdown-ltar-child-table"
             @change="handleUpdateRefTable"
           >

@@ -1,4 +1,4 @@
-// this is derived from https://github.com/pacocoursey/cmdk
+// this is derived from pacocoursey/cmdk
 
 // The scores are arranged so that a continuous match of characters will
 // result in a total score of 1.

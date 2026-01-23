@@ -31,6 +31,8 @@ const isFeatureVisible = (feature: BetaFeatureType) => {
   )
 }
 
+const { t } = useI18n()
+
 const filteredFeatures = computed(() => {
   if (!searchQuery.value) return features.value
 
@@ -38,8 +40,8 @@ const filteredFeatures = computed(() => {
 
   // Helper function to calculate match score
   const getMatchScore = (feature: BetaFeatureType) => {
-    const title = feature.title.toLowerCase()
-    const description = feature.description.toLowerCase()
+    const title = t(`betaFeatures.${feature.id}.title`).toLowerCase()
+    const description = t(`betaFeatures.${feature.id}.description`).toLowerCase()
 
     // Exact prefix match in title (highest priority)
     if (title.startsWith(query)) return 4
@@ -57,8 +59,8 @@ const filteredFeatures = computed(() => {
     .filter((feature) => {
       if (!isFeatureVisible(feature)) return false
 
-      const title = feature.title.toLowerCase()
-      const description = feature.description.toLowerCase()
+      const title = t(`betaFeatures.${feature.id}.title`).toLowerCase()
+      const description = t(`betaFeatures.${feature.id}.description`).toLowerCase()
       return title.includes(query) || description.includes(query)
     })
     .sort((a, b) => {
@@ -198,7 +200,7 @@ onUnmounted(() => {
       <div class="h-full overflow-y-auto nc-scrollbar-thin flex-grow p-4 !rounded-lg">
         <div ref="contentRef" class="!rounded-lg">
           <div class="sticky top-0 bg-nc-bg-default z-10 mb-2">
-            <a-input v-model:value="searchQuery" type="text" placeholder="Search features..." class="nc-input-sm nc-input-shadow">
+            <a-input v-model:value="searchQuery" type="text" :placeholder="$t('placeholder.searchFeatures')" class="nc-input-sm nc-input-shadow">
               <template #prefix>
                 <GeneralIcon
                   :class="{
@@ -222,13 +224,13 @@ onUnmounted(() => {
                 >
                   <div class="flex items-center justify-between">
                     <div class="text-sm text-nc-content-gray !font-weight-600">
-                      {{ feature.title }}
+                      {{ $t(`betaFeatures.${feature.id}.title`) }}
                     </div>
                     <NcSwitch v-model:checked="selectedFeatures[feature.id]" @change="saveExperimentalFeatures" />
                   </div>
 
                   <div class="text-nc-content-gray-muted leading-4 text-[13px] font-weight-500">
-                    {{ feature.description }}
+                    {{ $t(`betaFeatures.${feature.id}.description`) }}
                   </div>
                 </div>
               </template>

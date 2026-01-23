@@ -44,7 +44,7 @@ onMounted(() => {
 
 // This way special characters are updated immediately
 // which does not occur in vanilla v-model
-// See https://github.com/vuejs/vue/issues/9777
+// See vuejs/vue issue 9777
 function updateInput(e: any) {
   vModel.value = (e.target as HTMLInputElement)?.value ?? ''
 }

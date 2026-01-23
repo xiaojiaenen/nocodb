@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 interface Props {
   isLoading?: boolean
+  placeholder?: string
 }
 
 const props = defineProps<Props>()
 
-const { isLoading } = toRefs(props)
+const { isLoading, placeholder } = toRefs(props)
+
+const { t } = useI18n()
 
 const { baseHomeSearchQuery } = storeToRefs(useBases())
 
@@ -39,7 +42,7 @@ const handleClick = () => {
         v-model:value="baseHomeSearchQuery"
         type="text"
         class="nc-input-border-on-value nc-input-shadow !h-8 !pl-1.5 !pr-1 !py-1 !rounded-lg"
-        placeholder="Quick search..."
+        :placeholder="placeholder || t('placeholder.quickSearch')"
         allow-clear
         readonly
         @keydown.stop

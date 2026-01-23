@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+const { t } = useI18n()
 const { appInfo } = useGlobal()
 
 const { activeIntegration, categories, activeCategory } = useIntegrationStore()
@@ -7,7 +8,7 @@ const { copy } = useCopy()
 
 const copyIp = async () => {
   await copy('52.15.226.51')
-  message.success('Copied to clipboard')
+  message.success(t('msg.copiedToClipboard'))
 }
 
 const panelsRef = ref<HTMLElement | null>(null)
@@ -44,14 +45,14 @@ const onInputFocus = () => {
 
 <template>
   <div ref="panelsRef" class="panels">
-    <WorkspaceIntegrationsPanel title="Integration Details" icon="info">
+    <WorkspaceIntegrationsPanel :title="$t('title.integrationDetails')" icon="info">
       <template v-if="appInfo.isCloud && !appInfo.isOnPrem" #header-info>
         <div
           class="text-nc-content-gray-muted !text-xs font-weight-normal flex items-center gap-2 cursor-pointer flex items-center"
           @click="copyIp"
         >
           <GeneralIcon icon="info" class="text-primary" />
-          Whitelist our ip: 52.15.226.51 to allow database access
+          {{ $t('msg.whitelistIp', { ip: '52.15.226.51' }) }}
           <GeneralIcon
             icon="duplicate"
             class="text-nc-content-gray w-5 h-5 p-1 border-1 rounded-md border-nc-border-gray-medium"
@@ -60,27 +61,27 @@ const onInputFocus = () => {
       </template>
       <div>
         <div class="flex flex-col w-1/2 pr-3">
-          <label class="!text-xs font-weight-normal pb-1">Title</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('general.title') }}</label>
           <a-input v-model:value="activeIntegration.payload.title" class="input-text" :maxlength="255" @focus="onInputFocus" />
         </div>
       </div>
     </WorkspaceIntegrationsPanel>
-    <WorkspaceIntegrationsPanel title="Connection Details" icon="link">
+    <WorkspaceIntegrationsPanel :title="$t('title.connectionDetails')" icon="link">
       <div class="input-group">
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">Host</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.host') }}</label>
           <a-input v-model:value="activeIntegration.payload.host" class="input-text" @focus="onInputFocus" />
         </div>
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">Port</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.port') }}</label>
           <a-input v-model:value="activeIntegration.payload.port" class="input-text" @focus="onInputFocus" />
         </div>
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">User</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.user') }}</label>
           <a-input v-model:value="activeIntegration.payload.user" class="input-text" autocomplete="off" @focus="onInputFocus" />
         </div>
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">Password</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.password') }}</label>
           <a-input
             v-model:value="activeIntegration.payload.password"
             class="input-text"
@@ -90,11 +91,11 @@ const onInputFocus = () => {
           />
         </div>
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">Schema</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.schema') }}</label>
           <a-input v-model:value="activeIntegration.payload.schema" class="input-text" @focus="onInputFocus" />
         </div>
         <div class="input-item">
-          <label class="!text-xs font-weight-normal pb-1">Database</label>
+          <label class="!text-xs font-weight-normal pb-1">{{ $t('labels.database') }}</label>
           <a-input v-model:value="activeIntegration.payload.database" class="input-text" @focus="onInputFocus" />
         </div>
       </div>

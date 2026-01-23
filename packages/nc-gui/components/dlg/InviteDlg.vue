@@ -199,14 +199,14 @@ const emailInputValidation = (input: string, isBulkEmailCopyPaste = false): bool
     if (isBulkEmailCopyPaste) return false
 
     emailValidation.isError = true
-    emailValidation.message = 'Email should not be empty'
+    emailValidation.message = t('msg.info.emailNotEmpty')
     return false
   }
   if (!validateEmail(input.trim())) {
     if (isBulkEmailCopyPaste) return false
 
     emailValidation.isError = true
-    emailValidation.message = 'Invalid Email'
+    emailValidation.message = t('msg.info.invalidEmail')
     return false
   }
   return true
@@ -260,7 +260,7 @@ watch(inviteData, (newVal) => {
     const emailToAdd = newVal.email.split(',')[0].trim() || newVal.email.split(' ')[0].trim()
     if (!validateEmail(emailToAdd)) {
       emailValidation.isError = true
-      emailValidation.message = 'Invalid Email'
+      emailValidation.message = t('msg.info.invalidEmail')
       return
     }
     /**
@@ -352,7 +352,7 @@ const inviteCollaborator = async () => {
         const validationStatus = validateEmail(payloadData)
         if (!validationStatus) {
           emailValidation.isError = true
-          emailValidation.message = 'invalid email'
+          emailValidation.message = t('msg.info.invalidEmail')
         }
       }
 
@@ -480,7 +480,7 @@ const onTeamChange = async (_teamIds: RawValueType) => {
       <div class="flex flex-row text-2xl font-bold items-center gap-x-2">
         {{
           type === 'organization'
-            ? 'Invite Members to Workspaces'
+            ? $t('activity.inviteMembersToWorkspaces')
             : type === 'base'
             ? isTeam
               ? $t('activity.addTeamsToBase')
@@ -582,14 +582,14 @@ const onTeamChange = async (_teamIds: RawValueType) => {
                     {{
                       selectedWorkspaces.length > 0
                         ? selectedWorkspaces.map((w) => w.title).join(', ')
-                        : '-select workspaces to invite to-'
+                        : $t('placeholder.selectWorkspacesToInvite')
                     }}
                   </span>
                   <template #title>
                     {{
                       selectedWorkspaces.length > 0
                         ? selectedWorkspaces.map((w) => w.title).join(', ')
-                        : '-select workspaces to invite to-'
+                        : $t('placeholder.selectWorkspacesToInvite')
                     }}
                   </template>
                 </NcTooltip>
@@ -607,7 +607,7 @@ const onTeamChange = async (_teamIds: RawValueType) => {
                     }"
                     class="!rounded-lg !h-8 !ring-0 !placeholder:text-nc-content-gray-muted !border-nc-border-gray-medium !px-4"
                     data-testid="nc-ws-search"
-                    placeholder="Search workspace"
+                    :placeholder="$t('placeholder.searchWorkspace')"
                   >
                     <template #prefix>
                       <component :is="iconMap.search" class="h-4 w-4 mr-1 text-nc-content-gray-muted" />

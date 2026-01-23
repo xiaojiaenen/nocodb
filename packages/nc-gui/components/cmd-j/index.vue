@@ -100,7 +100,7 @@ watch(vOpen, () => {
     <div ref="modalEl" class="cmdk-modal-content cmdj-modal-content relative h-[25.25rem]">
       <div class="cmdk-input-wrapper border-b-1 border-nc-border-gray-medium">
         <GeneralIcon class="h-4 w-4 text-nc-content-gray-muted" icon="search" />
-        <input ref="cmdInputEl" v-model="search" class="cmdk-input cmdj-input" placeholder="Search through docs" type="text" />
+        <input ref="cmdInputEl" v-model="search" class="cmdk-input cmdj-input" :placeholder="$t('placeholder.searchDocs')" type="text" />
       </div>
 
       <div class="cmdk-results-container overflow-y-auto max-h-80">
@@ -108,15 +108,15 @@ watch(vOpen, () => {
           <img
             src="~assets/img/placeholder/no-search-result-found.png"
             class="!w-[240px] flex-none"
-            alt="Search through our documentation"
+            :alt="$t('msg.info.searchDocs')"
           />
-          <div>Search through our documentation</div>
+          <div>{{ $t('msg.info.searchDocs') }}</div>
         </div>
         <div
           v-else-if="(query.data.value === 'empty' || query.data.value?.length === 0) && !query.isLoading.value"
           class="flex flex-col p-4 items-start justify-center text-sm"
         >
-          Your search did not match any results
+          {{ $t('msg.info.noResultsFound') }}
         </div>
 
         <div v-else-if="!query.isLoading.value" class="cmdk-results">
@@ -137,14 +137,14 @@ watch(vOpen, () => {
                   }"
                   class="cmdk-action-text flex-1"
                 >
-                  <div class="cmdk-action-title text-md">{{ result.content }}</div>
+                  <div class="cmdk-action-title text-md">{{ result.title || result.content }}</div>
                 </div>
               </div>
             </div>
           </template>
         </div>
         <div v-else class="flex flex-col p-4 gap-4 justify-center text-sm">
-          <div>Searching...</div>
+          <div>{{ $t('msg.info.searching') }}</div>
         </div>
       </div>
 

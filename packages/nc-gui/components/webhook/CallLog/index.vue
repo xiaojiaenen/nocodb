@@ -160,8 +160,8 @@ onBeforeMount(async () => {
               </div>
             </div>
             <div class="flex-1 flex items-stretch gap-4">
-              <WebhookCallLogReqResDetailCardSkeleton title="Request" />
-              <WebhookCallLogReqResDetailCardSkeleton title="Response" />
+              <WebhookCallLogReqResDetailCardSkeleton :title="$t('title.request')" />
+              <WebhookCallLogReqResDetailCardSkeleton :title="$t('title.response')" />
             </div>
           </div>
           <WebhookCallLogDetails v-else :item="activeItem" />

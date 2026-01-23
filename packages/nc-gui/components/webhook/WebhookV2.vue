@@ -753,7 +753,7 @@ const toggleIncludeUser = async () => {
                         <a-input
                           v-model:value="hookRef.notification.payload.path"
                           size="medium"
-                          placeholder="http://example.com"
+                          :placeholder="$t('placeholder.exampleUrl')"
                           class="nc-text-field-hook-url-path nc-input-shadow h-9 !rounded-lg"
                         />
                         <div v-if="showCyclicCallsWarning" class="text-xs text-warning pl-2">
@@ -773,7 +773,7 @@ const toggleIncludeUser = async () => {
                       <LazyApiClientHeaders v-model="hookRef.notification.payload.headers" disabled />
                     </a-tab-pane>
 
-                    <a-tab-pane v-if="isBodyShown" key="body" tab="Body">
+                    <a-tab-pane v-if="isBodyShown" key="body" :tab="$t('general.body')">
                       <div
                         style="
                           box-shadow: 0px 0px 4px 0px rgba(var(--rgb-base), 0.08), 0px 0px 4px 0px rgba(var(--rgb-base), 0.08);
@@ -908,7 +908,7 @@ const toggleIncludeUser = async () => {
               <div>
                 <div class="w-full cursor-pointer flex items-center" @click.prevent="toggleIncludeUser">
                   <NcSwitch :checked="Boolean(hookRef.notification.include_user)" class="nc-check-box-include-user">
-                    <span class="!text-nc-content-gray-subtle font-semibold">{{ $t('labels.includeUser') }}</span> jkl
+                    <span class="!text-nc-content-gray-subtle font-semibold">{{ $t('labels.includeUser') }}</span>
                   </NcSwitch>
                   <NcTooltip class="flex">
                     <template #title>
@@ -948,7 +948,7 @@ const toggleIncludeUser = async () => {
               <div class="flex items-center justify-between -ml-1.5">
                 <NcButton type="text" class="mb-3" size="small" @click="toggleSamplePayload()">
                   <div class="flex items-center gap-3">
-                    Sample Payload
+                    {{ $t('labels.samplePayload') }}
                     <GeneralIcon
                       class="transition-transform"
                       :class="{

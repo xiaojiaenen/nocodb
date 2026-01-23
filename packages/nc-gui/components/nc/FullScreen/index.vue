@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @ref: https://github.com/mirari/vue-fullscreen/blob/master/src/component.vue
+ * @ref: mirari/vue-fullscreen src/component.vue
  * This is same component as vue-fullscreen, but it does not have support to disable esc key.
  */
 

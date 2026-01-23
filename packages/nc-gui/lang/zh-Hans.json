@@ -39,6 +39,116 @@
       "candlestick_chart": "K 线图"
     }
   },
+  "betaFeatures": {
+    "sandboxes": {
+      "title": "沙盒",
+      "description": "允许用户创建可复制的沙盒环境"
+    },
+    "bases_v3": {
+      "title": "Bases V3",
+      "description": "体验具有增强性能和优化的下一代 NocoDB Bases V3。"
+    },
+    "workflows": {
+      "title": "工作流",
+      "description": "通过可视化工作流自动化任务 - 无需代码即可连接触发器、操作和数据转换。"
+    },
+    "advanced_nodes": {
+      "title": "启用高级节点",
+      "description": "启用脚本、外部触发节点等高级节点。"
+    },
+    "infinite_scrolling": {
+      "title": "无限滚动",
+      "description": "通过无限滚动轻松浏览大型数据集。"
+    },
+    "canvas_grid_view": {
+      "title": "改进的网格视图",
+      "description": "具有增强滚动和渲染功能的高性能网格视图。"
+    },
+    "dark_mode": {
+      "title": "深色模式",
+      "description": "使用深色模式保护您的眼睛。"
+    },
+    "canvas_group_grid_view": {
+      "title": "改进的分组功能",
+      "description": "网格视图中经过改进的分组功能，具有增强的滚动和渲染能力。"
+    },
+    "link_to_another_record": {
+      "title": "链接到另一条记录",
+      "description": "在链接字段中显示链接记录的显示值。"
+    },
+    "ai_features": {
+      "title": "AI 功能",
+      "description": "解锁 AI 功能以增强您的 NocoDB 体验。"
+    },
+    "ai_beta_features": {
+      "title": "AI Beta 功能",
+      "description": "解锁 AI Beta 功能以增强您的 NocoDB 体验。"
+    },
+    "integrations": {
+      "title": "集成",
+      "description": "启用动态集成。"
+    },
+    "data_reflection": {
+      "title": "数据映射",
+      "description": "启用数据映射。"
+    },
+    "import_from_nocodb": {
+      "title": "OSS 到企业版迁移",
+      "description": "启用从 NocoDB OSS 实例到企业版的导入。"
+    },
+    "sync_beta_feature": {
+      "title": "高级同步功能",
+      "description": "启用自定义同步、多源同步等同步 Beta 功能。"
+    },
+    "geodata_column": {
+      "title": "地理数据列",
+      "description": "启用地理数据列。"
+    },
+    "form_support_column_scanning": {
+      "title": "表单数据扫描填充",
+      "description": "启用扫描器以填充表单中的数据。"
+    },
+    "extensions": {
+      "title": "扩展 Beta 功能",
+      "description": "扩展允许您为 NocoDB 平台添加新功能或特性。"
+    },
+    "attachment_carousel_comments": {
+      "title": "附件轮播中的评论",
+      "description": "启用附件轮播中的评论。"
+    },
+    "cross_base_link": {
+      "title": "跨库链接",
+      "description": "允许在不同数据库的表之间创建链接。"
+    },
+    "custom_link": {
+      "title": "自定义链接",
+      "description": "允许用户使用现有字段创建自定义链接。"
+    },
+    "view_actions": {
+      "title": "视图操作",
+      "description": "对视图中的所有记录执行脚本和 Webhook。"
+    },
+    "show_everyones_personal_views": {
+      "title": "显示所有人的个人视图",
+      "description": "使用此功能，我们可以避免在左侧侧边栏中显示其他用户的个人视图。"
+    },
+    "templates": {
+      "title": "模板",
+      "description": "启用模板功能以浏览和使用模板。"
+    },
+    "gauge_widget": {
+      "title": "仪表盘挂件",
+      "description": "一种视觉指示器，可一目了然地显示实时值、限制和性能水平。"
+    },
+    "card_field_header_visibility": {
+      "title": "卡片字段标题可见性",
+      "description": "在画廊和看板视图中启用字段标题可见性。"
+    },
+    "kanban_opt": {
+      "title": "优化的看板视图",
+      "description": "具有优化 API 的看板视图，可实现更好的性能。"
+    }
+  },
   "aggregation": {
     "sum": "求和",
     "count": "计数",
@@ -242,7 +352,7 @@
     "comments": "评论",
     "microsoftTeams": "Microsoft Teams",
     "discord": "Discord",
-    "matterMost": "最重要的事项",
+    "matterMost": "Mattermost",
     "twilio": "Twilio",
     "whatsappTwilio": "WhatsApp Twilio",
     "quote": "引用",
@@ -252,6 +362,7 @@
     "creating": "创建",
     "creatingEntity": "创建{entity}",
     "details": "详细信息",
+    "logs": "日志",
     "skip": "跳过",
     "code": "代码",
     "codeBlock": "代码块",
@@ -284,6 +395,12 @@
     "showAll": "显示全部",
     "hideAll": "隐藏全部",
     "notFound": "未找到",
+    "matchedByKeyword": "通过关键字匹配：{keyword}",
+    "addAiIntegration": "添加 AI 集成",
+    "generatedFields": "生成的字段",
+    "failedToAddFields": "添加字段失败",
+    "currentTable": "当前表",
+    "createFields": "创建 {count} 个字段",
     "showMore": "显示更多",
     "showLess": "隐藏显示",
     "showOptions": "显示选项",
@@ -312,6 +429,12 @@
     "condition": "条件",
     "after": "后",
     "before": "前",
+    "requestIntegration": "请求集成",
+    "body": "正文",
+    "export": "导出",
+    "exporting": "导出中",
+    "generating": "生成中",
+    "csvFilePreparedBackground": "CSV 文件正在后台准备。准备就绪后您将收到通知。",
     "search": "搜索",
     "searchIn": "搜索范围",
     "notification": "通知",
@@ -423,7 +546,9 @@
     "downgrade": "降级",
     "upgrade": "升级",
     "reviewAndUpgrade": "审核并升级",
-    "requestUpgrade": "Request Upgrade",
+    "requestUpgrade": "请求升级",
+    "showMore": "显示更多",
+    "showLess": "显示更少",
     "reactivate": "重新激活",
     "left": "剩余",
     "seat": "席位",
@@ -467,6 +592,9 @@
     "projects": "项目",
     "table": "表格",
     "tables": "表格",
+    "teams": {
+      "teamCantBeAssignedOwnerRole": "团队不能被分配所有者角色"
+    },
     "field": "字段",
     "fields": "字段",
     "column": "列",
@@ -723,6 +851,10 @@
     "isNotNull": "不为空（Not Null）"
   },
   "title": {
+    "integrationDetails": "集成详情",
+    "connectionDetails": "连接详情",
+    "request": "请求",
+    "response": "响应",
     "mcpServer": "MCP Server",
     "accessRestricted": "访问受限",
     "editTablePermissions": "编辑表格权限",
@@ -949,6 +1081,12 @@
     "confirmRemoveMemberFromWorkspaceSubtitle": "If you remove, they will lose access to all bases and data within this workspace. They’ll need an invitation to rejoin."
   },
   "labels": {
+    "host": "主机",
+    "port": "端口",
+    "user": "用户",
+    "password": "密码",
+    "schema": "模式",
+    "database": "数据库",
     "hideEditor": "隐藏编辑器",
     "showEditor": "显示编辑器",
     "configurationError": "Configuration Error",
@@ -977,6 +1115,7 @@
     "mcpSubText": "星澜 MCP（模型上下文协议）可以添加到任何支持 MCP 的客户端。这是一个唯一的端点，允许 LLM（根据您的角色）直接在您的项目内代表您执行操作。",
     "modelContextProtocol": "模型上下文协议",
     "mcp": "MCP",
+    "samplePayload": "示例 Payload",
     "exampleScript": "脚本示例",
     "scriptByNocoDB": "星澜 脚本",
     "scriptsByNocoDB": "星澜 脚本",
@@ -1029,7 +1168,7 @@
     "newSnapshot": "新建快照",
     "searchASnapshot": "搜索快照",
     "continue": "继续",
-    "toggleExperimentalFeature": "Easily toggle all experimental features on / off",
+    "toggleExperimentalFeature": "轻松开启/关闭所有实验性功能",
     "modifiedOn": "修改于",
     "configuration": "配置",
     "setup": "设置",
@@ -1548,6 +1687,7 @@
     "newWorkspace": "新工作区",
     "addDomain": "添加域",
     "addMembers": "添加成员",
+    "inviteMembersToWorkspaces": "邀请成员到工作区",
     "enterEmail": "输入邮箱地址",
     "inviteToBase": "邀请",
     "inviteToWorkspace": "邀请到工作区",
@@ -1875,6 +2015,7 @@
     "aiIntegrationAddAndReConfigure": "AI集成已被移除，请从字段编辑模式重新添加和配置以使用NocoAI功能",
     "generateFieldDataUsingAiButtonOption": "使用记录信息和 NocoAI 为该表中的多个字段生成值",
     "sourceDataIsReadonly": "源数据只读",
+    "autoSuggestViews": "自动为 {table} 建议视图",
     "schemaChangeDisabledFormSqlView": "此 SQL 视图已禁用架构编辑。",
     "shiftSpace": "Shift + 空格",
     "expandShiftSpace": "展开 Shift + 空格",
@@ -1883,7 +2024,14 @@
     "copyErrorCode": "复制错误代码",
     "paidUserBadgeTooltip": "用户在至少一个 Base 中拥有编辑者或更高角色。",
     "approachingLimit": "接近限制",
+    "autoSuggestFieldsFor": "正在为 {title} 自动建议字段",
+    "maxSelectionCountReached": "您一次只能选择 {count} 个字段进行创建。",
+    "failedToAddFieldsMsg": "NocoDB 无法将 {count} 个字段添加到表中。请重试添加字段。",
+    "cannotEditAiFieldType": "您不能编辑 AI 生成字段的字段类型。可以在创建字段后进行编辑。",
     "exceedingLimit": "超出限制",
+    "somethingWentWrong": "出错了",
+    "copiedToClipboard": "已复制到剪贴板",
+    "whitelistIp": "白名单我们的 IP：{ip} 以允许数据库访问",
     "filteredByCurrentUser": "按当前用户筛选",
     "navigateToBaseToCreateTable": "请先进入某个项目以创建数据表",
     "navigateToBaseToCreateAutomation": "Navigate to a base to a create automation",
@@ -1904,17 +2052,18 @@
     "youCantHideARequiredField": "You can't hide a required field.",
     "youCantRemoveARequiredField": "You can't remove a required field.",
     "removeFromForm": "Remove from form",
-    "fieldCannotBeUsedAsDisplayValueField": "{field} field cannot be used as display value field",
-    "thisFieldTypeDoesNotSupportSorting": "This field type doesn't support sorting",
-    "thisFieldTypeDoesNotSupportFiltering": "This field type doesn't support filtering",
-    "thisFieldTypeDoesNotSupportGrouping": "This field type doesn't support grouping",
-    "filterByLimitExceeded": "Filter by limit exceeded",
-    "groupByLimitExceeded": "Group by limit exceeded",
-    "youDoNotHavePermissionToPasteIntoThisField": "你没有权限粘贴进该字段",
+    "fieldCannotBeUsedAsDisplayValueField": "{field} 字段不能用作显示值字段",
+    "thisFieldTypeDoesNotSupportSorting": "此字段类型不支持排序",
+    "thisFieldTypeDoesNotSupportFiltering": "此字段类型不支持筛选",
+    "thisFieldTypeDoesNotSupportGrouping": "此字段类型不支持分组",
+    "filterByLimitExceeded": "超出筛选限制",
+    "groupByLimitExceeded": "超出分组限制",
+    "youDoNotHavePermissionToPasteIntoThisField": "您没有权限粘贴到此字段",
     "pasteOperationLimitedToMaxRows": "Paste operation limited to {max} rows. Additional rows were truncated."
   },
   "placeholder": {
     "searchIcons": "搜索图标",
+    "searchFeatures": "搜索功能...",
     "selectSlackChannels": "选择 Slack 频道",
     "selectTeamsChannels": "选择 Microsoft Teams 频道",
     "selectDiscordChannels": "选择 Discord 频道",
@@ -1923,7 +2072,15 @@
     "barcodeColumn": "为条形码值选择一个字段",
     "notFoundContent": "找不到有效的字段类型。",
     "selectBarcodeFormat": "选择条形码格式",
+    "pasteRedirectUrlHere": "在此粘贴重定向 URL",
+    "pasteFileLinkHere": "在此粘贴文件链接...",
+    "quickActions": "快速操作",
     "projName": "输入项目名称",
+    "selectBase": "选择项目",
+    "selectTableToLink": "选择要关联的数据表",
+    "canOnlyLinkCreatorAccess": "您只能关联到具有创建者权限或更高权限的项目中的表。",
+    "selectWorkspacesToInvite": "- 选择要邀请的工作区 -",
+    "typeSomething": "请输入...",
     "selectGroupField": "选择分组字段",
     "selectGroupFieldNotFound": "没有可用的单选字段，请先创建。",
     "selectCoverImageField": "选择封面图片字段",
@@ -1942,8 +2099,28 @@
     "searchProjectTree": "搜索表",
     "searchFields": "搜索字段",
     "searchColumn": "搜索 {search} 列",
+    "searchBases": "搜索项目",
+    "searchTables": "搜索数据表",
+    "searchViews": "搜索视图",
+    "searchTablesViews": "搜索数据表、视图",
+    "searchWorkspace": "搜索工作区",
+    "searchDataSource": "搜索数据源",
+    "suggestMore": "建议更多",
+    "clearAndResuggest": "清除所有并重新建议",
+    "enterPromptForSuggestions": "输入提示词以获取字段建议...",
+    "cannotSetDefaultValueUnique": "设置了唯一约束，无法设置默认值。请禁用唯一约束以配置默认值。",
+    "exampleUrl": "http://example.com",
+    "exampleImageUrl": "www.google.com/hello.png",
+    "selectTable": "-选择数据表-",
+    "selectView": "-选择视图-",
+    "searchIntegration": "搜索集成",
+    "searchCategory": "搜索类别",
+    "provideIntegrationName": "提供集成名称和您的使用案例。",
+    "quickSearch": "快速搜索...",
+    "searchWorkspaceBasesTablesViews": "搜索工作区、项目、数据表、视图等...",
     "searchApps": "搜索应用程序",
     "searchModels": "搜索模型",
+    "searchDocs": "搜索文档...",
     "selectUsers": "选择用户",
     "selectUsersToView": "选择可见的用户",
     "selectUsersToCreate": "选择可创建的用户",
@@ -2106,7 +2283,7 @@
     "noRecordsLinked": "没有链接记录",
     "noLinkedRecords": "暂无引用数据",
     "recordsLinked": "链接的记录",
-    "acceptOnlyValid": "仅接受",
+    "acceptOnlyValid": "仅接受有效的 {type}",
     "apiTokenCreate": "创建个人 API tokens，以便在自动化或外部应用程序中使用。",
     "selectFieldToSort": "选择要排序的字段",
     "selectFieldToGroup": "选择要分组的字段",
@@ -2154,6 +2331,9 @@
       "youCanOnlyUploadMaxLimitFilesAtATimePlural": "每次只能上传 {limit} 个 {type} 文件"
     },
     "info": {
+      "uniqueConstraintNotSupportedForExternalDb": "唯一约束仅支持 NocoDB（不支持外部数据库）",
+      "uniqueConstraintNotSupportedForFieldType": "字段类型 '{type}' 不支持唯一约束",
+      "uniqueConstraintDefaultValueConflict": "无法启用唯一约束，因为已设置默认值。请先移除默认值。",
       "inviteSent": "邀请发送成功",
       "userRoleUpdated": "用户角色已成功更新",
       "actionIrreversible": "此操作不可逆转",
@@ -2167,6 +2347,12 @@
       "noOIDC": "没有配置 OpenID 身份验证。",
       "disabledAsViewLocked": "已禁用，因为视图已锁定",
       "basesMigrated": "项目已迁移。请重试。",
+      "emailNotEmpty": "电子邮件不能为空",
+      "invalidEmail": "无效的电子邮件",
+      "useRecordIdToGetId": "使用 {record_id} 获取新创建记录的 ID。",
+      "searchDocs": "搜索我们的文档",
+      "noResultsFound": "未找到匹配的搜索结果",
+      "searching": "正在搜索...",
       "pasteNotSupported": "处于活动状态的单元格不能粘贴内容",
       "roles": {
         "orgCreator": "创建者可以创建新项目，访问受邀项目。",
@@ -2187,8 +2373,8 @@
       "upload": "选择文件以上传",
       "upload_sub": "或拖放文件",
       "excelSupport": "支持：.xls，.xlsx，.xlsm，.ods，.ots",
-      "excelURL": "Add files from URL",
-      "csvURL": "Add files from URL",
+      "excelURL": "从 URL 添加文件",
+      "csvURL": "从 URL 添加文件",
       "footMsg": "要解析为推断数据类型的行数",
       "excelImport": "可用于导入的表格",
       "exportMetadata": "您想从元表导出元数据吗？",

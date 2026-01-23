@@ -841,7 +841,7 @@ watch(
                                 v-model:value="file.encoding"
                                 :open="visible"
                                 :list="charsetOptions"
-                                search-input-placeholder="Search"
+                                :search-input-placeholder="$t('labels.search')"
                                 option-label-key="sortLabel"
                                 option-value-key="value"
                                 class="!w-full"
@@ -935,7 +935,7 @@ watch(
                     <a-input
                       v-model:value="importState.url"
                       class="!rounded-md"
-                      placeholder="Paste file link here..."
+                      :placeholder="$t('placeholder.pasteFileLinkHere')"
                       :disabled="preImportLoading"
                     />
                   </a-form-item>
