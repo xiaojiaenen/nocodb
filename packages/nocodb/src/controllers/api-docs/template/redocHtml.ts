@@ -67,7 +67,7 @@ export default ({
   linkEl.setAttribute('class', 'we-are-hiring')
   linkEl.innerHTML = '🚀 We are Hiring!!! 🚀'
   const styleEl = document.createElement('style');
-  styleEl.innerHTML = `
+  styleEl.innerHTML = \`
 .menu-content img {
   content: url('${ncSiteUrl}/icon.png');
   height: 40px !important;
