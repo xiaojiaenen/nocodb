@@ -1,13 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "NocoDB v3",
+    "title": "星澜 v3",
     "version": "3.0",
-    "description": "NocoDB API Documentation"
+    "description": "星澜 API 文档"
   },
   "servers": [
     {
-      "url": "https://app.nocodb.com"
+      "url": "https://app.xinglan.com"
     }
   ],
   "paths": {},

@@ -69,7 +69,7 @@ export default class Minio implements IStorageAdapterV2 {
     try {
       const stream = new Readable({
         read() {
-          this.push('Hello from Minio, NocoDB');
+          this.push('Hello from Minio, 星澜');
           this.push(null);
         },
       });

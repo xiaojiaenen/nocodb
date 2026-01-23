@@ -593,7 +593,7 @@ export default class Model implements TableType {
   /**
    * Creates a BaseModelSqlv2 instance with optional transaction support.
    *
-   * @param context - The NocoDB context
+   * @param context - The 星澜 context
    * @param args - Configuration arguments
    * @param args.dbDriver - The base database driver
    * @param args.transaction - Optional transaction instance to use for operations
@@ -601,7 +601,7 @@ export default class Model implements TableType {
    * @param args.extractFirstCollaborativeView - Whether to extract the first collaborative grid view if viewId not provided
    * @param args.viewId - The view ID (optional)
    * @param args.source - The data source (optional, will be fetched if not provided)
-   * @param ncMeta - The NocoDB metadata instance
+   * @param ncMeta - The 星澜 metadata instance
    * @returns A configured BaseModelSqlv2 instance
    */
   public static async getBaseModelSQL(

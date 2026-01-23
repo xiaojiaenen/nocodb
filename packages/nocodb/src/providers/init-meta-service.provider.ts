@@ -76,7 +76,7 @@ export const InitMetaServiceProvider: FactoryProvider = {
 
       if (+configObj.version < 100002) {
         throw new Error(
-          `You are trying to upgrade from an old version of NocoDB. Please upgrade to 0.207.3 first and then you can upgrade to the latest version.`,
+          `您正在尝试从旧版本的 星澜 升级。请先升级到 0.207.3，然后再升级到最新版本。`,
         );
       }
     } else {
@@ -84,7 +84,7 @@ export const InitMetaServiceProvider: FactoryProvider = {
       const isOld = (await metaService.legacyProjectList())?.length;
       if (isOld) {
         throw new Error(
-          `You are trying to upgrade from an old version of NocoDB. Please upgrade to 0.207.3 first and then you can upgrade to the latest version.`,
+          `您正在尝试从旧版本的 星澜 升级。请先升级到 0.207.3，然后再升级到最新版本。`,
         );
       }
     }

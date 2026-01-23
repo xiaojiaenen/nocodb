@@ -5977,7 +5977,7 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
 
           if (this.isSqlite) {
             // if there is no timezone info,
-            // we assume the input is on NocoDB server timezone
+            // we assume the input is on 星澜 server timezone
             // then we convert to UTC from server timezone
             // example: datetime without timezone
             // we need to display 2023-04-27 10:00:00 (in HKT)
@@ -6017,7 +6017,7 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
             d[col.id].slice(-1) !== 'Z'
           ) {
             // if there is no timezone info,
-            // we assume the input is on NocoDB server timezone
+            // we assume the input is on 星澜 server timezone
             // then we convert to UTC from server timezone
             // e.g. 2023-04-27 10:00:00 (IST) -> 2023-04-27 04:30:00+00:00
             d[col.id] = dayjs(d[col.id])

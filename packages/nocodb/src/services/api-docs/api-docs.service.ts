@@ -41,7 +41,7 @@ export class ApiDocsService {
         variables: {
           customUrl: {
             default: param.siteUrl,
-            description: 'Provide custom nocodb app base url',
+            description: '提供自定义星澜应用基础 URL',
           },
         },
       },

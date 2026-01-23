@@ -12,12 +12,12 @@ export { isUniqueConstraintSupportedType, UNIQUE_CONSTRAINT_SUPPORTED_TYPES };
 
 /**
  * Validates unique constraint request and throws error if invalid
- * @param context - NocoDB context
- * @param uidt - UI data type
- * @param meta - Column metadata
- * @param unique - Unique constraint value
- * @param source - Source object to check if it's NC-DB
- * @param cdf - Column default value (to check mutual exclusivity)
+ * @param context - 星澜 上下文
+ * @param uidt - UI 数据类型
+ * @param meta - 列元数据
+ * @param unique - 唯一约束值
+ * @param source - 源对象以检查是否为 星澜 数据库
+ * @param cdf - 列默认值（用于检查互斥性）
  */
 export function validateUniqueConstraint(
   context: NcContext,
@@ -27,27 +27,27 @@ export function validateUniqueConstraint(
   source?: Pick<Source, 'is_local' | 'is_meta'>,
   cdf?: string,
 ): void {
-  if (!unique) return; // No validation needed if not setting unique
+  if (!unique) return; // 如果未设置唯一性，则无需验证
 
-  // Check if source is NC-DB (meta or local)
+  // 检查源是否为 星澜 数据库（元数据或本地）
   if (source && !source.is_meta && !source.is_local) {
     NcError.get(context).badRequest(
-      'Unique constraint is only supported for NC-DB (not external databases)',
+      '唯一约束仅支持 星澜 数据库（不支持外部数据库）',
     );
   }
 
-  // Check if field type supports unique constraint
+  // 检查字段类型是否支持唯一约束
   if (!isUniqueConstraintSupportedType(uidt, meta)) {
     const fieldTypeName = UITypes[uidt] || uidt;
     NcError.get(context).badRequest(
-      `Unique constraint is not supported for field type '${fieldTypeName}'`,
+      `字段类型 '${fieldTypeName}' 不支持唯一约束`,
     );
   }
 
-  // Check if default value is set (mutually exclusive with unique constraint)
+  // 检查是否设置了默认值（与唯一约束互斥）
   if (cdf !== null && cdf !== undefined && cdf !== '') {
     NcError.get(context).badRequest(
-      'Cannot enable unique constraint because a default value is set. Please remove the default value first.',
+      '无法启用唯一约束，因为已设置默认值。请先删除默认值。',
     );
   }
 }
