@@ -131,6 +131,10 @@ function navigateSignIn() {
 <style lang="scss">
 .auth-bg {
   background: linear-gradient(135deg, #f6f8fb 0%, #e5ebee 100%);
+
+  .dark & {
+    background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+  }
 }
 
 .forgot-password {

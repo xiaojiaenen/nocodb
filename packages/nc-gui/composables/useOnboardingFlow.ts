@@ -936,10 +936,10 @@ export const useOnboardingFlow = createSharedComposable(() => {
 
   const postCompleteOnboardingFlow = (skipped: boolean = false) => {
     const formattedQuestionAnswers = questions.value.map((q) => {
-      const answer = formState.value[q.id]
+      const answer = formState.value[q.id] ?? ''
 
       return {
-        key: q.key ?? q.id,
+        key: (q.key ?? q.id) as string,
         question: q.question,
         answer,
       }

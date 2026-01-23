@@ -7,15 +7,15 @@ export const useUsers = defineStore('userStore', () => {
   const { loadRoles } = useRoles()
   const basesStore = useBases()
 
-  const updateUserProfile = async ({ attrs }: { attrs: Pick<UserType, 'display_name' | 'meta'> }) => {
+  const updateUserProfile = async ({ attrs }: { attrs: Pick<UserType, 'display_name' | 'meta'> & { is_new_user?: boolean } }) => {
     if (!user.value) throw new Error('User is not defined')
 
-    await api.userProfile.update(attrs)
+    await api.userProfile.update(attrs as any)
 
     user.value = {
       ...user.value,
       ...attrs,
-    }
+    } as User
 
     basesStore.clearBasesUser()
   }

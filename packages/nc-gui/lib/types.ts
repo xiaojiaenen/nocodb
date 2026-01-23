@@ -57,6 +57,7 @@ interface User {
   display_name?: string | null
   featureFlags?: Record<string, boolean>
   meta?: MetaType
+  is_new_user?: boolean
 }
 
 interface ProjectMetaInfo {
@@ -224,6 +225,8 @@ type NcProject = BaseType & {
   uuid?: string
   users?: User[]
   default_role?: ProjectRoles | string
+  project_role?: string
+  workspace_role?: string
   version?: BaseVersion
 }
 

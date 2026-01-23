@@ -31,7 +31,7 @@ const baseViewOpen = computed(() => {
   if (routeNameSplit.length <= 1) return false
 
   const routeNameAfterProjectView = routeNameSplit[routeNameSplit.length - 1]
-  return routeNameAfterProjectView.split('-').length === 2 || routeNameAfterProjectView.split('-').length === 1
+  return !!routeNameAfterProjectView && (routeNameAfterProjectView.split('-').length === 2 || routeNameAfterProjectView.split('-').length === 1)
 })
 
 async function addNewProjectChildEntity(showSourceSelector = true) {
@@ -46,7 +46,7 @@ const openBaseHomePage = async () => {
 
     return
   }
-  const cmdOrCtrl = isMac() ? metaKey.value : control.value
+  const cmdOrCtrl = isMac() ? metaKey?.value : control?.value
 
   await navigateTo(
     `${cmdOrCtrl ? '#' : ''}${baseUrl({
@@ -66,7 +66,7 @@ const openBaseHomePage = async () => {
 const isVisibleCreateNew = ref(false)
 
 const hasTableCreatePermission = computed(() => {
-  return isUIAllowed('tableCreate', { roles: base.value.project_role, source: base.value?.sources?.[0] })
+  return isUIAllowed('tableCreate', { roles: base.value.project_role || base.value.roles, source: base.value?.sources?.[0] })
 })
 </script>
 
@@ -82,8 +82,8 @@ const hasTableCreatePermission = computed(() => {
             <div
               class="w-24 min-w-10 transition-all duration-200 p-1 transform"
             >
-              <img v-if="isDark" width="96" alt="NocoDB" src="~/assets/img/brand/text.png" />
-              <img v-else width="96" alt="NocoDB" src="~/assets/img/brand/nocodb.png" />
+              <img v-if="isDark" width="96" alt="星澜" src="~/assets/img/brand/full-logo-dark.svg" />
+              <img v-else width="96" alt="星澜" src="~/assets/img/brand/full-logo.svg" />
             </div>
 
             <div class="flex flex-grow"></div>
